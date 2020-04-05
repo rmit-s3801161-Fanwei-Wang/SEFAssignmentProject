@@ -34,8 +34,8 @@ public class Position {
 		intToPosition(this.positionToInt() + dice);
 	}
 
-	public Position move(String choice) {
-		return null;// 先不急，人走马步用，蛇斜着走
+	public void move(String choice) {
+		// 先不急，人走马步用，蛇斜着走
 	}
 
 	public int positionToInt() {
