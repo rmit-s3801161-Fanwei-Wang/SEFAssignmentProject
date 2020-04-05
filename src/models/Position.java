@@ -48,4 +48,12 @@ public class Position {
 		else
 			this.setXY((100-z) % 10, z / 10);
 	}
+
+	public boolean getOccupy(Object obj) {
+		return false;
+	}
+
+	public Piece[] getPieces() {
+		return null;
+	}
 }
