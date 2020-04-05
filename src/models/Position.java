@@ -34,8 +34,8 @@ public class Position {
 		intToPosition(this.positionToInt() + dice);
 	}
 
-	public Position move(String choice) {
-		return null;// 先不急，人走马步用，蛇斜着走
+	public void move(String choice) {
+		// 先不急，人走马步用，蛇斜着走
 	}
 
 	public int positionToInt() {
@@ -47,5 +47,13 @@ public class Position {
 			this.setXY(z % 10-1 , z / 10);
 		else
 			this.setXY((100-z) % 10, z / 10);
+	}
+
+	public boolean getOccupy(Object obj) {
+		return false;
+	}
+
+	public Piece[] getPieces() {
+		return null;
 	}
 }
