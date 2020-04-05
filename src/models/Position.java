@@ -3,10 +3,12 @@ package models;
 public class Position {
 	private int x;
 	private int y;
+	private Object occupy;
 
-	public Position(int x, int y) {
+	public Position(int x, int y, Object occupy) {
 		this.x = x;
 		this.y = y;
+		this.occupy = occupy;
 	}
 
 	public int getX() {
@@ -25,17 +27,64 @@ public class Position {
 		this.y = y;
 	}
 
+	public Object getOccupy() {
+		return occupy;
+	}
+
 	public void setXY(int x, int y) {
 		setX(x);
 		setY(y);
+	}
+
+	public void setXY(Position p) {
+		setX(p.getX());
+		setY(p.getY());
 	}
 
 	public void move(int dice) {
 		intToPosition(this.positionToInt() + dice);
 	}
 
-	public Position move(String choice) {
-		return null;// 先不急，人走马步用，蛇斜着走
+	public void move(String choice) {
+		// 先不急，人走马步用，蛇斜着走
+		switch (choice) {
+		case "TL":
+			break;
+		case "TR":
+			break;
+
+		case "BR":
+			break;
+
+		case "BL":
+			break;
+
+		case "T2L1":
+			break;
+
+		case "T1L2":
+			break;
+
+		case "T2R1":
+			break;
+
+		case "T1R2":
+			break;
+
+		case "B2R1":
+			break;
+
+		case "B1R2":
+			break;
+
+		case "B2L1":
+			break;
+
+		case "B1L2":
+			break;
+
+		default:
+		}
 	}
 
 	public int positionToInt() {
@@ -44,8 +93,14 @@ public class Position {
 
 	private void intToPosition(int z) {
 		if (z / 10 % 2 == 0)
-			this.setXY(z % 10-1 , z / 10);
+			this.setXY(z % 10 - 1, z / 10);
 		else
-			this.setXY((100-z) % 10, z / 10);
+			this.setXY((100 - z) % 10, z / 10);
+	}
+
+	public boolean compareTo(Position p) {
+		if (p.getX() == this.x && p.getY() == this.y)
+			return true;
+		return false;
 	}
 }
