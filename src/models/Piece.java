@@ -9,12 +9,12 @@ public class Piece {
 
 	public void setPosition(Position tail) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setBuff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

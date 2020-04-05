@@ -17,13 +17,12 @@ public class Ladder {
 		return top;
 	}
 
-//	public boolean climb(Piece piece) {
-//		if(piece.getPosition() == bottom){
-//			piece.setPosition(top);
-//			return true;
-//		}
-//		return false;
-//	}
-	
+	public boolean climb(Piece piece) {
+		if (piece.getPosition().compareTo(bottom)) {
+			piece.getPosition().setXY(top);
+			return true;
+		}
+		return false;
+	}
 
 }
