@@ -20,7 +20,11 @@ public class Snake {
 		return head;
 	}
 
-	public boolean move(ArrayList<Position> positions, boolean top, boolean left) {
+	public Position getTail() {
+		return tail;
+	}
+
+	public boolean move(ArrayList<Position> positions, boolean top, boolean left) throws Exception {
 		if (top) {
 			if (head.getY() + 1 > 9)
 				// outOfBoardException
@@ -71,14 +75,10 @@ public class Snake {
 		return true;
 	}
 
-	public Position getTail() {
-		return tail;
-	}
-
 	public void eat(ArrayList<Piece> pieces) {
 		for (Piece piece : pieces) {
 			if (piece.getPosition().compareTo(head)) {
-				piece.setPosition(tail);
+				piece.getPosition().setXY(tail);
 				piece.setBuff();
 			}
 		}
