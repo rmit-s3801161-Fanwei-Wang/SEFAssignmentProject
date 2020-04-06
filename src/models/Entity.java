@@ -18,7 +18,7 @@ abstract public class Entity {
 			if (piece.getPosition().compareTo(entry)) {
 				piece.getPosition().setXY(exit);
 //				System.out.println(piece.getName() + " is eaten by a snake to " + exit.positionToInt());
-				piece.setBuff();
+//				piece.setBuff();
 			}
 	}
 
