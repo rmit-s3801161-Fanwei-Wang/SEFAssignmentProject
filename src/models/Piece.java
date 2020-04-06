@@ -3,7 +3,7 @@ package models;
 public class Piece {
 
 	private String name;
-	private int level = 1;
+//	private int level = 1;
 	private Position position = null;
 	private boolean debuff = false;
 
@@ -18,7 +18,7 @@ public class Piece {
 	public void move(int dice) {
 		if (position == null) {
 			System.out.println(name + " move to " + dice);
-			position = new Position(dice - 1, 0, this);
+			position = new Position(dice - 1, 0);
 			return;
 		}
 		if (!debuff) {

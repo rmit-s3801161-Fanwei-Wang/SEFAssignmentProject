@@ -20,6 +20,7 @@ public class Ladder {
 	public boolean climb(Piece piece) {
 		if (piece.getPosition().compareTo(bottom)) {
 			piece.getPosition().setXY(top);
+			System.out.println(piece.getName() + " climb ladder to " + top.positionToInt());
 			return true;
 		}
 		return false;
