@@ -13,7 +13,7 @@ public class PositionTest {
 
 	@Before
 	public void setUp() {
-		p = new Position(0, 0, new Piece("A"));
+		p = new Position(0, 0);
 	}
 
 	@After
@@ -28,16 +28,14 @@ public class PositionTest {
 		assertEquals(7, p.getX());
 		p.move(6);
 		assertEquals(1, p.getY());
-		assertEquals("A", ((Piece)p.getOccupy()).getName());
 	}
 
 	@Test
 	public void testMovePositionInt() {
-		Position p1 = new Position(5, 7, new Piece("B"));
+		Position p1 = new Position(5, 7);
 		p1.move(1);
 		assertEquals(4, p1.getX());
 		assertEquals(76, p1.positionToInt());
-		assertEquals("B", ((Piece)p1.getOccupy()).getName());
 
 	}
 

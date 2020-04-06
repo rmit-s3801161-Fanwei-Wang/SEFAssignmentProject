@@ -1,6 +1,6 @@
 package models;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Snake {
 	private Position head;
@@ -24,7 +24,7 @@ public class Snake {
 		return tail;
 	}
 
-	public boolean move(ArrayList<Position> positions, boolean top, boolean left) throws Exception {
+	public boolean move(HashMap<Position, Object> collections, boolean top, boolean left) throws Exception {
 		if (top) {
 			if (head.getY() + 1 > 9)
 				// outOfBoardException
@@ -43,7 +43,7 @@ public class Snake {
 				// outOfBoardException
 				return false;
 		}
-		Position headDestination = new Position(head.getX(), head.getY(), null);
+		Position headDestination = new Position(head.getX(), head.getY());
 		Position tailDestination;
 		if (top && left)
 			headDestination.move("TL");
@@ -53,34 +53,34 @@ public class Snake {
 			headDestination.move("BR");
 		else
 			headDestination.move("BL");
-		tailDestination = new Position(headDestination.getX() - relativeX, headDestination.getY() - relativeY, null);
-		ArrayList<Piece> pieces = new ArrayList<Piece>();
-		for (Position p : positions) {
-			if (p.equals(this.getHead()) || p.equals(this.getTail()))
-				continue;
-			// Snake or Ladder or Guard
-			if (!(p.getOccupy() instanceof Piece)) {
-				if (p.compareTo(headDestination) || p.compareTo(tailDestination))
+		tailDestination = new Position(headDestination.getX() - relativeX, headDestination.getY() - relativeY);
+
+		for (Position p : collections.keySet()) {
+			if (p.compareTo(headDestination) || p.compareTo(tailDestination)) {
+				if (collections.get(p).equals(this) || collections.get(p) instanceof Piece)
+					continue;
+				else
+					// Exception
 					return false;
-			}
-			// Piece
-			else {
-				if (p.compareTo(headDestination))
-					pieces.add((Piece) p.getOccupy());
 			}
 		}
 		head.setXY(headDestination);
 		tail.setXY(tailDestination);
-		eat(pieces);
+		for (Position p : collections.keySet()) {
+			if (p.compareTo(head)) {
+				if (collections.get(p) instanceof Piece)
+					eat((Piece)collections.get(p));
+			}
+		}
 		return true;
 	}
 
-	public void eat(ArrayList<Piece> pieces) {
-		for (Piece piece : pieces) {
+	public void eat(Piece piece) {
+		if (piece.getPosition() != null)
 			if (piece.getPosition().compareTo(head)) {
 				piece.getPosition().setXY(tail);
+				System.out.println(piece.getName() + " is eaten by a snake to " + tail.positionToInt());
 				piece.setBuff();
 			}
-		}
 	}
 }

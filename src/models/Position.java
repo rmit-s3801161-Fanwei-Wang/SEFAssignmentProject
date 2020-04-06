@@ -3,12 +3,10 @@ package models;
 public class Position {
 	private int x;
 	private int y;
-	private Object occupy;
 
-	public Position(int x, int y, Object occupy) {
+	public Position(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.occupy = occupy;
 	}
 
 	public int getX() {
@@ -27,10 +25,6 @@ public class Position {
 		this.y = y;
 	}
 
-	public Object getOccupy() {
-		return occupy;
-	}
-
 	public void setXY(int x, int y) {
 		setX(x);
 		setY(y);
@@ -42,7 +36,10 @@ public class Position {
 	}
 
 	public void move(int dice) {
-		intToPosition(this.positionToInt() + dice);
+		int temp = this.positionToInt() + dice;
+		if(temp>100) 
+			temp = 200-temp;
+		intToPosition(temp);
 	}
 
 	public void move(String choice) throws Exception {
@@ -92,6 +89,7 @@ public class Position {
 	}
 
 	private void intToPosition(int z) {
+		
 		if ((z-1) / 10 % 2 == 0) {
 			if(z%10==0)
 				this.setXY(9,z/10-1);
