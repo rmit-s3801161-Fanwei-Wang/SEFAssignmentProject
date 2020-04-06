@@ -8,6 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import exception.InitializeException;
+import exception.OutOfBoardException;
 import models.*;
 
 public class BoardTest {
@@ -28,28 +30,28 @@ public class BoardTest {
 		events = board.getCollections();
 
 
-		ladders[0] = new Ladder(new Position(1,0),new Position(2,7));
-		ladders[1] = new Ladder(new Position(7,0),new Position(1,4));
-		ladders[2] = new Ladder(new Position(3,1),new Position(3,9));
-		ladders[3] = new Ladder(new Position(4,3),new Position(0,6));
-		ladders[4] = new Ladder(new Position(9,4),new Position(0,7));
+		ladders[0] = new Ladder(new Position(1,0),new Position(2,2));
+		ladders[1] = new Ladder(new Position(7,0),new Position(1,2));
+		ladders[2] = new Ladder(new Position(3,1),new Position(3,3));
+		ladders[3] = new Ladder(new Position(4,3),new Position(0,5));
+		ladders[4] = new Ladder(new Position(9,4),new Position(0,6));
 		
 		for(int i=0;i<ladders.length;i++)
 			board.addCollection(ladders[i]);
 		
-		snakes[0] = new Snake(new Position(1,9),new Position(1,1));
-		snakes[1] = new Snake(new Position(3,7),new Position(7,3));
-		snakes[2] = new Snake(new Position(5,5),new Position(6,2));
-		snakes[3] = new Snake(new Position(8,8),new Position(1,2));
-		snakes[4] = new Snake(new Position(6,3),new Position(9,0));
+		snakes[0] = new Snake(new Position(1,9),new Position(1,7));
+		snakes[1] = new Snake(new Position(3,7),new Position(7,5));
+		snakes[2] = new Snake(new Position(5,5),new Position(6,3));
+		snakes[3] = new Snake(new Position(8,8),new Position(1,6));
+		snakes[4] = new Snake(new Position(6,3),new Position(9,1));
 		
 		for(int i=0;i<ladders.length;i++) {
-			System.out.println("Snake head: " + snakes[i].getHead().positionToInt());
+//			System.out.println(snakes[i].getHead().positionToInt());
 			board.addCollection(snakes[i]);
 		}
 		
 		for (int i = 0; i < 4; i++) {
-			pieces.add(new Piece(Character.toString((char) 65 + i)));
+			pieces.add(new Piece(null, null, Character.toString((char)(65 + i))));
 		}
 	}
 
@@ -71,17 +73,50 @@ public class BoardTest {
 				events.forEach((k, v) -> {
 					if (!(v instanceof Piece) && k.compareTo(p.getPosition())) {
 						if (v instanceof Snake)
-							((Snake) v).eat(p);
+							((Snake) v).adajustPosition(p);
 						else
-							((Ladder) v).climb(p);
+							((Ladder) v).adajustPosition(p);;
 					}
 				});
 			}			
 		}
 	}
 	
-	public void snakeMoveTest() {
-		
+	@Test
+	public void snakeMoveTest2() {
+		try {
+			snakes[1].move(events, false, false);
+			snakes[2].move(events, false, true);				
+			snakes[3].move(events, true, true);	
+		} catch (OutOfBoardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	
+}
+	
+	
+	@Test (expected = OutOfBoardException.class)
+	public void snakeMoveTest() throws OutOfBoardException {
+			snakes[0].move(events, true, true);	
 	}
-
+	
+	@Test 
+	public void initialTest()  {
+			try {
+				Snake s = new Snake(new Position(0 , 1),new Position(0,8));
+			} catch (InitializeException e) {
+				System.out.println(e.toString());
+			}
+	}
+	
+	@Test 
+	public void initialTest2()  {
+			try {
+				Ladder l = new Ladder(new Position(0 , 4),new Position(0,1));
+				Ladder l1 = new Ladder(new Position(0 , 1),new Position(0,8));
+			} catch (InitializeException e) {
+				System.out.println(e.toString());
+			}
+	}
 }

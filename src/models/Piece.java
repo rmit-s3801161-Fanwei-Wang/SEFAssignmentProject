@@ -1,13 +1,16 @@
 package models;
 
-public class Piece {
+import java.awt.Graphics;
+
+public class Piece extends Entity{
 
 	private String name;
 //	private int level = 1;
 	private Position position = null;
 	private boolean debuff = false;
 
-	public Piece(String name) {
+	public Piece(Position entry, Position exit, String name) {
+		super(entry,exit);
 		this.name = name;
 	}
 
@@ -40,6 +43,12 @@ public class Piece {
 
 	public void setBuff() {
 		debuff = true;
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

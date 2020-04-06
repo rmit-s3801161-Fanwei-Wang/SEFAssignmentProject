@@ -15,12 +15,12 @@ public class PieceTest {
 	@Before
 	public void setUp() throws Exception {
 
-		pieces[0] = new Piece("A");
-		pieces[1] = new Piece("B");
-		pieces[2] = new Piece("C");
-		pieces[3] = new Piece("D");
-		pieces[4] = new Piece("E");
-		pieces[5] = new Piece("F");
+		pieces[0] = new Piece(null, null, "A");
+		pieces[1] = new Piece(null, null, "B");
+		pieces[2] = new Piece(null, null, "C");
+		pieces[3] = new Piece(null, null, "D");
+		pieces[4] = new Piece(null, null, "E");
+		pieces[5] = new Piece(null, null, "F");
 
 	}
 
