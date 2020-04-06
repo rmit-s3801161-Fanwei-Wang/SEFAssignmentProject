@@ -45,7 +45,7 @@ public class Position {
 		intToPosition(this.positionToInt() + dice);
 	}
 
-	public void move(String choice) {
+	public void move(String choice) throws Exception {
 		// 先不急，人走马步用，蛇斜着走
 		switch (choice) {
 		case "TL":
@@ -92,10 +92,18 @@ public class Position {
 	}
 
 	private void intToPosition(int z) {
-		if (z / 10 % 2 == 0)
-			this.setXY(z % 10 - 1, z / 10);
-		else
-			this.setXY((100 - z) % 10, z / 10);
+		if ((z-1) / 10 % 2 == 0) {
+			if(z%10==0)
+				this.setXY(9,z/10-1);
+			else
+				this.setXY(z % 10 - 1, z / 10);
+		}
+		else {
+			if(z%10==0)
+				this.setXY(0, z/10 -1);
+			else
+				this.setXY((100 - z) % 10, z / 10 );
+		}
 	}
 
 	public boolean compareTo(Position p) {
