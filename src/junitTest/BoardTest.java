@@ -1,6 +1,5 @@
 package junitTest;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -15,57 +14,39 @@ import models.*;
 
 public class BoardTest {
 
+	private Piece[] pieces = new Piece[4];
 	Board board;
-	Ladder[] ladders;
-	Snake[] snakes;
-	Guard[] guards;
-	ArrayList<Piece> pieces;
-	HashMap<Position, Entity> events;
+	HashMap<Position, Entity> collections;
 
 	@Before
 	public void setUp() throws Exception {
 		board = new Board();
-		ladders = board.getLadders();
-		snakes = board.getSnakes();
-		guards = board.getGuards();
-		pieces = board.getPieces();
-		events = board.getCollections();
+		collections = board.getCollections();
 
-		ladders[0] = new Ladder(new Position(1, 0), new Position(2, 2), "Ladder1");
-		ladders[1] = new Ladder(new Position(7, 0), new Position(1, 2), "Ladder2");
-		ladders[2] = new Ladder(new Position(3, 1), new Position(3, 3), "Ladder3");
-		ladders[3] = new Ladder(new Position(4, 3), new Position(0, 5), "Ladder4");
+		board.addCollection(new Ladder(new Position(1, 0), new Position(2, 2), "Ladder1"));
+		board.addCollection(new Ladder(new Position(7, 0), new Position(1, 2), "Ladder2"));
+		board.addCollection(new Ladder(new Position(3, 1), new Position(3, 3), "Ladder3"));
+		board.addCollection(new Ladder(new Position(4, 3), new Position(0, 5), "Ladder4"));
 		try {
-			ladders[4] = new Ladder(new Position(0, 9), new Position(0, 3), "Ladder5");
+			new Ladder(new Position(0, 9), new Position(0, 8), "Ladder5");
 		} catch (InitializeException ex) {
-			System.out.println(ex.toString());
+			System.out.println(ex.getMessage());
 		}
-		ladders[4] = new Ladder(new Position(9, 4), new Position(0, 6), "Ladder5");
+		board.addCollection(new Ladder(new Position(9, 4), new Position(0, 6), "Ladder5"));
 
-		for (int i = 0; i < ladders.length; i++)
-			board.addCollection(ladders[i]);
-
-		snakes[0] = new Snake(new Position(1, 9), new Position(1, 7), "Snake1");
-		snakes[1] = new Snake(new Position(3, 7), new Position(7, 5), "Snake2");
-		snakes[2] = new Snake(new Position(5, 5), new Position(6, 3), "Snake3");
-		snakes[3] = new Snake(new Position(8, 8), new Position(4, 6), "Snake4");
+		board.addCollection(new Snake(new Position(1, 9), new Position(1, 7), "Snake1"));
+		board.addCollection(new Snake(new Position(3, 7), new Position(7, 5), "Snake2"));
+		board.addCollection(new Snake(new Position(5, 5), new Position(6, 3), "Snake3"));
+		board.addCollection(new Snake(new Position(8, 8), new Position(1, 6), "Snake4"));
 		try {
-			snakes[4] = new Snake(new Position(0, 1), new Position(0, 8), "Snake5");
+			new Snake(new Position(0, 1), new Position(0, 8), "Snake5");
 		} catch (InitializeException ex) {
-			System.out.println(ex.toString());
+			System.out.println(ex.getMessage());
 		}
-		snakes[4] = new Snake(new Position(6, 3), new Position(9, 1), "Snake5");
-
-		for (int i = 0; i < ladders.length; i++) {
-			board.addCollection(ladders[i]);
-		}
-
-		for (int i = 0; i < snakes.length; i++) {
-			board.addCollection(snakes[i]);
-		}
-
+		board.addCollection(new Snake(new Position(6, 3), new Position(9, 1), "Snake5"));
+		
 		for (int i = 0; i < 4; i++) {
-			pieces.add(new Piece(null, Character.toString((char) (65 + i))));
+			pieces[i] = new Piece(null, Character.toString((char) (65 + i)));
 		}
 	}
 
@@ -79,22 +60,30 @@ public class BoardTest {
 		Scanner scan = new Scanner(System.in);
 		String choice;
 		boolean okay;
-		int snake;
+		String snake;
 		try {
 			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < pieces.size(); j++) {
-					pieces.get(j).move(events, dice.rollDice());
+				for (int j=0;j<4;j++) {
+					pieces[j].move(collections, dice.rollDice());
 				}
 
 				do {
 					okay = false;
 					System.out.print("Select snake:");
-					snake = scan.nextInt();
-					scan.nextLine();
-					System.out.println("TL,TR,BR,BL:");
-					choice = scan.nextLine();
+					snake = scan.nextLine();
+					if(snake.compareToIgnoreCase("Q")==0)
+						throw new Exception("Quit!");
 					try {
-						snakes[snake].move(events, choice);
+						for(Entity e: collections.values()) {
+							if(e instanceof Snake) {
+								if(e.getName().compareToIgnoreCase(snake)==0) {
+									System.out.println("TL,TR,BR,BL:");
+									choice = scan.nextLine();
+									((Snake)e).move(collections, choice);
+									okay = false;
+								}
+							}
+						}
 					} catch (OutOfBoardException e) {
 						System.out.println(e.toString());
 						okay = true;
@@ -105,9 +94,12 @@ public class BoardTest {
 					}
 				} while (okay);
 			}
+			
 		} catch (Exception ex) {
 			System.out.println(ex.toString());
 		}
-		scan.close();
+		finally {
+			scan.close();
+		}
 	}
 }
