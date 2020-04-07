@@ -14,7 +14,8 @@ public class Snake extends Entity {
 		InitializeException ex = new InitializeException(
 				"Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
 		if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
-				|| super.getExit().positionToInt() > super.getEntry().positionToInt()) {
+				|| super.getExit().positionToInt() > super.getEntry().positionToInt() 
+				|| super.getEntry().positionToInt() == 100 || super.getEntry().getY() == super.getExit().getY()) {
 			throw ex;
 		}
 	}
@@ -36,7 +37,11 @@ public class Snake extends Entity {
 			headDestination.move("BL");
 			tailDestination.move("BL");
 		}
-
+		
+		if(headDestination.positionToInt() == 100) {
+			throw new OutOfBoardException("Snake head cannot reach 100");
+		}
+		
 		for (Position p : collections.keySet()) {
 			if (p.compareTo(headDestination) || p.compareTo(tailDestination)) {
 				if (collections.get(p).equals(this) || collections.get(p) instanceof Piece)
