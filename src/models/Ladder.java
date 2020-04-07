@@ -11,7 +11,7 @@ public class Ladder extends Entity {
 		InitializeException ex = new InitializeException(
 				("Bottom:" + bottom.positionToInt() + " ,Top:" + top.positionToInt() + " is not possible"));
 		if (super.getExit().positionToInt() - super.getEntry().positionToInt() > 30
-				|| super.getEntry().positionToInt() > super.getExit().positionToInt() || super.getExit().positionToInt() != 100) {
+				|| super.getEntry().positionToInt() > super.getExit().positionToInt()) {
 			throw ex;
 		}
 	}
