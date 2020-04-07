@@ -4,41 +4,32 @@ import java.awt.Graphics;
 
 import exception.InitializeException;
 
-public class Ladder extends Entity{
-	private Position bottom;
-	private Position top;
+public class Ladder extends Entity {
 
-	public Ladder(Position bottom, Position top) throws InitializeException {
-		super(bottom,top);
-		this.bottom = bottom;
-		this.top = top;
-		InitializeException ex = new InitializeException(("Bottom:" + bottom.positionToInt() + " ,Top:"+ top.positionToInt() + " is not possible"));
-		if(this.top.positionToInt() - this.bottom.positionToInt() > 30 || this.bottom.positionToInt() > this.top.positionToInt()) {
+	public Ladder(Position bottom, Position top, String name) throws InitializeException {
+		super(bottom, top, name);
+		InitializeException ex = new InitializeException(
+				("Bottom:" + bottom.positionToInt() + " ,Top:" + top.positionToInt() + " is not possible"));
+		if (super.getExit().positionToInt() - super.getEntry().positionToInt() > 30
+				|| super.getExit().positionToInt() > super.getExit().positionToInt()) {
 			throw ex;
 		}
 	}
 
-	public Position getBottom() {
-		return bottom;
+	@Override
+	public boolean adjustPosition(Piece piece) {
+		if (super.adjustPosition(piece)) {
+			System.out.println(
+					piece.getName() + " climb " + super.getName() + " to " + super.getExit().positionToInt());
+			return true;
+		}
+		return false;
 	}
-
-	public Position getTop() {
-		return top;
-	}
-
-//	public boolean climb(Piece piece) {
-//		if (piece.getPosition().compareTo(bottom)) {
-//			piece.getPosition().setXY(top);
-//			System.out.println(piece.getName() + " climb ladder to " + top.positionToInt());
-//			return true;
-//		}
-//		return false;
-//	}
 
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

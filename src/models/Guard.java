@@ -1,15 +1,18 @@
 package models;
 
-public class Guard {
+import java.awt.Graphics;
 
-	private Position position = null;
+public class Guard extends Entity{
 
-	public Guard(Position position) {
-		this.position = position;
+	public Guard(Position position,String name) {
+		super(null,position,name);
 	}
 
-	public Position getPosition() {
-		return position;
+	@Override
+	public void draw(Graphics g) {
+		// TODO Auto-generated method stub
+		
 	}
+	
 
 }

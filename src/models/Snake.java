@@ -3,48 +3,36 @@ package models;
 import java.awt.Graphics;
 import java.util.HashMap;
 
+import exception.GridsBeingTakenException;
 import exception.InitializeException;
 import exception.OutOfBoardException;
 
-public class Snake extends Entity{
-	private Position head;
-	private Position tail;
+public class Snake extends Entity {
 
-	public Snake(Position head, Position tail) throws InitializeException {
-		super(head,tail);
-		this.head = head;
-		this.tail = tail;
-		InitializeException ex = new InitializeException("Head:" + head.positionToInt() + " ,Tail:"+ tail.positionToInt() + " is not possible");
-		if(this.head.positionToInt() - this.tail.positionToInt() > 30 || this.tail.positionToInt() > this.head.positionToInt()) {
+	public Snake(Position head, Position tail, String name) throws InitializeException {
+		super(head, tail, name);
+		InitializeException ex = new InitializeException(
+				"Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
+		if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
+				|| super.getExit().positionToInt() > super.getEntry().positionToInt()) {
 			throw ex;
 		}
 	}
 
-	public Position getHead() {
-		return head;
-	}
+	public boolean move(HashMap<Position, Entity> collections, String choice) throws OutOfBoardException, GridsBeingTakenException {
 
-	public Position getTail() {
-		return tail;
-	}
-
-	public boolean move(HashMap<Position, Object> collections, boolean top, boolean left) throws OutOfBoardException {
-		
-		Position headDestination = new Position(head.getX(), head.getY());
-		Position tailDestination = new Position(tail.getX(), tail.getY());
-		if (top && left) {
+		Position headDestination = new Position(super.getEntry().getX(), super.getEntry().getY());
+		Position tailDestination = new Position(super.getExit().getX(), super.getExit().getY());
+		if (choice.compareToIgnoreCase("TL") == 0) {
 			headDestination.move("TL");
 			tailDestination.move("TL");
-		}
-		else if (top && !left) {
+		} else if (choice.compareToIgnoreCase("TR") == 0) {
 			headDestination.move("TR");
 			tailDestination.move("TR");
-		}
-		else if (!top && !left) {
+		} else if (choice.compareToIgnoreCase("BR") == 0) {
 			headDestination.move("BR");
 			tailDestination.move("BR");
-		}
-		else {
+		} else if (choice.compareToIgnoreCase("BL") == 0) {
 			headDestination.move("BL");
 			tailDestination.move("BL");
 		}
@@ -54,40 +42,48 @@ public class Snake extends Entity{
 				if (collections.get(p).equals(this) || collections.get(p) instanceof Piece)
 					continue;
 				else
-					// Exception
-					return false;
+					throw new GridsBeingTakenException(super.getName()+" cannot move to "+ p.positionToInt()+ " because of " + collections.get(p).getName());
 			}
 		}
-		
-		System.out.print("Snake head moves from " + head.positionToInt());
-		head.setXY(headDestination);
-		System.out.println(" to " + head.positionToInt());
-		
-		System.out.print("Snake tail moves from " + tail.positionToInt());
-		tail.setXY(tailDestination);
-		System.out.println(" to " + tail.positionToInt());
-		
+
+		System.out.print(super.getName() + " head moves from " + super.getEntry().positionToInt());
+		super.getEntry().setXY(headDestination);
+		System.out.println(" to " + super.getEntry().positionToInt());
+
+		System.out.print(super.getName() + " tail moves from " + super.getExit().positionToInt());
+		super.getExit().setXY(tailDestination);
+		System.out.println(" to " + super.getExit().positionToInt());
+
 		for (Position p : collections.keySet()) {
-			if (p.compareTo(head)) {
-				if (collections.get(p) instanceof Piece)
-					adajustPosition((Piece) collections.get(p));
+			if (p.compareTo(super.getEntry())) {
+				if (collections.get(p) instanceof Piece) {
+					if(((Piece) collections.get(p)).getLevel()==1) {
+					adjustPosition((Piece) collections.get(p));
+					}
+					else if(((Piece) collections.get(p)).getLevel()==3) {
+						System.out.println("Snake win");
+					}
+				}
 			}
 		}
 		return true;
 	}
 
-//	public void eat(Piece piece) {
-//		if (piece.getPosition() != null)
-//			if (piece.getPosition().compareTo(head)) {
-//				piece.getPosition().setXY(tail);
-//				System.out.println(piece.getName() + " is eaten by a snake to " + tail.positionToInt());
-//				piece.setBuff();
-//			}
-//	}
+	@Override
+	public boolean adjustPosition(Piece piece) {
+		if (super.adjustPosition(piece)) {
+			System.out.println(
+					piece.getName() + " is eaten by " + super.getName() + " to " + super.getExit().positionToInt());
+			piece.setBuff();
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 }
