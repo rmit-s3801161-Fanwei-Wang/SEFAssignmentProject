@@ -14,13 +14,14 @@ public class Snake extends Entity {
 		InitializeException ex = new InitializeException(
 				"Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
 		if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
-				|| super.getExit().positionToInt() > super.getEntry().positionToInt() 
+				|| super.getExit().positionToInt() > super.getEntry().positionToInt()
 				|| super.getEntry().positionToInt() == 100 || super.getEntry().getY() == super.getExit().getY()) {
 			throw ex;
 		}
 	}
 
-	public boolean move(HashMap<Position, Entity> collections, String choice) throws OutOfBoardException, GridsBeingTakenException {
+	public boolean move(HashMap<Position, Entity> collections, String choice)
+			throws OutOfBoardException, GridsBeingTakenException {
 
 		Position headDestination = new Position(super.getEntry().getX(), super.getEntry().getY());
 		Position tailDestination = new Position(super.getExit().getX(), super.getExit().getY());
@@ -37,17 +38,18 @@ public class Snake extends Entity {
 			headDestination.move("BL");
 			tailDestination.move("BL");
 		}
-		
-		if(headDestination.positionToInt() == 100) {
+
+		if (headDestination.positionToInt() == 100) {
 			throw new OutOfBoardException("Snake head cannot reach 100");
 		}
-		
+
 		for (Position p : collections.keySet()) {
 			if (p.compareTo(headDestination) || p.compareTo(tailDestination)) {
 				if (collections.get(p).equals(this) || collections.get(p) instanceof Piece)
 					continue;
 				else
-					throw new GridsBeingTakenException(super.getName()+" cannot move to "+ p.positionToInt()+ " because of " + collections.get(p).getName());
+					throw new GridsBeingTakenException(super.getName() + " cannot move to " + p.positionToInt()
+							+ " because of " + collections.get(p).getName());
 			}
 		}
 
@@ -62,10 +64,9 @@ public class Snake extends Entity {
 		for (Position p : collections.keySet()) {
 			if (p.compareTo(super.getEntry())) {
 				if (collections.get(p) instanceof Piece) {
-					if(((Piece) collections.get(p)).getLevel()==1) {
-					adjustPosition((Piece) collections.get(p));
-					}
-					else if(((Piece) collections.get(p)).getLevel()==3) {
+					if (((Piece) collections.get(p)).getLevel() == 1) {
+						adjustPosition((Piece) collections.get(p));
+					} else if (((Piece) collections.get(p)).getLevel() == 3) {
 						System.out.println("Snake win");
 					}
 				}

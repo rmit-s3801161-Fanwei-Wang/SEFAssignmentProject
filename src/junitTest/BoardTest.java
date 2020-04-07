@@ -28,7 +28,7 @@ public class BoardTest {
 		board.addCollection(new Ladder(new Position(3, 1), new Position(3, 3), "Ladder3"));
 		board.addCollection(new Ladder(new Position(4, 3), new Position(0, 5), "Ladder4"));
 		try {
-			new Ladder(new Position(0, 9), new Position(0, 8), "Ladder5");
+			new Ladder(new Position(0, 9), new Position(0, 3), "Ladder5");
 		} catch (InitializeException ex) {
 			System.out.println(ex.getMessage());
 		}
