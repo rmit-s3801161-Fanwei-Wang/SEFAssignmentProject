@@ -36,9 +36,9 @@ public class BoardTest {
 		ladders[2] = new Ladder(new Position(3, 1), new Position(3, 3), "Ladder3");
 		ladders[3] = new Ladder(new Position(4, 3), new Position(0, 5), "Ladder4");
 		try {
-			ladders[4] = new Ladder(new Position(0, 9), new Position(0, 8), "Ladder5");
+			ladders[4] = new Ladder(new Position(0, 9), new Position(0, 3), "Ladder5");
 		} catch (InitializeException ex) {
-			System.out.println(ex.getMessage());
+			System.out.println(ex.toString());
 		}
 		ladders[4] = new Ladder(new Position(9, 4), new Position(0, 6), "Ladder5");
 
@@ -48,11 +48,11 @@ public class BoardTest {
 		snakes[0] = new Snake(new Position(1, 9), new Position(1, 7), "Snake1");
 		snakes[1] = new Snake(new Position(3, 7), new Position(7, 5), "Snake2");
 		snakes[2] = new Snake(new Position(5, 5), new Position(6, 3), "Snake3");
-		snakes[3] = new Snake(new Position(8, 8), new Position(1, 6), "Snake4");
+		snakes[3] = new Snake(new Position(8, 8), new Position(4, 6), "Snake4");
 		try {
 			snakes[4] = new Snake(new Position(0, 1), new Position(0, 8), "Snake5");
 		} catch (InitializeException ex) {
-			System.out.println(ex.getMessage());
+			System.out.println(ex.toString());
 		}
 		snakes[4] = new Snake(new Position(6, 3), new Position(9, 1), "Snake5");
 
