@@ -37,6 +37,8 @@ abstract public class Entity {
 	abstract public void draw(Graphics g);
 
 	public boolean adjustPosition(Piece piece) {
+		if (this.getExit() == null || this.getEntry() == null)
+			return false;
 		if (piece.getEntry() != null)
 			if (piece.getEntry().compareTo(entry)) {
 				piece.getEntry().setXY(exit);
