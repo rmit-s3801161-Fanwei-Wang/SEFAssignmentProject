@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import models.Piece;
+import exception.OutOfBoardException;
 import models.Position;
 
 public class PositionTest {
@@ -36,7 +36,16 @@ public class PositionTest {
 		p1.move(1);
 		assertEquals(4, p1.getX());
 		assertEquals(76, p1.positionToInt());
-
+	}
+	
+	@Test (expected = OutOfBoardException.class)
+	public void testMove() throws OutOfBoardException {
+		Position p2 = new Position(4,0);
+		p2.move("TL");
+		assertEquals(17,p2.positionToInt());
+		p2.move("B1L2");
+		assertEquals(2,p2.positionToInt());
+		p2.move("BR");
 	}
 
 }

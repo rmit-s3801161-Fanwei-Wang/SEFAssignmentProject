@@ -1,29 +1,35 @@
 package models;
 
-public class Ladder {
-	private Position bottom;
-	private Position top;
+import java.awt.Graphics;
 
-	public Ladder(Position bottom, Position top) {
-		this.bottom = bottom;
-		this.top = top;
+import exception.InitializeException;
+
+public class Ladder extends Entity {
+
+	public Ladder(Position bottom, Position top, String name) throws InitializeException {
+		super(bottom, top, name);
+		InitializeException ex = new InitializeException(
+				("Bottom:" + bottom.positionToInt() + " ,Top:" + top.positionToInt() + " is not possible"));
+		if (super.getExit().positionToInt() - super.getEntry().positionToInt() > 30
+				|| super.getExit().positionToInt() > super.getExit().positionToInt()) {
+			throw ex;
+		}
 	}
 
-	public Position getBottom() {
-		return bottom;
-	}
-
-	public Position getTop() {
-		return top;
-	}
-
-	public boolean climb(Piece piece) {
-		if (piece.getPosition().compareTo(bottom)) {
-			piece.getPosition().setXY(top);
-			System.out.println(piece.getName() + " climb ladder to " + top.positionToInt());
+	@Override
+	public boolean adjustPosition(Piece piece) {
+		if (super.adjustPosition(piece)) {
+			System.out.println(
+					piece.getName() + " climb " + super.getName() + " to " + super.getExit().positionToInt());
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

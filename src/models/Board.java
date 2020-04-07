@@ -11,7 +11,7 @@ public class Board {
 	private Snake[] snakes = new Snake[5];
 	private Guard[] guards = new Guard[3];
 	private ArrayList<Piece> pieces = new ArrayList<Piece>();
-	private HashMap<Position,Object> collections = new HashMap<Position,Object>();
+	private HashMap<Position,Entity> collections = new HashMap<Position,Entity>();
 
 	public Board() {
 	}
@@ -20,12 +20,12 @@ public class Board {
 		this.ladders = ladders;
 		this.snakes = snakes;
 		for(int i=0;i<ladders.length;i++) {
-			collections.put(ladders[i].getBottom(), ladders[i]);
-			collections.put(ladders[i].getTop(), ladders[i]);
+			collections.put(ladders[i].getEntry(), ladders[i]);
+			collections.put(ladders[i].getExit(), ladders[i]);
 		}
 		for(int i=0;i<snakes.length;i++) {
-			collections.put(snakes[i].getHead(), snakes[i]);
-			collections.put(snakes[i].getTail(), snakes[i]);
+			collections.put(snakes[i].getEntry(), snakes[i]);
+			collections.put(snakes[i].getExit(), snakes[i]);
 		}
 	}
 
@@ -49,26 +49,26 @@ public class Board {
 		return pieces;
 	}
 
-	public void addCollection(Object obj) {
+	public void addCollection(Entity obj) {
 		if(obj instanceof Piece) {
-			if(((Piece)obj).getPosition()!=null)
-				collections.put(((Piece)obj).getPosition(), obj);
+			if(((Piece)obj).getEntry()!=null)
+				collections.put(((Piece)obj).getEntry(), obj);
 		}
 		else if(obj instanceof Guard) {
-			if(((Guard)obj).getPosition()!=null)
-				collections.put(((Guard)obj).getPosition(), obj);
+			if(((Guard)obj).getExit()!=null)
+				collections.put(((Guard)obj).getExit(), obj);
 		}
 		else if(obj instanceof Snake) {
-			collections.put(((Snake) obj).getHead(),obj);
-			collections.put(((Snake) obj).getTail(),obj);
+			collections.put(((Snake) obj).getEntry(),obj);
+			collections.put(((Snake) obj).getExit(),obj);
 		}
 		else {
-			collections.put(((Ladder) obj).getBottom(),obj);
-			collections.put(((Ladder) obj).getTop(),obj);
+			collections.put(((Ladder) obj).getEntry(),obj);
+			collections.put(((Ladder) obj).getExit(),obj);
 		}
 	}
 	
-	public HashMap<Position, Object> getCollections() {
+	public HashMap<Position, Entity> getCollections() {
 		return collections;
 	}
 
