@@ -2,4 +2,4 @@ Snakes and Ladders
 
 Use case diagram and class diagram: ~/Diagram.png
 
-main class: Game, User, Player, Admin, Board, Ladder, Snake, Position, Guard, Piece, Dice, GameSys
+main class: Game, User, Player, Admin, Board, Ladder, Snake, Position, Guard, Piece, Dice, GameSys,Entity
