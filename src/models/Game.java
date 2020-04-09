@@ -33,7 +33,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return String.format("Game[ ID: %s   BoardID: %s   Snake PlayerID: %s   Human PlayerID: %s ]",gameID,"board.getBoardID()",players[0].getId(),players[1].getId() );
+        return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]",gameID,players[0].getId(),players[1].getId() );
         //TODO generate boardID
     }
 }
