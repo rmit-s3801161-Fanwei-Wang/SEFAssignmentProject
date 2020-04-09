@@ -7,9 +7,6 @@ public class Game {
     private Board board;
     private int round;
 
-    public Game() {
-    }
-
     public Game(Player snakePlayer,Player humanPlayer, Board board, int round) {
         players[0] = snakePlayer;
         players[1] = humanPlayer;
