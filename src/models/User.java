@@ -1,33 +1,30 @@
 package models;
 
-import javax.print.attribute.standard.PresentationDirection;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class User implements Serializable {
-    private String id;
+public abstract class User implements Serializable {
+    private String id = idGenerator();
     private String username;
     private String password;
-    private String role;
     private String userName;
     private String userEmail;
-    private ArrayList<Game> gameHistories = new ArrayList<Game>();
     private static HashMap<String,User> users = new HashMap<>();
-
-
+    private static HashMap<String,Game> games = new HashMap<>();
 
     public User() {
     }
 
-    public User(String username, String password, String role, String userName, String userEmail) {
+    public User(String username, String password, String userName, String userEmail) {
         this.username = userName;
         this.password = password;
-        this.role = role;
         this.userName = userName;
         this.userEmail = userEmail;
+    }
+
+    public static HashMap<String, Game> getGames() {
+        return games;
     }
 
     public String getId() {
@@ -54,14 +51,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getUserName() {
         return userName;
     }
@@ -81,7 +70,7 @@ public class User implements Serializable {
     public boolean forgetPassword(String email){
         for(User user: users.values()){
             if(email.equals(user.getUserEmail()))
-                //TODO send email
+                //TODO send email function
                 return true;
         }
         return false;
@@ -102,4 +91,7 @@ public class User implements Serializable {
         }
         return false;
     }
+
+    abstract String idGenerator();
+
 }
