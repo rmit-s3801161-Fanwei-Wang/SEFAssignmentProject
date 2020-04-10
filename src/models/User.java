@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class User implements Serializable {
-    private String id = idGenerator();
+    private String userID = idGenerator();
     private String username;
     private String password;
     private String userName;
@@ -27,12 +27,12 @@ public abstract class User implements Serializable {
         return games;
     }
 
-    public String getId() {
-        return id;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserID(String id) {
+        userID = id;
     }
 
     public String getUsername() {
@@ -93,5 +93,7 @@ public abstract class User implements Serializable {
     }
 
     abstract String idGenerator();
+
+
 
 }

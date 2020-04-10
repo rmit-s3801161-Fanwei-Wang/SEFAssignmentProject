@@ -1,10 +1,12 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player extends User {
     static int uniqueID = 0;
-    private ArrayList<Game> gameHistories = new ArrayList<>();
+    private ArrayList<Game> savedGame = new ArrayList<>();
+    private Game playing = null;
 
     public Player() {
     }
@@ -18,19 +20,41 @@ public class Player extends User {
         return String.format("player%06d",++uniqueID);
     }
 
-    //TODO implement load Game
-    public boolean loadGame(String gameID){
-        return false;
+    //TODO Don't throw Exception
+    public Game loadGame(String gameID){
+        boolean foundGame = false;
+        for(String id: getGames().keySet())
+            if(id.equals(gameID)){
+                foundGame = true;
+                if(Arrays.asList(getGames().get(id).getPlayers()).contains(getUserID())){
+                    return getGames().get(id);
+                }
+            }
+        if(foundGame)
+            throw new IllegalArgumentException("Failed to load game. You didn't played this game");
+        else
+            throw new IllegalArgumentException("Failed to load Game. Game not exit.");
     }
 
-    //TODO implement startNewGame
+    //Generate a new Game with unique GameID and default round = 0;
+    //Player could choose role to play.
+    //And admin should set a board before start the game.
     public Game startNewGame(){
-        return null;
+        Game newGame = new Game();
+        saveGame(newGame);
+        return newGame;
     }
 
-    //TODO implement saveGame
-    public Game saveGame(){
-        return null;
+    //Save game in this player's savedGame
+    //And update the game status to games
+    public void saveGame(Game game){
+        playing = game;
+        savedGame.add(game);
+        getGames().put(game.getGameID(),game);
+    }
+
+    public void saveGame(){
+        saveGame(playing);
     }
 
     //TODO implement pauseGame
@@ -46,11 +70,11 @@ public class Player extends User {
     @Override
     public String toString(){
         StringBuilder ret = new StringBuilder();
-        ret.append("Player[ " + "ID: " + getId() + "   Username: " + getUserName());
-        ret.append("   Game Histories: ");
-        for(int i = 0; i < gameHistories.size(); i++){
-            ret.append(gameHistories.get(i).getGameID());
-            if (i != gameHistories.size() -1){
+        ret.append("Player[ " + "ID: " + getUserID() + "   Username: " + getUserName());
+        ret.append("   Saved Game: ");
+        for(int i = 0; i < savedGame.size(); i++){
+            ret.append(savedGame.get(i).getGameID());
+            if (i != savedGame.size() -1){
                 ret.append(",");
             }
         }
