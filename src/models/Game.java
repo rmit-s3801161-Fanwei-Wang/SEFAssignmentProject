@@ -1,7 +1,7 @@
 package models;
 
 public class Game {
-    private String gameID;
+    private String gameID = idGenerator();;
     private static int uniqueID = 0;
     private Player snakePlayer;
     private Player humanPlayer;
@@ -22,7 +22,6 @@ public class Game {
     }
 
     public Game() {
-        gameID = idGenerator();
         round = 0;
     }
 
@@ -54,7 +53,7 @@ public class Game {
         if(snakePlayer != null)
             snake = snakePlayer.getUserID();
         if(humanPlayer != null)
-            snake = humanPlayer.getUserID();
+            human = humanPlayer.getUserID();
         return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
     }
 

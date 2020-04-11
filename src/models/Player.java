@@ -81,4 +81,15 @@ public class Player extends User {
         ret.append(" ]");
         return ret.toString();
     }
+
+    public static void main(String[] args) {
+        Player player1 = new Player();
+        Player player2 = new Player();
+        Game game = new Game(player1,player2,new Board());
+        player1.saveGame(game);
+        for (Game g: player2.getGames().values()) {
+            System.out.println(g);
+        }
+
+    }
 }
