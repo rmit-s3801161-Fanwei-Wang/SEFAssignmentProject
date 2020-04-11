@@ -1,7 +1,7 @@
 package models;
 
 public class Game {
-    private String gameID;
+    private String gameID = idGenerator();
     private static int uniqueID = 0;
     private Player snakePlayer;
     private Player humanPlayer;
@@ -22,7 +22,6 @@ public class Game {
     }
 
     public Game() {
-        gameID = idGenerator();
         round = 0;
     }
 
@@ -54,9 +53,14 @@ public class Game {
         if(snakePlayer != null)
             snake = snakePlayer.getUserID();
         if(humanPlayer != null)
-            snake = humanPlayer.getUserID();
+            human = humanPlayer.getUserID();
         return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
     }
 
-
+    public static void main(String[] args) {
+        Player snake = new Player("s1","123","123","@");
+        Player human = new Player("ss2","123","2123","@");
+        Game game = new Game(snake,human,new Board());
+        System.out.println(game);
+    }
 }
