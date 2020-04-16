@@ -1,7 +1,7 @@
 package models;
 
 public class Game {
-    private String gameID = idGenerator();;
+    private String gameID = idGenerator();
     private static int uniqueID = 0;
     private Player snakePlayer;
     private Player humanPlayer;

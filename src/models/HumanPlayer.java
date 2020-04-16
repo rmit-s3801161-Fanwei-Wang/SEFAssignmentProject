@@ -6,7 +6,7 @@ public class HumanPlayer extends Player {
     
     //TODO implement
     public int rollDice(Dice dice){
-        return -1;
+        return dice.rollDice();
     }
 
     //TODO implement
