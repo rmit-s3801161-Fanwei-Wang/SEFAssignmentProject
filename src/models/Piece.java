@@ -9,6 +9,7 @@ public class Piece extends Entity {
 
 	private int level = 1;
 	private boolean debuff = false;
+	private int climbedLadders = 0;
 
 	public Piece(Position position, String name) {
 		super(position, null, name);
@@ -21,28 +22,28 @@ public class Piece extends Entity {
 			System.out.println(super.getName() + " move to " + dice);
 			super.setEntry(new Position(dice - 1, 0));
 			collections.put(super.getEntry(), this);
-			for(Entity e:collections.values()) {
-				if(e instanceof Piece)
-					continue;
-				if(e.getEntry().compareTo(super.getEntry()))
-					e.adjustPosition(this);
-			}
-			return true;
+			 
 		}
-		if (!debuff) {
+		else if (!debuff) {
 			System.out.print(super.getName() + " move from " + super.getEntry().positionToInt());
 			super.getEntry().move(dice);
 			System.out.println(" to " + super.getEntry().positionToInt());
-			for(Entity e:collections.values()) {
-				if(e instanceof Piece)
-					continue;
-				if(e.getEntry().compareTo(super.getEntry()))
-					e.adjustPosition(this);
-			}
-			return true;
-		} else
+		} else {
 			System.out.println(super.getName() + " cannot move when having buff");
-		return false;
+			return false;
+		}
+		
+		for(Entity e:collections.values()) {
+			if(e instanceof Piece)
+				continue;
+			if(e.getEntry().compareTo(super.getEntry())) {
+				if(e instanceof Ladder) {
+					climbedLadders++;
+				}
+				e.adjustPosition(this);
+			}
+		}
+		return true;
 	}
 
 	public boolean move(HashMap<Position, Entity> collections, String choice) throws OutOfBoardException {
@@ -85,6 +86,10 @@ public class Piece extends Entity {
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public int getClimbNumber() {
+		return climbedLadders;
 	}
 
 }
