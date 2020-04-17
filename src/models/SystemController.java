@@ -18,7 +18,7 @@ public class SystemController {
 		//	idGenerator(count);	
 		Player newPlayer = new Player(userName, password, email);
 		String sql = "";
-		db.create();
+		db.create(sql, newPlayer);
 		currentPlayer = newPlayer;
 		db.db_close();
 	}
@@ -26,7 +26,7 @@ public class SystemController {
 	public static void logIn(String email, String password) {
 		DB db = new DB();
 		String sql = "";
-		currentPlayer = (Player) db.search();
+		currentPlayer = (Player) db.search("users", sql);
 		if (currentPlayer == null) {
 			String validMessage = "Wrong password or email!";
 		}
@@ -59,7 +59,7 @@ public class SystemController {
 		DB db = new DB();
 		// params: currentPlayer.getID(), gameID		
 		String sql = "";
-		Game loadGame = (Game) db.search();
+		Game loadGame = (Game) db.search("games", sql);
 		if (loadGame == null) {
 			throw new LoadGameException("Game not found!");
 		}
