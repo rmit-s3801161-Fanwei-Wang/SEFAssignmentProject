@@ -43,6 +43,24 @@ public class Board{
 		return collections;
 	}
 	
-	
+	public void viewBoard() {
+		System.out.println();
+		for(int i = 9 ; i >= 0 ; i--) {
+			for(int j = 0 ; j < 10 ; j++) {
+				boolean okay = true;
+				for(Position p:collections.keySet()) {
+					if(p.compareTo(new Position(j,i))) {
+						System.out.print(collections.get(p).getName());
+						okay = false;
+					}	
+				}
+				if(okay)
+					System.out.print("-");
+				System.out.print("\t");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
 
 }
