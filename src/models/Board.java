@@ -44,7 +44,7 @@ public class Board{
 	}
 	
 	public void viewBoard() {
-		
+		System.out.println();
 		for(int i = 9 ; i >= 0 ; i--) {
 			for(int j = 0 ; j < 10 ; j++) {
 				boolean okay = true;
@@ -60,6 +60,7 @@ public class Board{
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 
 }

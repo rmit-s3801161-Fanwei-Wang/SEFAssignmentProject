@@ -53,19 +53,25 @@ public class Piece extends Entity {
 		Position Destination = new Position(super.getEntry().getX(), super.getEntry().getY());
 		Destination.move(choice);
 		super.getEntry().setXY(Destination);
+		Snake removeSnake = null;
 		for(Entity e:collections.values()) {
 			if(e instanceof Snake) {
 				if(e.getEntry().compareTo(super.getEntry())) 
 					System.out.println(super.getName()+" is eaten by "+e.getName() +",Snake Win!");
 				else if(e.getExit().compareTo(super.getEntry())) {
 					System.out.println(e.getName()+" died");
-					collections.remove(e.getEntry(), e);
+					removeSnake = (Snake)e;
+					break;
 				}
 			}
 			else if(e instanceof Ladder) {
 				if(e.getEntry().compareTo(super.getEntry()))
 					e.adjustPosition(this);
 			}
+		}
+		if(removeSnake!=null) {
+			collections.remove(removeSnake.getEntry());
+			collections.remove(removeSnake.getExit());
 		}
 		return true;
 	}
