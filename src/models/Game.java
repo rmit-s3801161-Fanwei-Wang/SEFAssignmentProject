@@ -29,12 +29,37 @@ public class Game {
         return players;
     }
 
-    public void setPlayers(Player[] players) {
-        this.players = players;
+    public Player getSnakePlayer() {
+        return snakePlayer;
+
+    }
+
+    public void setSnakePlayer(Player snakePlayer) {
+        if(getHumanPlayer() == snakePlayer)
+            throw new IllegalArgumentException("Fail to set. You are a human player.");
+
+        this.snakePlayer = snakePlayer;
+        players[0] = snakePlayer;
+    }
+
+    public Player getHumanPlayer() {
+        return humanPlayer;
+    }
+
+    public void setHumanPlayer(Player humanPlayer) {
+        if(getSnakePlayer() == humanPlayer)
+            throw new IllegalArgumentException("Fail to set. You are a snake player.");
+
+        this.humanPlayer = humanPlayer;
+        players[1] = humanPlayer;
     }
 
     public String getGameID() {
         return gameID;
+    }
+
+    public int getRound() {
+        return round;
     }
 
     public int addRound(){
@@ -57,10 +82,9 @@ public class Game {
         return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
     }
 
-//    public static void main(String[] args) {
-//        Player snake = new Player("s1","123","123","@");
-//        Player human = new Player("ss2","123","2123","@");
-//        Game game = new Game(snake,human,new Board());
-//        System.out.println(game);
-//    }
+    public static void main(String[] args) {
+
+        Game game = new Game();
+        System.out.println(game);
+    }
 }
