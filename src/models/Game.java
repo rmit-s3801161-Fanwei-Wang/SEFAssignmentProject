@@ -81,10 +81,4 @@ public class Game {
             human = humanPlayer.getUserID();
         return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
     }
-
-    public static void main(String[] args) {
-
-        Game game = new Game();
-        System.out.println(game);
-    }
 }
