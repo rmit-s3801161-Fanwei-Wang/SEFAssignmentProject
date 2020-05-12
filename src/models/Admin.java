@@ -1,7 +1,7 @@
 package models;
 
 public class Admin extends User {
-    static int uniqueID = 0;
+//    static int uniqueID = 0;
 
     public Admin() {
     }
@@ -14,8 +14,8 @@ public class Admin extends User {
     public Board setNewBoard(){
         return null;
     }
-    @Override
-    String idGenerator() {
-        return String.format("admin%06d",++uniqueID);
-    }
+//    @Override
+//    String idGenerator() {
+//        return String.format("admin%06d",++uniqueID);
+//    }
 }

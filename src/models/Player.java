@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Player extends User {
-    static int uniqueID = 0;
+//    static int uniqueID = 0;
 //    private ArrayList<Game> savedGame = new ArrayList<>();
 //    private Game playing = null;
 
@@ -15,10 +15,10 @@ public class Player extends User {
         super(username, password, userEmail);
     }
 
-    @Override
-    String idGenerator() {
-        return String.format("player%06d",++uniqueID);
-    }
+//    @Override
+//    String idGenerator() {
+//        return String.format("player%06d",++uniqueID);
+//    }
 
     //TODO Don't throw Exception
 //    public Game loadGame(String gameID){
@@ -58,14 +58,14 @@ public class Player extends User {
 //    }
 
     //TODO implement pauseGame
-    public boolean pauseGame(){
-        return false;
-    }
+//    public boolean pauseGame(){
+//        return false;
+//    }
 
     //TODO implement resumeGame
-    public boolean resumeGame(){
-        return false;
-    }
+//    public boolean resumeGame(){
+//        return false;
+//    }
 
 //    @Override
 //    public String toString(){

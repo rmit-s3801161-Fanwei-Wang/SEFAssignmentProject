@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DB {	
+	private static final String SSH_URL = "titan.csit.rmit.edu.au";
 	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"; 
 	// TODO put DB server url here
     private static final String DB_URL = "";
@@ -73,7 +74,9 @@ public class DB {
     		// Create preparedStatement
             this.ptmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             Class<?> classN = object.getClass();
-
+            if (object instanceof models.Player) {
+				classN = User.class;
+			}
             Field[] fields = classN.getDeclaredFields();
             for (int i = 1; i < fields.length; i++) {
 				Field field = fields[i];
@@ -201,8 +204,62 @@ public class DB {
 		}	
 	}
 	
-	public int count(String tableName) {
-		return 0;
+	public boolean isUserExist(String email) {
+		String sql = "select * from users where email = '" + email + "'";
+		try {
+			this.stmt = this.conn.createStatement();
+			ResultSet rs = this.stmt.executeQuery(sql);
+			while (rs.next()) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public Player findPlayer(String email, String password) {
+		Player player = null;
+		String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
+		try {
+			this.stmt = this.conn.createStatement();
+			ResultSet rs = this.stmt.executeQuery(sql);
+			while (rs.next()) {
+				player.setID(rs.getLong("id"));
+				player.setUserEmail(rs.getString("email"));
+				player.setUsername(rs.getString("username"));
+				player.setPassword(rs.getString("password"));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		return player;
+	}
+	
+	public int count(String sql) {
+		int count = 0;
+		try {
+			this.stmt = this.conn.createStatement();
+	        ResultSet rs = this.stmt.executeQuery(sql);
+	        count = rs.getInt("total");
+		} catch (Exception e) {
+			System.out.println("Statement running failed: " + e);
+		} finally {
+			try {
+				if (this.stmt != null) this.stmt.close();
+			} 
+			catch (Exception e2) {
+				System.out.println("Closing statement failed: " + e2);
+			}
+		}
+		
+		return count;
 	}
 	
 	
