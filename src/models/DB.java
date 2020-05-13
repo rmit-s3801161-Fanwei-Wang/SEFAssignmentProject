@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exception.DBException;
+
 public class DB {	
 	private static final String SSH_URL = "titan.csit.rmit.edu.au";
 	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"; 
@@ -112,7 +114,8 @@ public class DB {
 				if (this.ptmt != null) this.ptmt.close();
 			} 
 			catch (Exception e2) {
-				System.out.println("Closing statement failed: " + e2);
+				result.put("status", false);
+				result.put("message", "Statement excetion occuring: " + e2);
 			}
 		}
     	return result;
@@ -204,7 +207,7 @@ public class DB {
 		}	
 	}
 	
-	public boolean isUserExist(String email) {
+	public boolean isUserExist(String email) throws DBException {
 		String sql = "select * from users where email = '" + email + "'";
 		try {
 			this.stmt = this.conn.createStatement();
@@ -215,13 +218,14 @@ public class DB {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			throw new DBException(e.getMessage());
 		}
 		
 		return false;
 	}
 	
-	public Player findPlayer(String email, String password) {
+	public Player findPlayer(String email, String password) throws DBException {
 		Player player = null;
 		String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
 		try {
@@ -236,26 +240,27 @@ public class DB {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DBException(e.getMessage());
 		}
         
 		return player;
 	}
 	
-	public int count(String sql) {
+	public int count(String sql) throws DBException {
 		int count = 0;
 		try {
 			this.stmt = this.conn.createStatement();
 	        ResultSet rs = this.stmt.executeQuery(sql);
 	        count = rs.getInt("total");
 		} catch (Exception e) {
-			System.out.println("Statement running failed: " + e);
+//			System.out.println("Statement running failed: " + e);
+			throw new DBException(e.getMessage());
 		} finally {
 			try {
 				if (this.stmt != null) this.stmt.close();
 			} 
 			catch (Exception e2) {
-				System.out.println("Closing statement failed: " + e2);
+				throw new DBException(e2.getMessage());
 			}
 		}
 		

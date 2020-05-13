@@ -51,9 +51,9 @@ public class Game {
         String snake = "N/A";
         String human = "N/A";
         if(snakePlayer != null)
-            snake = snakePlayer.getUserID();
+            snake = snakePlayer.getUsername();
         if(humanPlayer != null)
-            human = humanPlayer.getUserID();
+            human = humanPlayer.getUsername();
         return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
     }
 

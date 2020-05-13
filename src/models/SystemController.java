@@ -3,12 +3,15 @@ package models;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
+import exception.DBException;
+import exception.ExistException;
 import exception.LoadGameException;
+import exception.ValidationException;
 // TODO init DB API
 import models.DB;
 
 public class SystemController {
-	static Player currentPlayer;
+	public static Player currentPlayer;
 	
 	public static void main(String[] args) {
 		Player object = new Player("test", "test", "test@email.com");
@@ -22,20 +25,39 @@ public class SystemController {
 		}
 	}
 	
+	public static Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
 	//Put logic here first TODO implement this with GUI part	
-	public static void signUp(String email, String userName, String password, String conPassword) {
+	public static void signUp(String email, String userName, String password, String conPassword) throws ValidationException, DBException, ExistException {
 		currentPlayer = null;
+		if (email.isBlank() || password.isBlank() || conPassword.isBlank()) {
+			throw new ValidationException("Please enter right information!");
+		}
 		DB db = new DB();
 		if (db.isUserExist(email)) {
-			System.err.println("Email exist!");
+			throw new ExistException("Email exist!");
 		}
-		// TODO String format vaildation
-		//Check email format, Check password	
 		
+		String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+		String passPattern = "^[a-zA-Z]\\w{5,17}$";
+		if (!email.matches(emailPattern)) {
+			System.err.println("It is not an email!");
+			throw new ValidationException("It is not an email!");
+		}
+		
+		if (!password.matches(passPattern)) {
+			System.err.println("It is not a valid passaword!");
+			throw new ValidationException("It is not a valid passaword!");
+		} else if (!password.equals(conPassword)) {
+			System.err.println("Password is not same!");
+			throw new ValidationException("Password is not same!");
+		}	
 		
 		int playerCounts = db.count("select count(*) from users where type = 'player'");
 		if (userName.isBlank()) {
-			userName = "Player" + playerCounts;
+			userName = "Player" + (++playerCounts);
 		}
 		Player newPlayer = new Player(userName, password, email);
 		String sql = "insert into users (username, password, email, type) values(?, ?, ?, ?)";
@@ -45,15 +67,15 @@ public class SystemController {
 			newPlayer.setID((long) resultHashMap.get("id"));
 			currentPlayer = newPlayer;
 		} else {
-			System.err.println("Signup failed");
+			throw new DBException((String) resultHashMap.get("message"));
 		}
 	}
 	
-	public static void logIn(String email, String password) {
+	public static void logIn(String email, String password) throws DBException, ValidationException {
 		DB db = new DB();
 		currentPlayer = db.findPlayer(email, password);
 		if (currentPlayer == null) {
-			String validMessage = "Wrong password or email!";
+			throw new ValidationException("Wrong password or email!");
 		}
 		db.db_close();
 	}
