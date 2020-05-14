@@ -15,7 +15,7 @@ import models.SystemController;
 public class SystemControllerTest {
 	//positive
 	@Test
-	public void testSignInSuccess() throws ValidationException, DBException, ExistException {
+	public void testSignUpSuccess() throws ValidationException, DBException, ExistException {
 		String email = "test@email.com";
 		String username = "";
 		String password = "asdf1234";
@@ -54,7 +54,7 @@ public class SystemControllerTest {
 	
 	
 	@Test (expected = ExistException.class)
-	public void testSignInFailed() throws ValidationException, DBException, ExistException{
+	public void testSignUpFailed() throws ValidationException, DBException, ExistException{
 		String email = "test@email.com";
 		String username = "";
 		String password = "asdf1234";
@@ -65,7 +65,7 @@ public class SystemControllerTest {
 	}
 	
 	@Test (expected = ValidationException.class)
-	public void testSignInFailedWrongEmail() throws ValidationException, DBException, ExistException {
+	public void testSignUpFailedWrongEmail() throws ValidationException, DBException, ExistException {
 		String email = "test_email";
 		String username = "";
 		String password = "asdf1234";
@@ -75,7 +75,7 @@ public class SystemControllerTest {
 	}
 	
 	@Test (expected = ValidationException.class)
-	public void testSignInFailedWrongPassword() throws ValidationException, DBException, ExistException {
+	public void testSignUpFailedWrongPassword() throws ValidationException, DBException, ExistException {
 		String email = "test2@email.com";
 		String username = "";
 		String password = "1234";
@@ -85,7 +85,7 @@ public class SystemControllerTest {
 	}
 	
 	@Test (expected = ValidationException.class)
-	public void testSignInFailedNoInput() throws ValidationException, DBException, ExistException {
+	public void testSignUpFailedNoInput() throws ValidationException, DBException, ExistException {
 		String email = "";
 		String username = "";
 		String password = "";
@@ -95,22 +95,22 @@ public class SystemControllerTest {
 	}
 	
 	
-	//DB negative test	
-	@Test (expected = DBException.class)
-	public void testSignInFailedDB() throws ValidationException, DBException, ExistException {
-		String email = "test2@email.com";
-		String username = "";
-		String password = "aaa1234";
-		String conPassword = "aaa1234";
-		
-		SystemController.signUp(email, username, password, conPassword);
-	}
-	
-	@Test (expected = DBException.class)
-	public void testLogInFailedDB() throws ValidationException, DBException{
-		String email = "test2@email.com";
-		String password = "asdf1234";
-		
-		SystemController.logIn(email, password);
-	}
+//	//DB negative test	
+//	@Test (expected = DBException.class)
+//	public void testSignInFailedDB() throws ValidationException, DBException, ExistException {
+//		String email = "test2@email.com";
+//		String username = "";
+//		String password = "aaa1234";
+//		String conPassword = "aaa1234";
+//		
+//		SystemController.signUp(email, username, password, conPassword);
+//	}
+//	
+//	@Test (expected = DBException.class)
+//	public void testLogInFailedDB() throws ValidationException, DBException{
+//		String email = "test2@email.com";
+//		String password = "asdf1234";
+//		
+//		SystemController.logIn(email, password);
+//	}
 }

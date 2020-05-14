@@ -53,6 +53,10 @@ public abstract class User implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+    
+    public void setType(String type) {
+		this.type = type;
+	}
 
     public String getPassword() {
         return password;

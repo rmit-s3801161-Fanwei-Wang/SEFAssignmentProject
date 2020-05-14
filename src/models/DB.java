@@ -17,7 +17,7 @@ public class DB {
 	private static final String SSH_URL = "titan.csit.rmit.edu.au";
 	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"; 
 	// TODO put DB server url here
-    private static final String DB_URL = "";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/Sef?serverTimezone=UTC&zeroDateTimeBehavior=ConvertToNull";
     
     private static final String USER = "root";
     private static final String PASS = "root";
@@ -226,7 +226,7 @@ public class DB {
 	}
 	
 	public Player findPlayer(String email, String password) throws DBException {
-		Player player = null;
+		Player player = new Player();
 		String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
 		try {
 			this.stmt = this.conn.createStatement();
@@ -236,6 +236,7 @@ public class DB {
 				player.setUserEmail(rs.getString("email"));
 				player.setUsername(rs.getString("username"));
 				player.setPassword(rs.getString("password"));
+				player.setType("player");
 			}
 			
 		} catch (SQLException e) {
@@ -251,9 +252,10 @@ public class DB {
 		try {
 			this.stmt = this.conn.createStatement();
 	        ResultSet rs = this.stmt.executeQuery(sql);
-	        count = rs.getInt("total");
+	        while (rs.next()) {
+	        	count = rs.getInt(1);
+			}
 		} catch (Exception e) {
-//			System.out.println("Statement running failed: " + e);
 			throw new DBException(e.getMessage());
 		} finally {
 			try {
