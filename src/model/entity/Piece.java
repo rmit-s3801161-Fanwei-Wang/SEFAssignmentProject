@@ -52,11 +52,19 @@ public class Piece extends PGEntity {
 			return false;
 		Position Destination = new Position(super.getPosition().getX(), super.getPosition().getY());
 		Destination.move(choice);
+<<<<<<< HEAD
 <<<<<<< HEAD:src/models/Piece.java
 		super.getEntry().setXY(Destination);
 =======
 		super.getPosition().setXY(Destination);
 >>>>>>> ben:src/model/entity/Piece.java
+=======
+<<<<<<<< HEAD:src/model/entity/Piece.java
+		super.getPosition().setXY(Destination);
+========
+		super.getEntry().setXY(Destination);
+>>>>>>>> ben:src/models/Piece.java
+>>>>>>> ben
 		Snake removeSnake = null;
 		for(Entity e:collections.values()) {
 			if(e instanceof Snake) {
