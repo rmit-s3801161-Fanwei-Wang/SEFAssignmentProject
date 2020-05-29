@@ -1,6 +1,6 @@
-package models;
+package model.entity;
 
-import exception.OutOfBoardException;
+import model.exception.OutOfBoardException;
 
 public class Position{
 	private int x;

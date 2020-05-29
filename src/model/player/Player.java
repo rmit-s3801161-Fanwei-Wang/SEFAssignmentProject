@@ -1,7 +1,4 @@
-package models;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+package model.player;
 
 public class Player extends User {
     static int uniqueID = 0;
