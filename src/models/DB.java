@@ -41,7 +41,16 @@ public class DB {
 			System.err.println("DB Error " + e);
 		}
 	}
-	
+
+	public Statement getStmt() {
+		return stmt;
+	}
+
+	public void setStmt(Statement stmt) {
+		this.stmt = stmt;
+	}
+
+
 	public Connection getConn() {
 		return this.conn;
 	}
@@ -65,7 +74,8 @@ public class DB {
             }
 		}
     }
-	
+
+    //Insert data in to database
 	// TODO CRUD	
 	public Object create(String sql, Object object) {
 		// result = {"status": [true, false], "id": 1, "message": ""}    		    	
@@ -227,7 +237,8 @@ public class DB {
 		
 		return false;
 	}
-	
+
+
 	public Player findPlayer(String email, String password) throws DBException {
 		Player player = new Player();
 		String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
@@ -249,10 +260,10 @@ public class DB {
         
 		return null;
 	}
-	
-	public Game findGame(long gameID) {
-		
-	};
+
+	//TODO LUCAS
+	public void loadGame(){}
+
 	
 	public int count(String sql) throws DBException {
 		int count = 0;

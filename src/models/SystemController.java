@@ -1,17 +1,19 @@
 package models;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import exception.DBException;
 import exception.ExistException;
-import exception.LoadGameException;
 import exception.ValidationException;
+import javafx.event.ActionEvent;
 // TODO init DB API
-import models.DB;
+
 
 public class SystemController {
 	public static Player currentPlayer;
+	private ArrayList<Game> games = Game.getGames(currentPlayer);
 	
 	public static void main(String[] args) {
 		Player object = new Player("test", "test", "test@email.com");
@@ -59,10 +61,13 @@ public class SystemController {
 			int playerCounts = db.count("select count(*) from users where type = 'player'");
 			userName = "Player" + (++playerCounts);
 		}
+
+
 		Player newPlayer = new Player(userName, password, email);
 		String sql = "insert into users (username, password, email, type) values(?, ?, ?, ?)";
 		HashMap<String, Object> resultHashMap = (HashMap<String, Object>) db.create(sql, newPlayer);
 		db.db_close();
+
 		if ((boolean)resultHashMap.get("status")) {
 			newPlayer.setID((long) resultHashMap.get("id"));
 			currentPlayer = newPlayer;
@@ -85,37 +90,45 @@ public class SystemController {
 	}
 	
 	public static Game CreateGame() {
-		// TODO GUI
-		String selectRole = "";
-		switch (selectRole) {
-		case "human":
-			Player humanPlayer = currentPlayer;
-			break;
-		case "snake":
-			Player snakePlayer = currentPlayer;
-		default:
-			break;
-		}
-		DB db = new DB();
-		//		
-		String sql = "";
-		return null;
+//		// TODO GUI
+//		String selectRole = "";
+//		switch (selectRole) {
+//		case "human":
+//			Player humanPlayer = currentPlayer;
+//			break;
+//		case "snake":
+//			Player snakePlayer = currentPlayer;
+//		default:
+//			break;
+//		}
+//		DB db = new DB();
+//		//
+//		String sql = "";
+//		return null;
+		return Game.createGame(currentPlayer);
 	}
-	
-	
-	public static Game loadGame() throws LoadGameException {
-		DB db = new DB();
-		// params: currentPlayer.getID(), gameID		
-		String sql = "";
-		Game loadGame = (Game) db.search("games", sql);
-		if (loadGame == null) {
-			throw new LoadGameException("Game not found!");
-		}
-		
-		return loadGame;
+
+	//get a list of games belong to current user
+	public ArrayList<Game> getGames() {
+		return games;
 	}
+
+
+
+
+
 	
-	public static Board loadBoard() {
-		
-	}
+//	public static Game loadGame() throws LoadGameException {
+//		DB db = new DB();
+//		// params: currentPlayer.getID(), gameID
+//		String sql = "";
+//		Game loadGame = (Game) db.search("games", sql);
+//		if (loadGame == null) {
+//			throw new LoadGameException("Game not found!");
+//		}
+//
+//		return loadGame;
+//	}
+	
+
 }

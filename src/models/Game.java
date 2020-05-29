@@ -1,66 +1,135 @@
 package models;
 
+import exception.LoadGameException;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 public class Game {
-    private String gameID = idGenerator();;
-    private static int uniqueID = 0;
-    private Player snakePlayer;
-    private Player humanPlayer;
-    private Player[] players = new Player[2];// players[0] is snake control ID, players[1] is Human control ID
-    private Board board;
-    private int round;
+    private long gameID;
+    //    private Player player;
+//    private Board board;
+    private String playerID;
+    private String boardID;
 
-    public Game(Player snakePlayer,Player humanPlayer, Board board, int round) {
-        this.snakePlayer = snakePlayer;
-        this.humanPlayer = humanPlayer;
-        players = new Player[]{snakePlayer, humanPlayer};
-        this.board = board;
-        this.round = round;
-    }
-
-    public Game(Player snakePlayer,Player humanPlayer, Board board) {
-        this(snakePlayer,humanPlayer,board,0);
-    }
-
-    public Game() {
-        round = 0;
-    }
-
-    public Player[] getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(Player[] players) {
-        this.players = players;
-    }
-
-    public String getGameID() {
-        return gameID;
-    }
-
-    public int addRound(){
-        return round++;
-    }
-
-    private String idGenerator() {
-        return String.format("game%06d", ++uniqueID);
-    }
-
-
-    @Override
-    public String toString() {
-        String snake = "N/A";
-        String human = "N/A";
-        if(snakePlayer != null)
-            snake = snakePlayer.getUsername();
-        if(humanPlayer != null)
-            human = humanPlayer.getUsername();
-        return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
-    }
-
-//    public static void main(String[] args) {
-//        Player snake = new Player("s1","123","123","@");
-//        Player human = new Player("ss2","123","2123","@");
-//        Game game = new Game(snake,human,new Board());
-//        System.out.println(game);
+//
+//    public Game(Player player, Board board) {
+//        this.player = player;
+//        this.board = board;
 //    }
+
+    public Game(String playerID, String boardID) {
+        this.playerID = playerID;
+        this.boardID = boardID;
+    }
+
+    public Game(long gameID, String playerID, String boardID) {
+        this.gameID = gameID;
+        this.playerID = playerID;
+        this.boardID = boardID;
+    }
+
+    //
+    public static ArrayList<Game> getGames(Player currentPlayer) {
+        final String GAME_TABLE_NAME = "GAME";
+        ArrayList<Game> games = new ArrayList<>();
+        //TODO data in game table (game_id,player_id,board_id)
+
+        DB db = new DB();
+
+        try (Connection con = db.getConn();
+             Statement stmt = con.createStatement();
+        ) {
+            String sql = "SELECT * FROM " + GAME_TABLE_NAME + " WHERE player_id = " + currentPlayer.getID();
+
+            try(ResultSet resultSet = db.getStmt().executeQuery(sql)) {
+
+                while (resultSet.next()) {
+                    Game game = new Game(resultSet.getLong("game_id"), resultSet.getString("player_id"), resultSet.getString("board_id"));
+                    games.add(game);
+                }
+            }catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return games;
+    }
+
+    public Board getBoard(String boardID) {
+        final String BOARD_TABLE_NAME = "BOARD";
+
+        DB db = new DB();
+
+        String sql = "SELECT * FROM " + BOARD_TABLE_NAME + "WHERE board_id = " + boardID;
+
+        try (Connection con = db.getConn();
+             Statement stmt = con.createStatement();
+        ) {
+            Board board = new Board()
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+//    public Player getPlayer() {
+//        return player;
+//    }
+//
+//    public void setPlayer(Player player) {
+//        this.player = player;
+//    }
+//
+//    public Board getBoard() {
+//        return board;
+//    }
+//
+//    public void setBoard(Board board) {
+//        this.board = board;
+//    }
+
+
+    public String getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(String playerID) {
+        this.playerID = playerID;
+    }
+
+    public String getBoardID() {
+        return boardID;
+    }
+
+    public void setBoardID(String boardID) {
+        this.boardID = boardID;
+    }
+
+    public static Game createGame(Player currentPlayer) {
+//         TODO GUI
+        String selectRole = "";
+        switch (selectRole) {
+            case "human":
+                Player humanPlayer = currentPlayer;
+                break;
+            case "snake":
+                Player snakePlayer = currentPlayer;
+            default:
+                break;
+        }
+        DB db = new DB();
+        //
+        String sql = "";
+        return null;
+
+    }
+
 }
