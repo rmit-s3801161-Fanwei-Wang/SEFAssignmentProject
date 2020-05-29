@@ -1,4 +1,6 @@
-package models;
+package model.entity;
+
+import model.entity.*;
 
 import java.util.HashMap;
 
@@ -6,7 +8,7 @@ public class Board{
 //	private static int grids = 10; // columns and lines
 //	private int gridsize = 20; // size
 
-	private HashMap<Position,Entity> collections = new HashMap<Position,Entity>();
+	private HashMap<Position, Entity> collections = new HashMap<Position,Entity>();
 
 	public Board() {
 		
@@ -22,20 +24,18 @@ public class Board{
 
 	public void addCollection(Entity obj) {
 		if(obj instanceof Piece) {
-			if(((Piece)obj).getEntry()!=null)
-				collections.put(((Piece)obj).getEntry(), obj);
+			if(((Piece)obj).getPosition()!=null)
+				collections.put(((Piece)obj).getPosition(), obj);
 		}
 		else if(obj instanceof Guard) {
-			if(((Guard)obj).getExit()!=null)
-				collections.put(((Guard)obj).getExit(), obj);
+			if(((Guard)obj).getPosition()!=null)
+				collections.put(((Guard)obj).getPosition(), obj);
 		}
 		else if(obj instanceof Snake) {
 			collections.put(((Snake) obj).getEntry(),obj);
-			collections.put(((Snake) obj).getExit(),obj);
 		}
 		else {
 			collections.put(((Ladder) obj).getEntry(),obj);
-			collections.put(((Ladder) obj).getExit(),obj);
 		}
 	}
 	

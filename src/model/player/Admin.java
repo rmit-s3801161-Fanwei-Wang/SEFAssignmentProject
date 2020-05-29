@@ -1,4 +1,6 @@
-package models;
+package model.player;
+
+import model.entity.Board;
 
 public class Admin extends User {
     static int uniqueID = 0;
@@ -6,8 +8,8 @@ public class Admin extends User {
     public Admin() {
     }
 
-    public Admin(String username, String password, String userName, String userEmail) {
-        super(username, password, userName, userEmail);
+    public Admin(String username, String password, String userEmail) {
+        super(username, password, userEmail);
     }
 
     //TODO implement

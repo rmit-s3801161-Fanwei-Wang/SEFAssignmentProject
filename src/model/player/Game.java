@@ -1,7 +1,9 @@
-package models;
+package model.player;
+
+import model.entity.Board;
 
 public class Game {
-    private String gameID = idGenerator();;
+    private String gameID = idGenerator();
     private static int uniqueID = 0;
     private Player snakePlayer;
     private Player humanPlayer;
@@ -57,10 +59,10 @@ public class Game {
         return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
     }
 
-    public static void main(String[] args) {
-        Player snake = new Player("s1","123","123","@");
-        Player human = new Player("ss2","123","2123","@");
-        Game game = new Game(snake,human,new Board());
-        System.out.println(game);
-    }
+//    public static void main(String[] args) {
+//        Player snake = new Player("s1","123","123","@");
+//        Player human = new Player("ss2","123","2123","@");
+//        Game game = new Game(snake,human,new Board());
+//        System.out.println(game);
+//    }
 }

@@ -1,4 +1,4 @@
-package models;
+package model.entity;
 
 import java.util.Random;
 
