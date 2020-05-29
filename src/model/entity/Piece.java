@@ -96,7 +96,7 @@ public class Piece extends PGEntity {
 
 	@Override
 	public String toDbString() {
-		return String.format("{'Type':'Piece','Name':'%s','PositionX':%d,'PositionY':%d}",
+		return String.format("{\"Type\":\"Piece\",\"Name\":\"%s\",\"PositionX\":%d,\"PositionY\":%d}",
 				super.getName(),
 				super.getPosition().getX(),super.getPosition().getY());
 	}

@@ -109,7 +109,7 @@ public class Snake extends SLEntity {
 
     @Override
     public String toDbString() {
-        return String.format("{'Type':'Snake','Name':'%s','TailX':%d,'TailY':%d,'HeadX':%d,'HeadY':%d}",
+        return String.format("{\"Type\":\"Snake\",\"Name\":\"%s\",\"TailX\":%d,\"TailY\":%d,\"HeadX\":%d,\"HeadY\":%d}",
                 super.getName(), super.getExit().getX(),super.getExit().getY(),super.getEntry().getX(),super.getEntry().getY());
     }
 

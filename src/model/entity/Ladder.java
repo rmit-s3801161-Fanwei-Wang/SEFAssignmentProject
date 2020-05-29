@@ -36,7 +36,7 @@ public class Ladder extends SLEntity {
 
 	@Override
 	public String toDbString() {
-		return String.format("{'Type':'Ladder','Name':'%s','TopX':%d,'TopY':%d,'BotX':%d,'BotY':%d}", super.getName(),
+		return String.format("{\"Type\":\"Ladder\",\"Name\":\"%s\",\"TopX\":%d,\"TopY\":%d,\"BotX\":%d,\"BotY\":%d}", super.getName(),
 				super.getExit().getX(),super.getExit().getY(),super.getEntry().getX(),super.getEntry().getY());
 	}
 
