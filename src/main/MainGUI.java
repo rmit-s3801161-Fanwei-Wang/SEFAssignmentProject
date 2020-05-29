@@ -16,7 +16,7 @@ public class MainGUI extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/login_view.fxml"));
 
         stage.setTitle("Sneaks & Ladders Game");
-        stage.setScene(new Scene(root,1000  ,1000));
+        stage.setScene(new Scene(root,300  ,250));
         stage.show();
 
     }

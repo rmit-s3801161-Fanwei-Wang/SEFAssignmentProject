@@ -15,17 +15,17 @@ public class SystemController {
 	public static Player currentPlayer;
 	private ArrayList<Game> games = Game.getGames(currentPlayer);
 	
-	public static void main(String[] args) {
-		Player object = new Player("test", "test", "test@email.com");
-		Class<?> classN = object.getClass();
-		if (object instanceof models.Player) {
-			classN = User.class;
-		}
-        Field[] fields = classN.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-			System.out.println(fields[i]);
-		}
-	}
+//	public static void main(String[] args) {
+//		Player object = new Player("test", "test", "test@email.com");
+//		Class<?> classN = object.getClass();
+//		if (object instanceof models.Player) {
+//			classN = User.class;
+//		}
+//        Field[] fields = classN.getDeclaredFields();
+//        for (int i = 0; i < fields.length; i++) {
+//			System.out.println(fields[i]);
+//		}
+//	}
 	
 	public static Player getCurrentPlayer() {
 		return currentPlayer;
@@ -76,13 +76,17 @@ public class SystemController {
 		}
 	}
 	
-	public static void logIn(String email, String password) throws DBException, ValidationException {
+	public static boolean logIn(String email, String password) throws DBException, ValidationException {
 		DB db = new DB();
 		currentPlayer = db.findPlayer(email, password);
-		if (currentPlayer == null) {
-			throw new ValidationException("Wrong password or email!");
-		}
+//		if (currentPlayer == null) {
+//			throw new ValidationException("Wrong password or email!");
+//		}
+		if(currentPlayer!=null)
+			return true;
+
 		db.db_close();
+		return false;
 	}
 	
 	public static void logOut() {
