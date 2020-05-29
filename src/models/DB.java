@@ -1,5 +1,7 @@
 package models;
 
+import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
+
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -79,6 +81,7 @@ public class DB {
             if (object instanceof models.Player) {
 				classN = User.class;
 			}
+            
             Field[] fields = classN.getDeclaredFields();
             for (int i = 1; i < fields.length; i++) {
 				Field field = fields[i];
@@ -218,7 +221,7 @@ public class DB {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			// e.printStackTrace();
 			throw new DBException(e.getMessage());
 		}
 		
@@ -236,7 +239,7 @@ public class DB {
 				player.setUserEmail(rs.getString("email"));
 				player.setUsername(rs.getString("username"));
 				player.setPassword(rs.getString("password"));
-				player.setType("player");
+				return player;
 			}
 			
 		} catch (SQLException e) {
@@ -244,8 +247,12 @@ public class DB {
 			throw new DBException(e.getMessage());
 		}
         
-		return player;
+		return null;
 	}
+	
+	public Game findGame(long gameID) {
+		
+	};
 	
 	public int count(String sql) throws DBException {
 		int count = 0;
@@ -256,6 +263,7 @@ public class DB {
 	        	count = rs.getInt(1);
 			}
 		} catch (Exception e) {
+			//System.out.println("Statement running failed: " + e);
 			throw new DBException(e.getMessage());
 		} finally {
 			try {

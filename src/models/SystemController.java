@@ -55,8 +55,8 @@ public class SystemController {
 			throw new ValidationException("Password is not same!");
 		}	
 		
-		int playerCounts = db.count("select count(*) from users where type = 'player'");
 		if (userName.isBlank()) {
+			int playerCounts = db.count("select count(*) from users where type = 'player'");
 			userName = "Player" + (++playerCounts);
 		}
 		Player newPlayer = new Player(userName, password, email);
@@ -102,6 +102,7 @@ public class SystemController {
 		return null;
 	}
 	
+	
 	public static Game loadGame() throws LoadGameException {
 		DB db = new DB();
 		// params: currentPlayer.getID(), gameID		
@@ -112,5 +113,9 @@ public class SystemController {
 		}
 		
 		return loadGame;
+	}
+	
+	public static Board loadBoard() {
+		
 	}
 }
