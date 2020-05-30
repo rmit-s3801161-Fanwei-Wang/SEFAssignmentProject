@@ -34,11 +34,11 @@ public class SignInViewController {
     @FXML
     public void createNewUser(ActionEvent event) throws DBException, IOException {
 //        isNewUserValid() set this in if()
-        if(true){
+        if(isNewUserValid()){
             Player newPlayer = new Player(username.getText(), password.getText(), email.getText());
-//            String sql = "insert into users (username, password, email, type) values(?, ?, ?, ?)";
-//            HashMap<String, Object> resultHashMap = (HashMap<String, Object>) db.create(sql, newPlayer);
-//            db.db_close();
+            String sql = "insert into users (username, password, email, type) values(?, ?, ?, ?)";
+            HashMap<String, Object> resultHashMap = (HashMap<String, Object>) db.create(sql, newPlayer);
+            db.db_close();
 
             alertBox("Congratulation","\nSign in successful.\nID: " + newPlayer.getID() + "\nUsername: " + newPlayer.getUsername());
             //change scene back to login window
@@ -68,12 +68,13 @@ public class SignInViewController {
 
         if (!password.getText().matches(passPattern)) {
             errorMessage.append("It is not a valid password!\n");
-        } else if (!password.equals(conPassword)) {
+        }
+
+        if (!password.getText().equals(conPassword.getText())) {
             errorMessage.append("Password is not same!\n");
         }
 
         if (username.getText().isBlank()) {
-            errorMessage.append("Email exist!\n");
             int playerCounts = db.count("select count(*) from users where type = 'player'");
             username.setText("Player" + (++playerCounts));
         }

@@ -11,8 +11,8 @@
    <children>
       <HBox prefHeight="45.0" prefWidth="600.0" spacing="10.0">
          <children>
-            <Label prefHeight="54.0" prefWidth="26.0" text="Hi," />
-            <Label fx:id="usernameLabel" />
+            <Label prefHeight="17.0" prefWidth="18.0" text="Hi," />
+            <Label fx:id="usernameLabel" prefHeight="38.0" prefWidth="82.0" />
             <Label prefHeight="32.0" prefWidth="330.0" text="Please choose the Game you want to play." />
          </children>
          <VBox.margin>

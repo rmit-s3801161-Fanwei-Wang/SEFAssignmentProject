@@ -14,7 +14,9 @@ import static controller.Util.changeScene;
 
 public class MenuWindowViewController {
     @FXML
-    public void loadGame(ActionEvent event) {
+    public void loadGame(ActionEvent event) throws IOException {
+        String fileAddress = "/view/loadGame_view.fxml";
+        changeScene(event,fileAddress);
 
     }
 

@@ -11,44 +11,44 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Game {
-    private long gameID;
+    private int gameID;
     //    private Player player;
 //    private Board board;
-    private String playerID;
-    private String boardID;
+    private int playerID;
+    private int boardID;
 
 //
 //    public Game(Player player, Board board) {
 //        this.player = player;
 //        this.board = board;
 //    }
-    public Game(String playerID, String boardID) {
+    public Game(int playerID, int boardID) {
         this.playerID = playerID;
         this.boardID = boardID;
     }
 
-    public Game(long gameID, String playerID, String boardID) {
+    public Game(int gameID, int playerID,int boardID) {
         this.gameID = gameID;
         this.playerID = playerID;
         this.boardID = boardID;
     }
 
-    //
+
     public static ArrayList<Game> getGames(User currentPlayer) {
-        final String GAME_TABLE_NAME = "GAME";
+        final String GAME_TABLE_NAME = "games";
         ArrayList<Game> games = new ArrayList<>();
 
         DB db = new DB();
 
         try (Connection con = db.getConn();
              Statement stmt = con.createStatement();
-        ) {
-            String sql = "SELECT * FROM " + GAME_TABLE_NAME + " WHERE playerID = " + currentPlayer.getID();
-
-            try(ResultSet resultSet = db.getStmt().executeQuery(sql)) {
-
+        ){
+            String sql = "SELECT * FROM " + GAME_TABLE_NAME + " WHERE playerID = " + currentPlayer.getID() + ";";
+//            String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
+            try(ResultSet resultSet = stmt.executeQuery(sql)) {
                 while (resultSet.next()) {
-                    Game game = new Game(resultSet.getLong("id"), resultSet.getString("playerID"), resultSet.getString("boardID"));
+                    Game game = new Game(resultSet.getInt("id"), resultSet.getInt("playerID"), resultSet.getInt("boardID"));
+
                     games.add(game);
                 }
             }catch (SQLException e) {
@@ -79,21 +79,18 @@ public class Game {
 //        }
 //    }
 
-    public String getPlayerID() {
+    public int getGameID() {
+        return gameID;
+    }
+
+    public int getPlayerID() {
         return playerID;
     }
 
-    public void setPlayerID(String playerID) {
-        this.playerID = playerID;
-    }
-
-    public String getBoardID() {
+    public int getBoardID() {
         return boardID;
     }
 
-    public void setBoardID(String boardID) {
-        this.boardID = boardID;
-    }
 
     public static Game createGame(Player currentPlayer) {
 //         TODO GUI

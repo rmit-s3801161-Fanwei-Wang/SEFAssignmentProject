@@ -27,7 +27,7 @@ public class DB {
     private Connection conn = null;
 	private Statement  stmt = null;
 	private PreparedStatement ptmt = null;
-	
+
 	public DB() {
 		try {
     		Class.forName(JDBC_DRIVER);
@@ -242,6 +242,7 @@ public class DB {
 	public Player findPlayer(String email, String password) throws DBException {
 		Player player = new Player();
 		String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
+
 		try {
 			this.stmt = this.conn.createStatement();
 			ResultSet rs = this.stmt.executeQuery(sql);
