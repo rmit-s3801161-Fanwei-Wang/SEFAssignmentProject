@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 import model.entity.Dice;
+=======
+package model.junitTest;
+
+import static org.junit.Assert.*;
+>>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

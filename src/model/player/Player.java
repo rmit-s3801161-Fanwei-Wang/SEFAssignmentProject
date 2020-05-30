@@ -1,7 +1,7 @@
 package model.player;
 
 public class Player extends User {
-    static int uniqueID = 0;
+//    static int uniqueID = 0;
 //    private ArrayList<Game> savedGame = new ArrayList<>();
 //    private Game playing = null;
 
@@ -12,10 +12,17 @@ public class Player extends User {
         super(username, password, userEmail);
     }
 
+<<<<<<< HEAD
     @Override
     String idGenerator() {
         return String.format("player%06d", ++uniqueID);
     }
+=======
+//    @Override
+//    String idGenerator() {
+//        return String.format("player%06d",++uniqueID);
+//    }
+>>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
 
     //TODO Don't throw Exception
 //    public Game loadGame(String gameID){
@@ -55,6 +62,7 @@ public class Player extends User {
 //    }
 
     //TODO implement pauseGame
+<<<<<<< HEAD
     public boolean pauseGame() {
         return false;
     }
@@ -63,6 +71,16 @@ public class Player extends User {
     public boolean resumeGame() {
         return false;
     }
+=======
+//    public boolean pauseGame(){
+//        return false;
+//    }
+
+    //TODO implement resumeGame
+//    public boolean resumeGame(){
+//        return false;
+//    }
+>>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
 
 //    @Override
 //    public String toString(){

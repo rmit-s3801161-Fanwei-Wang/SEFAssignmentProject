@@ -2,6 +2,7 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -71,5 +72,11 @@ public class MainGameController {
         ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
         Collections.swap(workingCollection, 0, 1);
         hBox.getChildren().setAll(workingCollection);
+    }
+
+    public void quit(ActionEvent actionEvent) {
+    }
+
+    public void save(ActionEvent actionEvent) {
     }
 }

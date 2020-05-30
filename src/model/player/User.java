@@ -3,12 +3,14 @@ package model.player;
 import java.io.Serializable;
 
 public abstract class User implements Serializable {
-    private String userID = idGenerator();
+	private long id;
+//    private String userID = idGenerator();
     private String username;
     private String password;
     //    duplicate element
 //    private String userName;
-    private String userEmail;
+    private String email;
+    private String type = "player";
 //    implement this by database
 //    private static HashMap<String,User> users = new HashMap<>();
 //    private static HashMap<String,Game> games = new HashMap<>();
@@ -16,25 +18,32 @@ public abstract class User implements Serializable {
     public User() {
     }
 
-    public User(String username, String password, String userEmail) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
 //        this.userName = userName;
-        this.userEmail = userEmail;
+        this.email = email;
     }
 
 //    public static HashMap<String, Game> getGames() {
 //        return games;
 //    }
 
-    public String getUserID() {
-        return userID;
-    }
+//    public String getUserID() {
+//        return userID;
+//    }
 
-    public void setUserID(String id) {
-        userID = id;
-    }
-
+//    public void setUserID(String id) {
+//        userID = id;
+//    }
+    public long getID() {
+		return id;
+	}
+    
+    public void setID(long id) {
+		this.id = id;
+	}
+    
     public String getUsername() {
         return username;
     }
@@ -42,6 +51,10 @@ public abstract class User implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+    
+    public void setType(String type) {
+		this.type = type;
+	}
 
     public String getPassword() {
         return password;
@@ -60,11 +73,11 @@ public abstract class User implements Serializable {
 //    }
 
     public String getUserEmail() {
-        return userEmail;
+        return email;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserEmail(String email) {
+        this.email = email;
     }
 
 //    public boolean forgetPassword(String email){
@@ -92,7 +105,7 @@ public abstract class User implements Serializable {
         return false;
     }
 
-    abstract String idGenerator();
+//    abstract String idGenerator();
 
 
 }

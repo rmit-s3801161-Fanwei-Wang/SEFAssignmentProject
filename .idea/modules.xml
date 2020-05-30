@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/SEFAssignment.iml" filepath="$PROJECT_DIR$/SEFAssignment.iml" />
       <module fileurl="file://$PROJECT_DIR$/SEF_Assign.iml" filepath="$PROJECT_DIR$/SEF_Assign.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/SEFAssignmentProject.iml" filepath="$PROJECT_DIR$/SEFAssignmentProject.iml" />
+>>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
     </modules>
   </component>
 </project>
