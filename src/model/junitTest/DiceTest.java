@@ -1,11 +1,11 @@
-package junitTest;
+package model.junitTest;
 
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import models.Dice;
+import model.entity.Dice;
 
 public class DiceTest {
 	Dice d1,d2;

@@ -1,4 +1,6 @@
-package models;
+package model.player;
+
+import model.entity.Board;
 
 public class Admin extends User {
 //    static int uniqueID = 0;

@@ -1,4 +1,4 @@
-package models;
+package model.player;
 
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 
@@ -88,7 +88,7 @@ public class DB {
     		// Create preparedStatement
             this.ptmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             Class<?> classN = object.getClass();
-            if (object instanceof models.Player) {
+            if (object instanceof model.player.Player) {
 				classN = User.class;
 			}
             

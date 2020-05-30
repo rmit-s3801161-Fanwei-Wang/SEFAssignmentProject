@@ -12,8 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import models.DB;
-import models.Player;
+import model.player.DB;
+import model.player.Player;
 
 import java.io.IOException;
 import java.util.HashMap;

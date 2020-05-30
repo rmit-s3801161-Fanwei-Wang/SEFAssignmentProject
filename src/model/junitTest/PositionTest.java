@@ -1,12 +1,12 @@
-package junitTest;
+package model.junitTest;
 
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exception.OutOfBoardException;
-import models.Position;
+import model.exception.OutOfBoardException;
+import model.entity.Position;
 
 public class PositionTest {
 	Position p;

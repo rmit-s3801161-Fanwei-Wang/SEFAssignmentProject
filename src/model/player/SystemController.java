@@ -1,4 +1,4 @@
-package models;
+package model.player;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

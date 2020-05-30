@@ -1,4 +1,4 @@
-package junitTest;
+package model.junitTest;
 
 import static org.junit.Assert.*;
 
@@ -8,8 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exception.OutOfBoardException;
-import models.*;
+import model.exception.OutOfBoardException;
+import model.entity.*;
 
 public class PieceTest {
 	Piece[] pieces = new Piece[6];
@@ -42,7 +42,7 @@ public class PieceTest {
 			assertFalse(pieces[0].move(collections, "TR"));
 			pieces[0].addLevel();
 			assertTrue(pieces[0].move(collections, "TR"));
-			assertEquals(1,pieces[0].getEntry().getY());
+			assertEquals(1,pieces[0].getPosition().getY());
 		} catch (OutOfBoardException e) {
 			e.printStackTrace();
 		}

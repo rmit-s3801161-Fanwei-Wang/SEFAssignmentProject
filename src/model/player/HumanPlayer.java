@@ -1,4 +1,8 @@
-package models;
+package model.player;
+
+import model.entity.Dice;
+import model.entity.Guard;
+import model.entity.Piece;
 
 public class HumanPlayer extends Player {
     private Piece[] pieces = new Piece[4];
@@ -6,7 +10,7 @@ public class HumanPlayer extends Player {
     
     //TODO implement
     public int rollDice(Dice dice){
-        return -1;
+        return dice.rollDice();
     }
 
     //TODO implement

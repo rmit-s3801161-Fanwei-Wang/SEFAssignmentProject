@@ -9,7 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import models.Game;
+import model.player.Game;
 
 public class LoadGameViewController {
     @FXML private TableView tableView;
