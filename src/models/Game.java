@@ -36,19 +36,18 @@ public class Game {
     public static ArrayList<Game> getGames(User currentPlayer) {
         final String GAME_TABLE_NAME = "GAME";
         ArrayList<Game> games = new ArrayList<>();
-        //TODO data in game table (game_id,player_id,board_id)
 
         DB db = new DB();
 
         try (Connection con = db.getConn();
              Statement stmt = con.createStatement();
         ) {
-            String sql = "SELECT * FROM " + GAME_TABLE_NAME + " WHERE player_id = " + currentPlayer.getID();
+            String sql = "SELECT * FROM " + GAME_TABLE_NAME + " WHERE playerID = " + currentPlayer.getID();
 
             try(ResultSet resultSet = db.getStmt().executeQuery(sql)) {
 
                 while (resultSet.next()) {
-                    Game game = new Game(resultSet.getLong("game_id"), resultSet.getString("player_id"), resultSet.getString("board_id"));
+                    Game game = new Game(resultSet.getLong("id"), resultSet.getString("playerID"), resultSet.getString("boardID"));
                     games.add(game);
                 }
             }catch (SQLException e) {
@@ -78,24 +77,6 @@ public class Game {
 //            e.printStackTrace();
 //        }
 //    }
-
-
-//    public Player getPlayer() {
-//        return player;
-//    }
-//
-//    public void setPlayer(Player player) {
-//        this.player = player;
-//    }
-//
-//    public Board getBoard() {
-//        return board;
-//    }
-//
-//    public void setBoard(Board board) {
-//        this.board = board;
-//    }
-
 
     public String getPlayerID() {
         return playerID;
