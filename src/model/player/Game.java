@@ -1,4 +1,6 @@
-package models;
+package model.player;
+
+import model.entity.Board;
 
 import exception.LoadGameException;
 
@@ -20,7 +22,6 @@ public class Game {
 //        this.player = player;
 //        this.board = board;
 //    }
-
     public Game(String playerID, String boardID) {
         this.playerID = playerID;
         this.boardID = boardID;
