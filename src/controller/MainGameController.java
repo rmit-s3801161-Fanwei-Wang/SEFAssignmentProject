@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import model.entity.*;
 import model.exception.InitializeException;
+import model.exception.OnlyOneSnakeGreaterEightyException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,11 +38,11 @@ public class MainGameController {
             board.addCollection(new Ladder(new Position(4, 3), new Position(0, 5), "L4"));
             board.addCollection(new Ladder(new Position(9, 4), new Position(0, 6), "L5"));
 
-            board.addCollection(new Snake(new Position(1, 9), new Position(1, 7), "S1"));
-            board.addCollection(new Snake(new Position(3, 7), new Position(7, 5), "S2"));
-            board.addCollection(new Snake(new Position(5, 5), new Position(6, 3), "S3"));
-            board.addCollection(new Snake(new Position(8, 8), new Position(1, 6), "S4"));
-            board.addCollection(new Snake(new Position(5, 3), new Position(9, 1), "S5"));
+            board.addCollection(new Snake(new Position(1, 9), new Position(1, 7), "S1", collections));
+            board.addCollection(new Snake(new Position(3, 7), new Position(7, 5), "S2", collections));
+            board.addCollection(new Snake(new Position(5, 5), new Position(6, 3), "S3", collections));
+            board.addCollection(new Snake(new Position(8, 8), new Position(1, 6), "S4", collections));
+            board.addCollection(new Snake(new Position(5, 3), new Position(9, 1), "S5", collections));
 
             for (int i = 0; i < 4; i++) {
                 pieces[i] = new Piece(null, Character.toString((char) (65 + i)));
@@ -53,7 +54,7 @@ public class MainGameController {
             pieces[1].move(collections, 35);
             pieces[2].move(collections, 53);
             pieces[3].move(collections, 71);
-        } catch (InitializeException e) {
+        } catch (InitializeException | OnlyOneSnakeGreaterEightyException e) {
             e.printStackTrace();
         }
 

@@ -5,12 +5,14 @@ import java.util.HashMap;
 
 import model.exception.GridsBeingTakenException;
 import model.exception.InitializeException;
+import model.exception.OnlyOneSnakeGreaterEightyException;
 import model.exception.OutOfBoardException;
 
 public class Snake extends SLEntity {
 
-    public Snake(Position head, Position tail, String name) throws InitializeException {
+    public Snake(Position head, Position tail, String name, HashMap<Position, Entity> collections) throws InitializeException, OnlyOneSnakeGreaterEightyException {
         super(head, tail, name);
+
         InitializeException ex = new InitializeException(
                 "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
         if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
@@ -19,10 +21,12 @@ public class Snake extends SLEntity {
                 || super.getEntry().getY() == super.getExit().getY()) {
             throw ex;
         }
+        snakeBound(collections);
+
     }
 
     public boolean move(HashMap<Position, Entity> collections, String choice)
-            throws OutOfBoardException, GridsBeingTakenException {
+            throws OutOfBoardException, GridsBeingTakenException, OnlyOneSnakeGreaterEightyException {
 
         Position headDestination = new Position(super.getEntry().getX(), super.getEntry().getY());
         Position tailDestination = new Position(super.getExit().getX(), super.getExit().getY());
@@ -67,7 +71,7 @@ public class Snake extends SLEntity {
                 }
             }
         }
-
+        snakeBound(collections);
         System.out.print(super.getName() + " head moves from " + super.getEntry().positionToInt());
         super.getEntry().setXY(headDestination);
         System.out.println(" to " + super.getEntry().positionToInt());
@@ -99,6 +103,21 @@ public class Snake extends SLEntity {
             return true;
         }
         return false;
+    }
+
+    public void snakeBound(HashMap<Position, Entity> collections) throws OnlyOneSnakeGreaterEightyException {
+        OnlyOneSnakeGreaterEightyException ooe = new OnlyOneSnakeGreaterEightyException();
+        int index = 0;
+        for (Entity e:collections.values()){
+            if (e instanceof Snake){
+                if (((Snake) e).getEntry().positionToInt()>80){
+                    index++;
+                }
+            }
+        }
+        if (index >= 2){
+            throw ooe;
+        }
     }
 
     @Override

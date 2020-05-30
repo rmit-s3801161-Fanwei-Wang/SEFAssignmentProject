@@ -13,8 +13,6 @@ public class GridsBeingTakenException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 	public GridsBeingTakenException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
