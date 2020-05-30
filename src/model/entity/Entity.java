@@ -1,20 +1,20 @@
 package model.entity;
 
-import java.awt.Graphics;
+import java.awt.*;
 //import javafx.beans.property.*;
 
 abstract public class Entity {
-	private String name;
+    private String name;
 
-	public Entity(String name) {
-		this.name = name;
-	}
+    public Entity(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	abstract public void draw(Graphics g);
+    abstract public void draw(Graphics g);
 
-	abstract public String toDbString();
+    abstract public String toDbString();
 }

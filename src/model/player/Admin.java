@@ -13,11 +13,12 @@ public class Admin extends User {
     }
 
     //TODO implement
-    public Board setNewBoard(){
+    public Board setNewBoard() {
         return null;
     }
+
     @Override
     String idGenerator() {
-        return String.format("admin%06d",++uniqueID);
+        return String.format("admin%06d", ++uniqueID);
     }
 }

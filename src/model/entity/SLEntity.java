@@ -1,9 +1,7 @@
 package model.entity;
 
 
-import java.awt.*;
-
-abstract public class SLEntity extends Entity{
+abstract public class SLEntity extends Entity {
     private Position entry;
     private Position exit;
 

@@ -3,15 +3,15 @@ package model.player;
 import model.entity.Board;
 
 public class Game {
-    private String gameID = idGenerator();
     private static int uniqueID = 0;
+    private String gameID = idGenerator();
     private Player snakePlayer;
     private Player humanPlayer;
     private Player[] players = new Player[2];// players[0] is snake control ID, players[1] is Human control ID
     private Board board;
     private int round;
 
-    public Game(Player snakePlayer,Player humanPlayer, Board board, int round) {
+    public Game(Player snakePlayer, Player humanPlayer, Board board, int round) {
         this.snakePlayer = snakePlayer;
         this.humanPlayer = humanPlayer;
         players = new Player[]{snakePlayer, humanPlayer};
@@ -19,8 +19,8 @@ public class Game {
         this.round = round;
     }
 
-    public Game(Player snakePlayer,Player humanPlayer, Board board) {
-        this(snakePlayer,humanPlayer,board,0);
+    public Game(Player snakePlayer, Player humanPlayer, Board board) {
+        this(snakePlayer, humanPlayer, board, 0);
     }
 
     public Game() {
@@ -39,7 +39,7 @@ public class Game {
         return gameID;
     }
 
-    public int addRound(){
+    public int addRound() {
         return round++;
     }
 
@@ -52,11 +52,11 @@ public class Game {
     public String toString() {
         String snake = "N/A";
         String human = "N/A";
-        if(snakePlayer != null)
+        if (snakePlayer != null)
             snake = snakePlayer.getUserID();
-        if(humanPlayer != null)
+        if (humanPlayer != null)
             human = humanPlayer.getUserID();
-        return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake,human);
+        return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake, human);
     }
 
 //    public static void main(String[] args) {

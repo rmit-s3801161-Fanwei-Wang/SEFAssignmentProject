@@ -9,9 +9,10 @@ import java.util.HashMap;
 
 public class MainGameController {
 
-    @FXML private HBox hBox;
+    @FXML
+    private HBox hBox;
 
-    public void initialize(){
+    public void initialize() {
         HashMap<Position, Entity> collections = new HashMap<>();
         Piece[] pieces = new Piece[4];
 
@@ -34,7 +35,7 @@ public class MainGameController {
             for (int i = 0; i < 4; i++) {
                 pieces[i] = new Piece(null, Character.toString((char) (65 + i)));
             }
-            for (int j=0;j<4;j++) {
+            for (int j = 0; j < 4; j++) {
                 pieces[j].move(collections, 1);
             }
             pieces[0].move(collections, 17);

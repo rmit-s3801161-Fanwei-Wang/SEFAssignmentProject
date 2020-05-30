@@ -14,7 +14,7 @@ public class Player extends User {
 
     @Override
     String idGenerator() {
-        return String.format("player%06d",++uniqueID);
+        return String.format("player%06d", ++uniqueID);
     }
 
     //TODO Don't throw Exception
@@ -55,12 +55,12 @@ public class Player extends User {
 //    }
 
     //TODO implement pauseGame
-    public boolean pauseGame(){
+    public boolean pauseGame() {
         return false;
     }
 
     //TODO implement resumeGame
-    public boolean resumeGame(){
+    public boolean resumeGame() {
         return false;
     }
 

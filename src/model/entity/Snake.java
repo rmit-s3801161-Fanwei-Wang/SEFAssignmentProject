@@ -1,11 +1,11 @@
 package model.entity;
 
-import java.awt.Graphics;
-import java.util.HashMap;
-
 import model.exception.GridsBeingTakenException;
 import model.exception.InitializeException;
 import model.exception.OutOfBoardException;
+
+import java.awt.*;
+import java.util.HashMap;
 
 public class Snake extends SLEntity {
 
@@ -44,24 +44,24 @@ public class Snake extends SLEntity {
             throw new OutOfBoardException("Snake head cannot reach 100");
         }
 
-        for (Entity e: collections.values()) {
-            if(e instanceof Piece)
+        for (Entity e : collections.values()) {
+            if (e instanceof Piece)
                 continue;
-            else if(e instanceof Guard) {
-                Position p = ((Guard)e).getPosition();
+            else if (e instanceof Guard) {
+                Position p = ((Guard) e).getPosition();
                 if (p.compareTo(headDestination) || p.compareTo(tailDestination)) {
-                        throw new GridsBeingTakenException(super.getName() + " cannot move to " + p.positionToInt()
-                                + " because of " + collections.get(p).getName());
+                    throw new GridsBeingTakenException(super.getName() + " cannot move to " + p.positionToInt()
+                            + " because of " + collections.get(p).getName());
                 }
-            } else{
-                if(e.equals(this))
+            } else {
+                if (e.equals(this))
                     continue;
-                Position p1 = ((SLEntity)e).getEntry();
-                Position p2 = ((SLEntity)e).getExit();
+                Position p1 = ((SLEntity) e).getEntry();
+                Position p2 = ((SLEntity) e).getExit();
                 if (p1.compareTo(headDestination) || p1.compareTo(tailDestination)) {
                     throw new GridsBeingTakenException(super.getName() + " cannot move to " + p1.positionToInt()
                             + " because of " + collections.get(p1).getName());
-                } else if(p2.compareTo(headDestination) || p2.compareTo(tailDestination)){
+                } else if (p2.compareTo(headDestination) || p2.compareTo(tailDestination)) {
                     throw new GridsBeingTakenException(super.getName() + " cannot move to " + p2.positionToInt()
                             + " because of " + collections.get(p1).getName());
                 }
@@ -110,7 +110,7 @@ public class Snake extends SLEntity {
     @Override
     public String toDbString() {
         return String.format("{\"Type\":\"Snake\",\"Name\":\"%s\",\"TailX\":%d,\"TailY\":%d,\"HeadX\":%d,\"HeadY\":%d}",
-                super.getName(), super.getExit().getX(),super.getExit().getY(),super.getEntry().getX(),super.getEntry().getY());
+                super.getName(), super.getExit().getX(), super.getExit().getY(), super.getEntry().getX(), super.getEntry().getY());
     }
 
 }

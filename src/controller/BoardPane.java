@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import model.entity.Entity;
 import model.entity.Position;
 
@@ -13,8 +12,9 @@ import java.util.HashMap;
 
 public class BoardPane extends GridPane {
 
-    @FXML private GridPane board;
     HashMap<Position, Entity> collections = new HashMap<>();
+    @FXML
+    private GridPane board;
 
     public BoardPane(HashMap<Position, Entity> collections) {
         this.collections = collections;
@@ -34,7 +34,7 @@ public class BoardPane extends GridPane {
                 for (Position p : collections.keySet()) {
                     if (p.compareTo(new Position(j, i))) {
                         Label label = new Label(collections.get(p).getName());
-                        board.add(label, j, 9-i);
+                        board.add(label, j, 9 - i);
                     }
                 }
 //                Position temp = new Position(j,i);

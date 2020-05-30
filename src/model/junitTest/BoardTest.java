@@ -1,20 +1,18 @@
-import java.util.HashMap;
-import java.util.Scanner;
-
 import model.entity.*;
+import model.exception.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.exception.*;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
 public class BoardTest {
 
-    private Piece[] pieces = new Piece[4];
     Board board;
     HashMap<Position, Entity> collections;
+    private Piece[] pieces = new Piece[4];
 
     @Before
     public void setUp() throws Exception {
@@ -100,17 +98,17 @@ public class BoardTest {
         for (int j = 0; j < 4; j++) {
             int m = dice.rollDice();
             pieces[j].move(collections, m);
-            if(m==6)
-                pieces[j].move(collections,dice.rollDice());
+            if (m == 6)
+                pieces[j].move(collections, dice.rollDice());
         }
         for (Entity e : collections.values()) {
             if (e.getName().compareToIgnoreCase("S3") == 0) {
                 ((Snake) e).move(collections, "BR");
-                assertEquals(((Snake) e).getEntry().positionToInt(),47);
+                assertEquals(((Snake) e).getEntry().positionToInt(), 47);
                 break;
             }
         }
-        for(Entity e:collections.values()){
+        for (Entity e : collections.values()) {
             System.out.println(e.toDbString());
         }
         board.viewBoard();
@@ -142,7 +140,7 @@ public class BoardTest {
             for (Entity e : collections.values()) {
                 if (e.getName().compareTo("S3") == 0) {
                     ((Snake) e).move(collections, "TR");
-                    assertEquals(((Snake)e).getExit().positionToInt(),48);
+                    assertEquals(((Snake) e).getExit().positionToInt(), 48);
                     break;
                 }
             }

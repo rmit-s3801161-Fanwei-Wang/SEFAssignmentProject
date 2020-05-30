@@ -1,14 +1,12 @@
 package model.player;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public abstract class User implements Serializable {
     private String userID = idGenerator();
     private String username;
     private String password;
-//    duplicate element
+    //    duplicate element
 //    private String userName;
     private String userEmail;
 //    implement this by database
@@ -79,7 +77,7 @@ public abstract class User implements Serializable {
 //    }
 
     //
-    public boolean resetPassword(String newPassword, String confirmPassword){
+    public boolean resetPassword(String newPassword, String confirmPassword) {
      
         /*
         TODO
@@ -87,7 +85,7 @@ public abstract class User implements Serializable {
         2. Password includes upper case letter
         3. Password includes lower case letter
         */
-        if(newPassword.equals(confirmPassword)){
+        if (newPassword.equals(confirmPassword)) {
             setPassword(newPassword);
             return true;
         }
@@ -95,7 +93,6 @@ public abstract class User implements Serializable {
     }
 
     abstract String idGenerator();
-
 
 
 }
