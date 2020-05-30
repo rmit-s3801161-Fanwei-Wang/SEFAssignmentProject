@@ -1,3 +1,4 @@
+package model.junitTest;
 
 import org.junit.Test;
 

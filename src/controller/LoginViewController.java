@@ -6,9 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import models.Admin;
-import models.DB;
-import models.User;
+import model.player.Admin;
+import model.player.DB;
+import model.player.User;
 
 import java.io.IOException;
 

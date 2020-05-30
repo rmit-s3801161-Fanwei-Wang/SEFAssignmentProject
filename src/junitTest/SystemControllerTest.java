@@ -9,8 +9,8 @@ import org.junit.Test;
 import exception.DBException;
 import exception.ExistException;
 import exception.ValidationException;
-import models.Player;
-import models.SystemController;
+import model.player.Player;
+import model.player.SystemController;
 
 public class SystemControllerTest {
 	//positive

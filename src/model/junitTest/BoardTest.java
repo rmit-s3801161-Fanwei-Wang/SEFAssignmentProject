@@ -1,3 +1,5 @@
+package model.junitTest;
+
 import java.util.HashMap;
 import java.util.Scanner;
 
