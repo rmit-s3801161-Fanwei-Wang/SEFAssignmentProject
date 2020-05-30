@@ -1,6 +1,7 @@
 package model.entity;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import model.exception.OutOfBoardException;
@@ -10,6 +11,7 @@ public class Piece extends PGEntity {
 	private int level = 1;
 	private boolean debuff = false;
 	private int climbedLadders = 0;
+	private static final String pieceShape = "./icon/piece.png";
 
 	public Piece(Position position, String name) {
 		super(position, name);
@@ -90,8 +92,7 @@ public class Piece extends PGEntity {
 	
 	@Override
 	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
-
+//		BufferedImage
 	}
 
 	@Override

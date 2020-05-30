@@ -6,7 +6,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import model.entity.Entity;
+import model.entity.PGEntity;
 import model.entity.Position;
+import model.entity.SLEntity;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,10 +33,20 @@ public class BoardPane extends GridPane {
     public void initialize() {
         for (int i = 9; i >= 0; i--) {
             for (int j = 0; j < 10; j++) {
-                for (Position p : collections.keySet()) {
-                    if (p.compareTo(new Position(j, i))) {
-                        Label label = new Label(collections.get(p).getName());
-                        board.add(label, j, 9-i);
+                for (Entity e:collections.values()) {
+                    if(e instanceof PGEntity) {
+                        if (((PGEntity) e).getPosition().compareTo(new Position(j, i))) {
+                            Label label = new Label(e.getName());
+                            board.add(label, j, 9 - i);
+                        }
+                    }else {
+                        if (((SLEntity) e).getEntry().compareTo(new Position(j, i))) {
+                            Label label = new Label(e.getName());
+                            board.add(label, j, 9 - i);
+                        } else if (((SLEntity) e).getExit().compareTo(new Position(j, i))) {
+                            Label label = new Label(e.getName());
+                            board.add(label, j, 9 - i);
+                        }
                     }
                 }
 //                Position temp = new Position(j,i);
