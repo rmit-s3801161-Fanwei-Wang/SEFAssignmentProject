@@ -20,6 +20,11 @@
     </orderEntry>
     <orderEntry type="library" name="junit-4.12" level="project" />
     <orderEntry type="library" name="lib" level="project" />
+<<<<<<< HEAD
     <orderEntry type="library" name="lib (2)" level="project" />
+=======
+    <orderEntry type="library" name="JavaFX" level="application" />
+    <orderEntry type="library" name="lib" level="project" />
+>>>>>>> bcc81f5d90557861b565ba2ebbbbbe727efd969a
   </component>
 </module>

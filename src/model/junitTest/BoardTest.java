@@ -1,11 +1,10 @@
-<<<<<<< HEAD
-=======
+
 package model.junitTest;
 
 import java.util.HashMap;
 import java.util.Scanner;
 
->>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
+
 import model.entity.*;
 import model.exception.*;
 import org.junit.After;

@@ -14,7 +14,8 @@
          <children>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
+                <Button mnemonicParsing="false" onAction="#quit" text="Quit" />
+                  <Button mnemonicParsing="false" onAction="#save" text="Save" />
               </items>
             </ToolBar>
             <HBox fx:id="hBox" spacing="20.0">

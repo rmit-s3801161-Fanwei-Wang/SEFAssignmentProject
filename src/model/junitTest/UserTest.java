@@ -1,10 +1,8 @@
-<<<<<<< HEAD
-=======
+
 package model.junitTest;
 
 import org.junit.Test;
 
->>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
 import model.player.*;
 import org.junit.Test;
 
@@ -12,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class UserTest {
-<<<<<<< HEAD
 
     @Test
     public void testUser() {
@@ -48,7 +45,6 @@ public class UserTest {
 
 
     }
-=======
 	
 	@Test
 	public void testUser() {
@@ -84,6 +80,5 @@ public class UserTest {
 		
 		
 	}
->>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
 
 }
