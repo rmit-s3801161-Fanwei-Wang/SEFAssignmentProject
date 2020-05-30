@@ -15,18 +15,6 @@ public class SystemController {
 	public static Player currentPlayer;
 	private ArrayList<Game> games = Game.getGames(currentPlayer);
 	
-//	public static void main(String[] args) {
-//		Player object = new Player("test", "test", "test@email.com");
-//		Class<?> classN = object.getClass();
-//		if (object instanceof models.Player) {
-//			classN = User.class;
-//		}
-//        Field[] fields = classN.getDeclaredFields();
-//        for (int i = 0; i < fields.length; i++) {
-//			System.out.println(fields[i]);
-//		}
-//	}
-	
 	public static Player getCurrentPlayer() {
 		return currentPlayer;
 	}
@@ -79,9 +67,6 @@ public class SystemController {
 	public static boolean logIn(String email, String password) throws DBException, ValidationException {
 		DB db = new DB();
 		currentPlayer = db.findPlayer(email, password);
-//		if (currentPlayer == null) {
-//			throw new ValidationException("Wrong password or email!");
-//		}
 		if(currentPlayer!=null)
 			return true;
 
@@ -94,21 +79,6 @@ public class SystemController {
 	}
 	
 	public static Game CreateGame() {
-//		// TODO GUI
-//		String selectRole = "";
-//		switch (selectRole) {
-//		case "human":
-//			Player humanPlayer = currentPlayer;
-//			break;
-//		case "snake":
-//			Player snakePlayer = currentPlayer;
-//		default:
-//			break;
-//		}
-//		DB db = new DB();
-//		//
-//		String sql = "";
-//		return null;
 		return Game.createGame(currentPlayer);
 	}
 
@@ -116,23 +86,4 @@ public class SystemController {
 	public ArrayList<Game> getGames() {
 		return games;
 	}
-
-
-
-
-
-	
-//	public static Game loadGame() throws LoadGameException {
-//		DB db = new DB();
-//		// params: currentPlayer.getID(), gameID
-//		String sql = "";
-//		Game loadGame = (Game) db.search("games", sql);
-//		if (loadGame == null) {
-//			throw new LoadGameException("Game not found!");
-//		}
-//
-//		return loadGame;
-//	}
-	
-
 }

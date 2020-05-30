@@ -1,7 +1,6 @@
 package model.player;
 
-import model.entity.Board;
-
+import model.entity.*;
 import exception.LoadGameException;
 
 import java.sql.Connection;
@@ -9,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
 
 public class Game {
     private int gameID;
@@ -32,7 +34,6 @@ public class Game {
         this.playerID = playerID;
         this.boardID = boardID;
     }
-
 
     public static ArrayList<Game> getGames(User currentPlayer) {
         final String GAME_TABLE_NAME = "games";
@@ -110,5 +111,50 @@ public class Game {
         return null;
 
     }
-
+    
+    private static HashMap<String, Position> rollMetricx(){
+    	HashMap<String, Position> initPostions = new HashMap<String, Position>();
+    	Position initPiece = new Position(0, 0);
+    	ArrayList<Entity> entitys = new ArrayList<Entity>();
+    	for (int i = 1; i < 5; i++) {
+    		Piece p = new Piece(initPiece, "piece"+i);
+    		entitys.add(p);
+		}
+    	
+    	int[] ladderBottom = {-1, -1, -1, -1, -1};
+    	int[] ladderTop = {-1, -1, -1, -1, -1};
+    	int[] snakeHead = {-1, -1, -1, -1, -1};
+    	int[] snakeTail = {-1, -1, -1, -1, -1};
+    	
+    	return initPostions;
+    }
+    
+    private static int randomInt(int range) {
+    	int i = (int) Math.random() * range;
+    	return i;
+    }
+    
+    private static int[] initLadderBottom(int[] bottoms) {
+    	int prev = -1;
+    	int ths = -1;
+    	while(bottoms[4] == -1) {
+    		
+    	}
+    }
+    
+    private static Position intToPosition(int z) {
+    	Position p = null;
+		if ((z - 1) / 10 % 2 == 0) {
+			if (z % 10 == 0)
+				p = new Position(9, z / 10 - 1);
+			else
+				p = new Position(z % 10 - 1, z / 10);
+		} else {
+			if (z % 10 == 0)
+				p = new Position(0, z / 10 - 1);
+			else
+				p = new Position((100 - z) % 10, z / 10);
+		}
+		return p;
+	}
 }

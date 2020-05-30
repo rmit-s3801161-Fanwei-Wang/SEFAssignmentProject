@@ -11,13 +11,10 @@ public class Admin extends User {
     public Admin(String username, String password, String userEmail) {
         super(username, password, userEmail);
     }
-
+    
+    // ladder ,snake larger than 30    
     //TODO implement
     public Board setNewBoard(){
         return null;
     }
-//    @Override
-//    String idGenerator() {
-//        return String.format("admin%06d",++uniqueID);
-//    }
 }
