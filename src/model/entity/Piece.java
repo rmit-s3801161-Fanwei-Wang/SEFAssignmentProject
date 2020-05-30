@@ -1,9 +1,11 @@
 package model.entity;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.exception.OutOfBoardException;
 
 public class Piece extends PGEntity {
@@ -11,7 +13,7 @@ public class Piece extends PGEntity {
 	private int level = 1;
 	private boolean debuff = false;
 	private int climbedLadders = 0;
-	private static final String pieceShape = "./icon/piece.png";
+	private static final String pieceShape = "./src/model/icon/piece.png";
 
 	public Piece(Position position, String name) {
 		super(position, name);
@@ -91,8 +93,14 @@ public class Piece extends PGEntity {
 	}
 	
 	@Override
-	public void draw(Graphics g) {
-//		BufferedImage
+	public void draw(ImageView imageView) {
+		Image image = null;
+		try {
+			image = new Image(new FileInputStream(pieceShape));
+			imageView.setImage(image);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

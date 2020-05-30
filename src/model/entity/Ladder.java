@@ -1,10 +1,14 @@
 package model.entity;
 
-import java.awt.Graphics;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.exception.InitializeException;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class Ladder extends SLEntity {
+	private String ladderName = "./src/model/icon/ladder1.png";
 
 	public Ladder(Position bottom, Position top, String name) throws InitializeException {
 		super(bottom, top, name);
@@ -29,9 +33,17 @@ public class Ladder extends SLEntity {
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
-
+	public void draw(ImageView imageView,Position position) {
+		Image image = null;
+		try {
+			if(this.getName().compareToIgnoreCase("L1")!=0){
+				ladderName = ladderName.replace('1',this.getName().charAt(1));
+			}
+			image = new Image(new FileInputStream(ladderName.toString()));
+			imageView.setImage(image);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

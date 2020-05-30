@@ -1,5 +1,7 @@
 package model.entity;
 
+import javafx.scene.image.ImageView;
+
 import java.awt.*;
 
 abstract public class PGEntity extends Entity{
@@ -12,6 +14,8 @@ abstract public class PGEntity extends Entity{
     public Position getPosition(){
         return position;
     }
+
+    abstract public void draw(ImageView imageView);
 
     public void setPosition(Position position){
         this.position = position;

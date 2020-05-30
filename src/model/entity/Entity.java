@@ -1,7 +1,6 @@
 package model.entity;
 
-import java.awt.Graphics;
-//import javafx.beans.property.*;
+import javafx.scene.image.ImageView;
 
 abstract public class Entity {
 	private String name;
@@ -13,8 +12,6 @@ abstract public class Entity {
 	public String getName() {
 		return name;
 	}
-
-	abstract public void draw(Graphics g);
 
 	abstract public String toDbString();
 }

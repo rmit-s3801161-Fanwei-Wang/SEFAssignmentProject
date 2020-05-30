@@ -1,6 +1,8 @@
 package model.entity;
 
 
+import javafx.scene.image.ImageView;
+
 import java.awt.*;
 
 abstract public class SLEntity extends Entity{
@@ -31,4 +33,7 @@ abstract public class SLEntity extends Entity{
             }
         return false;
     }
+
+    abstract public void draw(ImageView imageView,Position position);
+
 }

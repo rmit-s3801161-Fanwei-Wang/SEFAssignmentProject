@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import model.entity.*;
 import model.exception.InitializeException;
@@ -59,13 +61,12 @@ public class MainGameController {
 
         BoardPane boardGUI = new BoardPane(collections);
         hBox.getChildren().add(boardGUI);
-
         ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
         Collections.swap(workingCollection, 0, 1);
         hBox.getChildren().setAll(workingCollection);
     }
 
-    public void setUp(HashMap<Position, Entity> collections){
+    public void refresh(HashMap<Position, Entity> collections) {
         BoardPane boardGUI = new BoardPane(collections);
         hBox.getChildren().add(boardGUI);
         ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());

@@ -1,5 +1,6 @@
 package main;
 
+import controller.MainGameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainGUI extends Application {
+
     public static void main(String[] args) {
         launch(args);
     }

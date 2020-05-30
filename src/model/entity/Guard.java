@@ -1,6 +1,6 @@
 package model.entity;
 
-import java.awt.Graphics;
+import javafx.scene.image.ImageView;
 
 public class Guard extends PGEntity{
 
@@ -9,9 +9,8 @@ public class Guard extends PGEntity{
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
-		
+	public void draw(ImageView imageView) {
+		return;
 	}
 
 	@Override
