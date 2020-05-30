@@ -30,7 +30,6 @@ public class Game {
 
     public Game(Player snakePlayer, Player humanPlayer, Board board) {
         this(snakePlayer, humanPlayer, board, 0);
-=======
     private int gameID;
     //    private Player player;
 //    private Board board;
@@ -42,10 +41,10 @@ public class Game {
 //        this.player = player;
 //        this.board = board;
 //    }
+
     public Game(int playerID, int boardID) {
         this.playerID = playerID;
         this.boardID = boardID;
->>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
     }
 
     public Game(int gameID, int playerID,int boardID) {
@@ -104,21 +103,19 @@ public class Game {
         return gameID;
     }
 
-<<<<<<< HEAD
+
     public int addRound() {
         return round++;
-=======
+
     public int getPlayerID() {
         return playerID;
->>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
+
     }
 
     public int getBoardID() {
         return boardID;
     }
 
-
-<<<<<<< HEAD
     @Override
     public String toString() {
         String snake = "N/A";
@@ -128,7 +125,7 @@ public class Game {
         if (humanPlayer != null)
             human = humanPlayer.getUserID();
         return String.format("Game[ ID: %s   Snake PlayerID: %s   Human PlayerID: %s ]", gameID, snake, human);
-=======
+
     public static Game createGame(Player currentPlayer) {
 //         TODO GUI
         String selectRole = "";
@@ -146,7 +143,7 @@ public class Game {
         String sql = "";
         return null;
 
->>>>>>> e3eb5d4da3fe9362d2cf5fb77402919b846586f3
+
     }
 
 }
