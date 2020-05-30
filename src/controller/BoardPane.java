@@ -94,6 +94,7 @@ public class BoardPane extends ListView {
                         ImageView imageView = new ImageView();
                         imageView.setFitHeight(40);
                         imageView.setFitWidth(40);
+                        imageView.toBack();
                         ((SLEntity) e).draw(imageView, new Position(j, i));
                         if (e instanceof Snake) {
                             if (((SLEntity) e).getEntry().compareTo(new Position(j, i))) {
