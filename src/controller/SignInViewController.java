@@ -18,6 +18,9 @@ import models.Player;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static controller.Util.alertBox;
+import static controller.Util.changeScene;
+
 public class SignInViewController {
 
     @FXML private TextField username;
@@ -27,27 +30,20 @@ public class SignInViewController {
     @FXML private Label errorLabel;
 
     private DB db;
-    @FXML
-    public void CreateNewUser(ActionEvent event) throws DBException, IOException {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-//        isNewUserValid()
+    @FXML
+    public void createNewUser(ActionEvent event) throws DBException, IOException {
+//        isNewUserValid() set this in if()
         if(true){
             Player newPlayer = new Player(username.getText(), password.getText(), email.getText());
 //            String sql = "insert into users (username, password, email, type) values(?, ?, ?, ?)";
 //            HashMap<String, Object> resultHashMap = (HashMap<String, Object>) db.create(sql, newPlayer);
 //            db.db_close();
 
+            alertBox("Congratulation","\nSign in successful.\nID: " + newPlayer.getID() + "\nUsername: " + newPlayer.getUsername());
             //change scene back to login window
             String fileAddress = "/view/login_view.fxml";
-            Parent root = FXMLLoader.load(getClass().getResource(fileAddress));
-            Scene scene = new Scene(root);
-
-            //get Window
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            changeScene(event,fileAddress);
         }
     }
 
@@ -91,48 +87,9 @@ public class SignInViewController {
     }
 
 
-    //Put logic here first TODO implement this with GUI part
-    public static void signUp(String email, String userName, String password, String conPassword) throws ValidationException, DBException, ExistException {
-        LoginViewController.currentUser = null;
-        if (email.isBlank() || password.isBlank() || conPassword.isBlank()) {
-            throw new ValidationException("Please enter right information!");
-        }
-        DB db = new DB();
-        if (db.isUserExist(email)) {
-            throw new ExistException("Email exist!");
-        }
-
-        String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-        String passPattern = "^[a-zA-Z]\\w{5,17}$";
-        if (!email.matches(emailPattern)) {
-            System.err.println("It is not an email!");
-            throw new ValidationException("It is not an email!");
-        }
-
-        if (!password.matches(passPattern)) {
-            System.err.println("It is not a valid passaword!");
-            throw new ValidationException("It is not a valid passaword!");
-        } else if (!password.equals(conPassword)) {
-            System.err.println("Password is not same!");
-            throw new ValidationException("Password is not same!");
-        }
-
-        if (userName.isBlank()) {
-            int playerCounts = db.count("select count(*) from users where type = 'player'");
-            userName = "Player" + (++playerCounts);
-        }
-
-
-        Player newPlayer = new Player(userName, password, email);
-        String sql = "insert into users (username, password, email, type) values(?, ?, ?, ?)";
-        HashMap<String, Object> resultHashMap = (HashMap<String, Object>) db.create(sql, newPlayer);
-        db.db_close();
-
-        if ((boolean)resultHashMap.get("status")) {
-            newPlayer.setID((long) resultHashMap.get("id"));
-            LoginViewController.currentUser = newPlayer;
-        } else {
-            throw new DBException((String) resultHashMap.get("message"));
-        }
+    public void cancel(ActionEvent event) throws IOException {
+        //change scene back to login window
+        String fileAddress = "/view/login_view.fxml";
+        changeScene(event,fileAddress);
     }
 }

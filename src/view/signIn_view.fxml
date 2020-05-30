@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="279.0" prefWidth="341.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.SignInViewController">
+<VBox prefHeight="279.0" prefWidth="341.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignInViewController">
    <children>
       <Label alignment="BOTTOM_RIGHT" prefHeight="42.0" prefWidth="200.0" text="Sign In">
          <font>
@@ -58,11 +58,12 @@
       </GridPane>
       <HBox alignment="CENTER" prefHeight="12.0" prefWidth="272.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#CreateNewUser" prefHeight="24.0" prefWidth="120.0" text="Create">
+            <Button mnemonicParsing="false" onAction="#createNewUser" prefHeight="24.0" prefWidth="120.0" text="Create">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
             </Button>
+            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="24.0" prefWidth="120.0" text="Cancel" />
          </children>
       </HBox>
       <Label fx:id="errorLabel" prefHeight="65.0" prefWidth="341.0" />

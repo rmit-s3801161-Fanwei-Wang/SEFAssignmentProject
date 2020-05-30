@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Util {
-    public static void AlertBox(String title, String message) {
+    public static void alertBox(String title, String message) {
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);

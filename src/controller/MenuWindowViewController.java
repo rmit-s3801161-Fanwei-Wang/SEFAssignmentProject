@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static controller.Util.changeScene;
+
 public class MenuWindowViewController {
     @FXML
     public void loadGame(ActionEvent event) {
@@ -24,13 +26,6 @@ public class MenuWindowViewController {
     @FXML
     public void logout(ActionEvent event) throws IOException {
         String fileAddress = "/view/login_view.fxml";
-        Parent root = FXMLLoader.load(getClass().getResource(fileAddress));
-        Scene scene = new Scene(root);
-
-        //get Window
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        stage.setScene(scene);
-        stage.show();
+        changeScene(event,fileAddress);
     }
 }
