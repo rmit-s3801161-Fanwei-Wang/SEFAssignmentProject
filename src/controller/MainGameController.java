@@ -1,18 +1,29 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import model.entity.*;
 import model.exception.InitializeException;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 public class MainGameController {
 
-    @FXML
-    private HBox hBox;
+    @FXML private Label Human;
+    @FXML private Label Snake;
+    @FXML private Label SScore;
+    @FXML private Label HScore;
+    @FXML private HBox hBox;
+    @FXML private Button Rolldice;
 
-    public void initialize() {
+    // For development
+    public void initialize(){
         HashMap<Position, Entity> collections = new HashMap<>();
         Piece[] pieces = new Piece[4];
 
@@ -35,7 +46,7 @@ public class MainGameController {
             for (int i = 0; i < 4; i++) {
                 pieces[i] = new Piece(null, Character.toString((char) (65 + i)));
             }
-            for (int j = 0; j < 4; j++) {
+            for (int j=0;j<4;j++) {
                 pieces[j].move(collections, 1);
             }
             pieces[0].move(collections, 17);
@@ -48,5 +59,17 @@ public class MainGameController {
 
         BoardPane boardGUI = new BoardPane(collections);
         hBox.getChildren().add(boardGUI);
+
+        ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
+        Collections.swap(workingCollection, 0, 1);
+        hBox.getChildren().setAll(workingCollection);
+    }
+
+    public void setUp(HashMap<Position, Entity> collections){
+        BoardPane boardGUI = new BoardPane(collections);
+        hBox.getChildren().add(boardGUI);
+        ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
+        Collections.swap(workingCollection, 0, 1);
+        hBox.getChildren().setAll(workingCollection);
     }
 }
