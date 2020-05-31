@@ -1,5 +1,6 @@
 package model.entity;
 
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.exception.InitializeException;
@@ -25,8 +26,8 @@ public class Ladder extends SLEntity {
 	@Override
 	public boolean adjustPosition(Piece piece) {
 		if (super.adjustPosition(piece)) {
-			System.out.println(
-					piece.getName() + " climb " + super.getName() + " to " + super.getExit().positionToInt());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION,piece.getName() + " climb " + super.getName() + " to " + super.getExit().positionToInt());
+			alert.showAndWait();
 			return true;
 		}
 		return false;

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -19,21 +20,35 @@
             </ToolBar>
             <HBox fx:id="hBox" spacing="20.0">
                <children>
-                  <VBox spacing="20.0">
+                  <VBox alignment="TOP_CENTER" spacing="30.0">
                      <children>
-                        <HBox spacing="20.0">
+                        <HBox alignment="CENTER" spacing="20.0">
                            <children>
+                              <ImageView fx:id="SNAKE" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                               <Label fx:id="Snake" text="PlayerName" />
-                              <Label fx:id="SScore" text="PlayerScore" />
                            </children>
                         </HBox>
-                        <HBox spacing="20.0">
+                        <HBox alignment="CENTER" spacing="20.0">
                            <children>
+                              <ImageView fx:id="HUMAN" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                               <Label fx:id="Human" text="PlayerName" />
-                              <Label fx:id="HScore" text="PlayerScore" />
                            </children>
                         </HBox>
-                        <Button fx:id="Rolldice" mnemonicParsing="false" text="Roll Dice" />
+                        <Button fx:id="Dice" mnemonicParsing="false" text="Roll Dice" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fx:id="diceImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="diceImage2" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="Guard" mnemonicParsing="false" text="Place Guard" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                           <children>
+                              <ImageView fx:id="Guard1" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="Guard2" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="Guard3" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>

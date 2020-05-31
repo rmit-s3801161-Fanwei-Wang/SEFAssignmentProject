@@ -29,11 +29,11 @@ public class BoardTest {
         board.addCollection(new Ladder(new Position(4, 3), new Position(0, 5), "L4"));
         board.addCollection(new Ladder(new Position(9, 4), new Position(0, 6), "L5"));
 
-        board.addCollection(new Snake(new Position(1, 9), new Position(1, 7), "S1"));
-        board.addCollection(new Snake(new Position(3, 7), new Position(7, 5), "S2"));
-        board.addCollection(new Snake(new Position(5, 5), new Position(6, 3), "S3"));
-        board.addCollection(new Snake(new Position(8, 8), new Position(1, 6), "S4"));
-        board.addCollection(new Snake(new Position(5, 3), new Position(9, 1), "S5"));
+        board.addCollection(new Snake(new Position(1, 9), new Position(1, 7), "S1", collections));
+        board.addCollection(new Snake(new Position(3, 7), new Position(7, 5), "S2", collections));
+        board.addCollection(new Snake(new Position(5, 5), new Position(6, 3), "S3", collections));
+        board.addCollection(new Snake(new Position(8, 8), new Position(1, 6), "S4", collections));
+        board.addCollection(new Snake(new Position(5, 3), new Position(9, 1), "S5", collections));
 
         for (int i = 0; i < 4; i++) {
             pieces[i] = new Piece(null, Character.toString((char) (65 + i)));
@@ -61,22 +61,22 @@ public class BoardTest {
     }
 
     @Test(expected = InitializeException.class)
-    public void testSnake() throws InitializeException {
-        new Snake(new Position(0, 1), new Position(0, 8), "Snake");
+    public void testSnake() throws InitializeException, OnlyOneSnakeGreaterEightyException {
+        new Snake(new Position(0, 1), new Position(0, 8), "Snake",collections);
     }
 
     @Test(expected = InitializeException.class)
-    public void testSnake1() throws InitializeException {
-        new Snake(new Position(0, 9), new Position(0, 7), "Snake");
+    public void testSnake1() throws InitializeException, OnlyOneSnakeGreaterEightyException {
+        new Snake(new Position(0, 9), new Position(0, 7), "Snake",collections);
     }
 
     @Test(expected = InitializeException.class)
-    public void testSnake2() throws InitializeException {
-        new Snake(new Position(7, 0), new Position(2, 0), "Snake");
+    public void testSnake2() throws InitializeException, OnlyOneSnakeGreaterEightyException {
+        new Snake(new Position(7, 0), new Position(2, 0), "Snake",collections);
     }
 
     @Test(expected = GridsBeingTakenException.class)
-    public void testMoveSnake() throws GridsBeingTakenException, OutOfBoardException {
+    public void testMoveSnake() throws GridsBeingTakenException, OutOfBoardException, OnlyOneSnakeGreaterEightyException {
         for (Entity e : collections.values()) {
             if (e.getName().compareToIgnoreCase("S1") == 0) {
                 ((Snake) e).move(collections, "BL");
@@ -86,7 +86,7 @@ public class BoardTest {
     }
 
     @Test(expected = OutOfBoardException.class)
-    public void testMoveSnake1() throws GridsBeingTakenException, OutOfBoardException {
+    public void testMoveSnake1() throws GridsBeingTakenException, OutOfBoardException, OnlyOneSnakeGreaterEightyException {
         for (Entity e : collections.values()) {
             if (e.getName().compareToIgnoreCase("S1") == 0) {
                 ((Snake) e).move(collections, "TR");
@@ -96,7 +96,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testLevel1() throws GridsBeingTakenException, OutOfBoardException, CannotMoveException {
+    public void testLevel1() throws GridsBeingTakenException, OutOfBoardException, CannotMoveException, OnlyOneSnakeGreaterEightyException {
         board.viewBoard();
         Dice dice = new Dice();
         for (int j = 0; j < 4; j++) {
@@ -152,6 +152,8 @@ public class BoardTest {
             e.printStackTrace();
         } catch (GridsBeingTakenException e1) {
             e1.printStackTrace();
+        } catch (OnlyOneSnakeGreaterEightyException e) {
+            e.printStackTrace();
         } finally {
             board.viewBoard();
         }
