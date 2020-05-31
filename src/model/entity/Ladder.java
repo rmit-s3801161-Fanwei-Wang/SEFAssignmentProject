@@ -17,8 +17,8 @@ public class Ladder extends SLEntity {
 				("Bottom:" + bottom.positionToInt() + " ,Top:" + top.positionToInt() + " is not possible"));
 		if (super.getExit().positionToInt() - super.getEntry().positionToInt() > 30
 				|| super.getEntry().positionToInt() > super.getExit().positionToInt()
-				|| super.getExit().positionToInt() == 100
-				|| super.getEntry().getY() == super.getExit().getY()) {
+				|| super.getExit().positionToInt() == 100) {
+//							|| super.getEntry().getY() == super.getExit().getY()
 			throw ex;
 		}
 	}
@@ -49,7 +49,7 @@ public class Ladder extends SLEntity {
 
 	@Override
 	public String toDbString() {
-		return String.format("{\"Type\":\"Ladder\",\"Name\":\"%s\",\"TopX\":%d,\"TopY\":%d,\"BotX\":%d,\"BotY\":%d}", super.getName(),
+		return String.format("{\"Type\":\"Ladder\",\"Name\":\"%s\",\"TopX\":\"%d\",\"TopY\":\"%d\",\"BotX\":\"%d\",\"BotY\":\"%d\"}", super.getName(),
 				super.getExit().getX(),super.getExit().getY(),super.getEntry().getX(),super.getEntry().getY());
 	}
 
