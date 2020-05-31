@@ -134,92 +134,34 @@ public class DB {
     	return result;
 	}
 	
-	public void delete() {
-		
-	}
-	
-	public void update() {
-		
-	}
-	
-	public Object search(String className, String sql) {
-		try {
-    		// Create statement            
-            this.stmt = this.conn.createStatement();
-            ResultSet rs = this.stmt.executeQuery(sql);
-            ResultSetMetaData meta = rs.getMetaData();
-    		ArrayList<Object> data = new ArrayList<>();
-    		// result = {"status": [true, false], "data": [Object], "message": ""}    		
-			HashMap<String, Object> result = new HashMap<>();
-//    		TODO Create tables
-//            switch (className) {
-//    		case "":
-//    			className = "";
-//    			break;
-//    		case "":
-//    			className = "";
-//    			break;
-//    		case "":
-//    			className = "";
-//    			break;
-//    		case "":
-//    			className = "";
-//    			break;
-//    		case "":
-//    			className = "";
-//    			break;
-//    		case "":
-//    			className = "";
-//    			break;
-//    		case "":
-//    			className = "";
-//    			break;
-//    		default:
-//    			result.put("status", false);
-//    			result.put("data", new ArrayList<>());
-//    			result.put("message", "Class name not found!");
-//    			return result;
-//    		}
-           
-            while (rs.next()) {
-                int cols = meta.getColumnCount();
-                Class<?> classN = Class.forName(className);
-    			Object obj = classN.getDeclaredConstructor().newInstance();
-                for (int i = 1; i <=cols; i++) {
-    				Field field = null;
-    				field = classN.getDeclaredField(meta.getColumnName(i));
-    				field.setAccessible(true);
-    				field.set(obj, rs.getObject(i));
-    			}
-                
-				data.add(obj);
-    		}
-            if (!data.isEmpty()) {
-            	result.put("status", true);
-                result.put("data", data);
-                result.put("message", "Query success!");
-			}else {
-				result.put("status", true);
-                result.put("data", data);
-                result.put("message", "No results!");
+	public long insert(String sql) throws SQLException {
+		this.ptmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		int count = this.ptmt.executeUpdate();
+		long id = -1;
+        if (count > 0) {
+        	ResultSet rs = this.ptmt.getGeneratedKeys();
+        	while (rs.next()) {
+				id = rs.getLong(1);
 			}
-            return result;
-		} catch (Exception e) {
-			HashMap<String, Object> result = new HashMap<>();
-			result.put("status", false);
-			result.put("data", new ArrayList<>());
-			result.put("message", e);
-			return result;
-		} finally {
-			try {
-				if (this.stmt != null) this.stmt.close();
-			} 
-			catch (Exception e2) {
-				System.out.println("Closing statement failed: " + e2);
-			}
-		}	
+		}
+        return id;
 	}
 	
+	public boolean delete(String sql) throws SQLException {
+		this.ptmt = conn.prepareStatement(sql);
+		int count = this.ptmt.executeUpdate();
+		if (count > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	public ResultSet search(String sql) throws SQLException {
+		this.stmt = conn.createStatement();
+		ResultSet result = this.stmt.executeQuery(sql);
+		return result;
+	}
+		
 	public boolean isUserExist(String email) throws DBException {
 		String sql = "select * from users where email = '" + email + "'";
 		try {
@@ -241,7 +183,7 @@ public class DB {
 
 	public Player findPlayer(String email, String password) throws DBException {
 		Player player = new Player();
-		String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
+		String sql = "select * from users where email = '" + email + "' and password = '" + password + "' and type ='Player'";
 
 		try {
 			this.stmt = this.conn.createStatement();
@@ -264,7 +206,6 @@ public class DB {
 
 	//TODO LUCAS
 	public void loadGame(){}
-
 	
 	public int count(String sql) throws DBException {
 		int count = 0;

@@ -5,6 +5,7 @@ import model.entity.*;
 import java.util.HashMap;
 
 public class Board{
+	private long id;
 //	private static int grids = 10; // columns and lines
 //	private int gridsize = 20; // size
 
@@ -12,6 +13,10 @@ public class Board{
 
 	public Board() {
 		
+	}
+	
+	public Board(long id) {
+		this.id = id;
 	}
 
 	public Board(HashMap<Position,Entity> collections) {

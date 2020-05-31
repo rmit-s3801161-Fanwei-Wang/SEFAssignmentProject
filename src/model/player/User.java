@@ -12,7 +12,7 @@ public abstract class User implements Serializable {
 //    duplicate element
 //    private String userName;
     private String email;
-    private String type = "player";
+    private String type = "Player";
 //    implement this by database
 //    private static HashMap<String,User> users = new HashMap<>();
 //    private static HashMap<String,Game> games = new HashMap<>();

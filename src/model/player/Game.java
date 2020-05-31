@@ -1,6 +1,7 @@
 package model.player;
 
 import model.entity.*;
+import model.exception.GameSLException;
 import model.exception.InitializeException;
 import exception.LoadGameException;
 
@@ -16,14 +17,14 @@ import java.util.Map;
 import java.util.Random;
 
 import com.google.gson.Gson;
+import com.mysql.cj.xdevapi.DbDoc;
 
 
 public class Game {
-    private int gameID;
-    //    private Player player;
+    private long id = -1;   //    private Player player;
 //    private Board board;
-    private int playerID;
-    private int boardID;
+    private long playerID;
+    private long boardID;
     private Board board;
 
 //
@@ -33,25 +34,16 @@ public class Game {
 //    }
     
     public static void main(String[] args) {
-		try {
-			System.out.println("Testing Start!");
-			String result = initBoardDataBase();
-			Board board = stringConvertToCollection(result);
-			board.viewBoard();
-			System.out.println("Testing End!");
-		} catch (InitializeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
     
-    public Game(int playerID, int boardID) {
+    public Game(long playerID, long boardID) {
         this.playerID = playerID;
         this.boardID = boardID;
     }
 
-    public Game(int gameID, int playerID,int boardID) {
-        this.gameID = gameID;
+    public Game(long gameID, long playerID,long boardID) {
+        this.id = gameID;
         this.playerID = playerID;
         this.boardID = boardID;
     }
@@ -82,68 +74,115 @@ public class Game {
 
         return games;
     }
-
-//    public Board getBoard(String boardID) {
-//        final String BOARD_TABLE_NAME = "BOARD";
-//
-//        DB db = new DB();
-//
-//        String sql = "SELECT * FROM " + BOARD_TABLE_NAME + "WHERE board_id = " + boardID;
-//
-//        try (Connection con = db.getConn();
-//             Statement stmt = con.createStatement();
-//        ) {
-//            Board board = new Board()
-//
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    public int getGameID() {
-        return gameID;
+    
+    public long getGameID() {
+        return id;
     }
 
-    public int getPlayerID() {
+    public long getPlayerID() {
         return playerID;
     }
 
-    public int getBoardID() {
+    public long getBoardID() {
         return boardID;
     }
+    
+    public void setBoardID(long boardID) {
+    	this.boardID = boardID;
+    }
+    
+    public void setBoard(Board board) {
+    	this.board = board;
+    }
+    
+    public Board getBoard() {
+    	return this.board;
+    }
 
-
-    public static Game createGame(Player currentPlayer) {
-//         TODO GUI
-        String selectRole = "";
-        switch (selectRole) {
-            case "human":
-                Player humanPlayer = currentPlayer;
-                break;
-            case "snake":
-                Player snakePlayer = currentPlayer;
-            default:
-                break;
-        }
+    public static Game createGame(Player currentPlayer) throws SQLException {
+    	Game game = null;
+    	long playerID = currentPlayer.getID();
+    	long boardID = -1;
+    	String collection = "";
         DB db = new DB();
-        //
-        String sql = "";
-        return null;
+        String sql = "SELECT * FROM boards WHERE createdBy='Admin' ORDER BY RAND() LIMIT 1";
+        ResultSet rs = db.search(sql);
+        while (rs.next()) {
+			boardID = rs.getLong("id");
+			collection = rs.getString("collections");
+		}
+        if (boardID == -1 || collection.isBlank()) {
+			return game;
+		}
+        
+        Board board = stringConvertToCollection(boardID, collection);
+        game = new Game(playerID, boardID);
+        game.setBoard(board);
+        return game;
 
     }
+    
+    public boolean saveGame() throws SQLException, GameSLException {
+		DB db = new DB();
+		String collection = collectionConvetToStringJson(this.board.getCollections());
+		String boardSql = "INSERT INTO boards(collections, createdBy) VALUES('"+ collection +"', 'Player')";
+		long boardID = db.insert(boardSql);
+		if (boardID == -1) {
+			throw new GameSLException("Save Board Failed");
+		}
+		String gameSql = "";
+		if (this.getGameID() == -1) {
+			gameSql = "INSERT INTO games(playerID, boardID) VALUES(" + this.getPlayerID() + ", "+ boardID +")";
+		} else {
+			gameSql = "UPDATE games SET boardID = " + boardID; 
+		}
+		long gameID = db.insert(gameSql);
+		if (gameID == -1) {
+			String dSql = "DELETE FROM boards WHERE id = " + boardID;
+			if(db.delete(dSql)) {
+				throw new GameSLException("Save Game Failed");
+			} else {
+				throw new GameSLException("DB Error");
+			}
+		}
+		this.setBoardID(boardID);
+		return true;
+	}
+    
+    public Game loadGame(Player currentPlayer, long gameID) throws SQLException, GameSLException {
+    	DB db = new DB();
+    	Game game = null;
+    	String sql = "SELECT * FROM games WHERE id = " + gameID + "and playerID = " + currentPlayer.getID();
+    	ResultSet rs = db.search(sql);
+    	while (rs.next()) {
+			game = new Game(rs.getLong("id"), rs.getLong("playerID"), rs.getLong("boardID"));
+		}
+    	if (game == null) {
+			throw new GameSLException("LoadGame Failed");
+		}
+    	Board board = null;
+    	String bSql = "SELECT * FROM boards WHERE id = " + game.getBoardID() + "and createdBy = 'Player'";
+    	ResultSet bRs = db.search(bSql);
+    	while (bRs.next()) {
+			board = stringConvertToCollection(bRs.getLong("id"), bRs.getString("collections"));
+		}
+    	if (board == null) {
+			throw new GameSLException("LoadBoard Failed");
+		}
+    	game.setBoard(board);
+    	return game;
+    }
+    
     // init board to database
-    private static String initBoardDataBase() throws InitializeException {
-    	//    	DB db = new DB();
+    public static String initBoardDataBase() throws InitializeException {
     	Board board = initBoard();
     	String result = collectionConvetToStringJson(board.getCollections());
-    	System.out.println(result);
     	return result;
     }
     
     // import google Gson jar
     // convert board to string    
-    private static String collectionConvetToStringJson(HashMap<Position, Entity> collections) {
+    public static String collectionConvetToStringJson(HashMap<Position, Entity> collections) {
     	HashMap<Integer, String> hashmap = new HashMap<Integer, String>();
     	collections.forEach((k,v)->{
     		int position = k.positionToInt();
@@ -156,9 +195,9 @@ public class Game {
     }
     
     // convert string to board    
-    private static Board stringConvertToCollection(String json) {
+    public static Board stringConvertToCollection(long boardID, String json) {
     	Gson gson = new Gson();
-    	Board board = new Board();
+    	Board board = new Board(boardID);
     	HashMap<String, Object> prepareMap = new HashMap<String, Object>();
     	prepareMap = (HashMap<String, Object>) gson.fromJson(json, prepareMap.getClass());
     	prepareMap.forEach((k,v)->{ 
@@ -214,7 +253,7 @@ public class Game {
     }
     
     // init board functions    
-    private static Board initBoard() throws InitializeException{
+    public static Board initBoard() throws InitializeException{
     	Position initPiece = new Position(0, 0);
     	ArrayList<Entity> entitys = new ArrayList<Entity>();
     	for (int i = 1; i < 5; i++) {
@@ -226,12 +265,11 @@ public class Game {
     	int[] snakeHead = {-1, -1, -1, -1, -1};
     	int[] snakeTail = {-1, -1, -1, -1, -1};
     	
-    	System.out.println("Starting Random");
     	ladderBottom = initLadderBottom(ladderBottom);
     	ladderTop = initLadderTop(ladderBottom, ladderTop);
     	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail);
     	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop, snakeTail);
-    	System.out.println("Ending Random");
+    	
     	for (int i = 0; i < ladderBottom.length; i++) {
     		Position bottom = initToPosition(ladderBottom[i]);
     		Position top = initToPosition(ladderTop[i]);
