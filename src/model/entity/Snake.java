@@ -15,6 +15,18 @@ import model.exception.OutOfBoardException;
 
 public class Snake extends SLEntity {
 
+    public Snake(Position head, Position tail, String name) throws InitializeException, OnlyOneSnakeGreaterEightyException {
+        super(head, tail, name);
+        InitializeException ex = new InitializeException(
+                "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
+        if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
+                || super.getExit().positionToInt() > super.getEntry().positionToInt()
+                || super.getEntry().positionToInt() == 100
+                || super.getEntry().getY() == super.getExit().getY()) {
+            throw ex;
+        }
+    }
+
     public Snake(Position head, Position tail, String name, HashMap<Position,Entity>collections) throws InitializeException, OnlyOneSnakeGreaterEightyException {
         super(head, tail, name);
         InitializeException ex = new InitializeException(
