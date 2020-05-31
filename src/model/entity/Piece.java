@@ -27,14 +27,11 @@ public class Piece extends PGEntity {
 		if(level!=1)
 			return false;
 		if (super.getPosition() == null) {
-			System.out.println(super.getName() + " move to " + dice);
 			super.setPosition(new Position(dice - 1, 0));
 			collections.put(super.getPosition(), this);
 		}
 		else if (buff == 0) {
-			System.out.print(super.getName() + " move from " + super.getPosition().positionToInt());
 			super.getPosition().move(dice);
-			System.out.println(" to " + super.getPosition().positionToInt());
 		} else {
 			throw new CannotMoveException(super.getName() + " cannot move when having buff");
 		}
@@ -71,7 +68,8 @@ public class Piece extends PGEntity {
 					System.exit(0);
 				}
 				else if(((Snake)e).getExit().compareTo(super.getPosition())) {
-					System.out.println(e.getName()+" died");
+					Alert alert = new Alert(Alert.AlertType.INFORMATION,e.getName()+" died");
+					alert.showAndWait();
 					removeSnake = (Snake)e;
 					break;
 				}

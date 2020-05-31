@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.exception.GridsBeingTakenException;
@@ -90,7 +91,9 @@ public class Snake extends SLEntity {
                     if (((Piece) collections.get(p)).getLevel() == 1) {
                         adjustPosition((Piece) collections.get(p));
                     } else if (((Piece) collections.get(p)).getLevel() == 2) {
-                        System.out.println("Snake win");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Snake win");
+                        alert.showAndWait();
+                        System.exit(0);
                     }
                 }
             }
@@ -101,7 +104,7 @@ public class Snake extends SLEntity {
     @Override
     public boolean adjustPosition(Piece piece) {
         if (super.adjustPosition(piece)) {
-            System.out.println(
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     piece.getName() + " is eaten by " + super.getName() + " to " + super.getExit().positionToInt());
             piece.setBuff();
             return true;

@@ -362,7 +362,6 @@ public class BoardPane extends ListView {
                                     if (human) {
                                         if (guards < 3) {
                                             Position position = new Position(colIndex, 9 - rowIndex);
-                                            System.out.println(position.positionToInt());
                                             boolean check = false;
                                             for (Entity e : collections.values()) {
                                                 if (e instanceof SLEntity) {
