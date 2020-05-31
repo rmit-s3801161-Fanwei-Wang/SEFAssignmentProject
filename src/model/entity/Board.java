@@ -50,24 +50,24 @@ public class Board{
 	
 	public void viewBoard() {
 		System.out.println();
-		for (int i = 9; i >= 0; i--) {
-			for (int j = 0; j < 10; j++) {
+		for(int i = 9 ; i >= 0 ; i--) {
+			for(int j = 0 ; j < 10 ; j++) {
 				boolean okay = false;
-				for (Entity e : collections.values()) {
-					if (e instanceof PGEntity) {
-						if (((PGEntity) e).getPosition().compareTo(new Position(j, i))) {
+				for(Entity e:collections.values()) {
+					if(e instanceof PGEntity){
+						if(((PGEntity) e).getPosition().compareTo(new Position(j,i))) {
 							okay = true;
 							System.out.print(e.getName());
 						}
-					} else {
-						if (((SLEntity) e).getEntry().compareTo(new Position(j, i))
-								|| ((SLEntity) e).getExit().compareTo(new Position(j, i))) {
+					}
+					else{
+						if(((SLEntity)e).getEntry().compareTo(new Position(j,i)) || ((SLEntity)e).getExit().compareTo(new Position(j,i))) {
 							okay = true;
 							System.out.print(e.getName());
 						}
 					}
 				}
-				if (!okay)
+				if(!okay)
 					System.out.print("-");
 				System.out.print("\t");
 			}

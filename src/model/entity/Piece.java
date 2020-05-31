@@ -1,21 +1,27 @@
 package model.entity;
 
-import java.awt.Graphics;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import model.exception.CannotMoveException;
 import model.exception.OutOfBoardException;
 
 public class Piece extends PGEntity {
 
 	private int level = 1;
-	private boolean debuff = false;
+	private int buff = 0;
 	private int climbedLadders = 0;
+	private static final String pieceShape = "./src/model/icon/piece.png";
+	private static final String knightShape = "./src/model/icon/knight.png";
 
 	public Piece(Position position, String name) {
 		super(position, name);
 	}
 
-	public boolean move(HashMap<Position, Entity> collections,int dice) {
+	public boolean move(HashMap<Position, Entity> collections,int dice) throws CannotMoveException {
 		if(level!=1)
 			return false;
 		if (super.getPosition() == null) {
@@ -24,13 +30,12 @@ public class Piece extends PGEntity {
 			collections.put(super.getPosition(), this);
 			 
 		}
-		else if (!debuff) {
+		else if (buff == 0) {
 			System.out.print(super.getName() + " move from " + super.getPosition().positionToInt());
 			super.getPosition().move(dice);
 			System.out.println(" to " + super.getPosition().positionToInt());
 		} else {
-			System.out.println(super.getName() + " cannot move when having buff");
-			return false;
+			throw new CannotMoveException(super.getName() + " cannot move when having buff");
 		}
 		
 		for(Entity e:collections.values()) {
@@ -47,8 +52,7 @@ public class Piece extends PGEntity {
 	}
 
 	public boolean move(HashMap<Position, Entity> collections, String choice) throws OutOfBoardException {
-
-		if(level!=3)
+		if(level!=2)
 			return false;
 		Position Destination = new Position(super.getPosition().getX(), super.getPosition().getY());
 		Destination.move(choice);
@@ -77,9 +81,20 @@ public class Piece extends PGEntity {
 	}
 	
 	public void setBuff() {
-		debuff = true;
+		buff = 1;
 	}
-	
+
+	public void roundBuff(){
+		buff ++;
+		if(buff == 4){
+			buff = 0;
+		}
+	}
+
+	public int getBuff(){
+		return buff;
+	}
+
 	public void addLevel() {
 		level++;
 	}
@@ -89,9 +104,26 @@ public class Piece extends PGEntity {
 	}
 	
 	@Override
-	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
+	public void draw(ImageView imageView) {
+		Image image = null;
+		try {
+			image = new Image(new FileInputStream(pieceShape));
+			imageView.setImage(image);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
+	public void draw(ImageView imageView,boolean level){
+		if(level){
+			Image image = null;
+			try {
+				image = new Image(new FileInputStream(knightShape));
+				imageView.setImage(image);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override

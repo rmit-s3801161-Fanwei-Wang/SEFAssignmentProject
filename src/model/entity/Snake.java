@@ -1,8 +1,12 @@
 package model.entity;
 
 import java.awt.Graphics;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.exception.GridsBeingTakenException;
 import model.exception.InitializeException;
 import model.exception.OutOfBoardException;
@@ -102,9 +106,22 @@ public class Snake extends SLEntity {
     }
 
     @Override
-    public void draw(Graphics g) {
-        // TODO Auto-generated method stub
+    public void draw(ImageView imageView, Position position) {
+        Image image = null;
+        String snakeName = "./src/model/icon/snake1H.png";
 
+        if(position.compareTo(this.getExit())) {
+            snakeName = snakeName.replace('H','T');
+        }
+        try {
+            if(this.getName().compareToIgnoreCase("S1")!=0){
+                snakeName = snakeName.replace('1',this.getName().charAt(1));
+            }
+            image = new Image(new FileInputStream(snakeName.toString()));
+            imageView.setImage(image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
