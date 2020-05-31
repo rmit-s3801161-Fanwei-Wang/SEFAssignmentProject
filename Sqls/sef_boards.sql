@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `boards`;
 CREATE TABLE `boards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `collections` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `createdBy` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,4 +39,4 @@ CREATE TABLE `boards` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-29 19:00:16
+-- Dump completed on 2020-05-31 18:36:41
