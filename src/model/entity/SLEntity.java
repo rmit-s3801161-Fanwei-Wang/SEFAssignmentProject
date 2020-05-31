@@ -3,8 +3,6 @@ package model.entity;
 
 import javafx.scene.image.ImageView;
 
-import java.awt.*;
-
 abstract public class SLEntity extends Entity{
     private Position entry;
     private Position exit;

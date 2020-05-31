@@ -27,7 +27,6 @@ public class LoginViewController {
     public void signIn(ActionEvent event) throws IOException {
         String fileAddress = "/view/signIn_view.fxml";
         changeScene(event, fileAddress);
-
     }
 
 

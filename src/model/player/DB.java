@@ -16,13 +16,13 @@ import java.util.HashMap;
 import exception.DBException;
 
 public class DB {	
-	private static final String SSH_URL = "titan.csit.rmit.edu.au";
+//	private static final String SSH_URL = "titan.csit.rmit.edu.au";
 	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"; 
 	// TODO put DB server url here
     private static final String DB_URL = "jdbc:mysql://localhost:3306/Sef?serverTimezone=UTC&zeroDateTimeBehavior=ConvertToNull";
     
     private static final String USER = "root";
-    private static final String PASS = "root";
+    private static final String PASS = "Root1234";
     
     private Connection conn = null;
 	private Statement  stmt = null;

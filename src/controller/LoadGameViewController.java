@@ -50,8 +50,9 @@ public class LoadGameViewController {
     }
 
     @FXML
-    public void load(ActionEvent event) {
-        //TODO load game
+    public void load(ActionEvent event) throws IOException {
+        String fileAddress = "/view/mainGame.fxml";
+        changeScene(event,fileAddress);
         System.out.println("The Game ID you choose is: " + ((Game)tableView.getSelectionModel().getSelectedItem()).getGameID());
     }
 

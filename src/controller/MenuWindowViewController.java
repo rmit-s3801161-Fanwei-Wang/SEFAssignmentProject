@@ -21,8 +21,9 @@ public class MenuWindowViewController {
     }
 
     @FXML
-    public void createGame(ActionEvent event) {
-
+    public void createGame(ActionEvent event) throws IOException {
+        String fileAddress = "/view/mainGame.fxml";
+        changeScene(event,fileAddress);
     }
 
     @FXML

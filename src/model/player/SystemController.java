@@ -1,6 +1,7 @@
 package model.player;
 
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -78,7 +79,7 @@ public class SystemController {
 		currentPlayer = null;
 	}
 	
-	public static Game CreateGame() {
+	public static Game CreateGame() throws SQLException {
 		return Game.createGame(currentPlayer);
 	}
 
