@@ -30,15 +30,18 @@ public class BoardPane extends ListView {
     private ObservableList<GridPane> lists;
     private GridPane board;
     private HashMap<Position, Entity> collections;
+    private MainGameController controller;
 
     private Entity select = null;
     private int round;
     private boolean head = false;
     private boolean human;
     private boolean level;
+    private int levelStartRound;
 
-    public BoardPane(HashMap<Position, Entity> collections, boolean human, boolean level) {
+    public BoardPane(HashMap<Position, Entity> collections, boolean human, boolean level, MainGameController controller) {
         this.collections = collections;
+        this.controller = controller;
         round = 0;
         this.human = human;
         this.level = level;
@@ -79,7 +82,7 @@ public class BoardPane extends ListView {
         board.setHgap(0);
         board.setVgap(0);
         board.setStyle("-fx-column-halignment: center");
-        if(human){
+        if(human && !level){
             boolean allBuff = true;
             for(Entity e:collections.values()){
                 if(e instanceof Piece){
@@ -155,17 +158,118 @@ public class BoardPane extends ListView {
                             if(select!=null) {
                                 if(level) {
                                     // TO-DO implements super move
-                                    int position = new Position(colIndex, 9 - rowIndex).positionToInt();
-                                    try {
-                                        ((Piece) select).move(collections, position - ((Piece) select).getPosition().positionToInt());
-                                    } catch (CannotMoveException e) {
-                                        e.printStackTrace();
-                                    }
-                                    select = null;
-                                    human = false;
-                                    reboard();
+                                    Position position = new Position(colIndex, 9 - rowIndex);
+                                    System.out.println((position.getY()-((Piece) select).getPosition().getY())*10 + position.getX()-((Piece) select).getPosition().getX());
+                                    boolean okay = false;
+                                        switch ((position.getY()-((Piece) select).getPosition().getY())*10 + position.getX()-((Piece) select).getPosition().getX()) {
+                                            case 21:
+                                                try {
+                                                    ((Piece) select).move(collections, "T2R1");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case 19:
+                                                try {
+                                                    ((Piece) select).move(collections, "T2L1");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case -19:
+                                                try {
+                                                    ((Piece) select).move(collections, "B2R1");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case -21:
+                                                try {
+                                                    ((Piece) select).move(collections, "B2L1");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case 12:
+                                                try {
+                                                    ((Piece) select).move(collections, "T1R2");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case 8:
+                                                try {
+                                                    ((Piece) select).move(collections, "T1L2");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case -8:
+                                                try {
+                                                    ((Piece) select).move(collections, "B1R2");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case -12:
+                                                try {
+                                                    ((Piece) select).move(collections, "B1L2");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case 11:
+                                                try {
+                                                    ((Piece) select).move(collections, "TR");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case 9:
+                                                try {
+                                                    ((Piece) select).move(collections, "TL");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case -9:
+                                                try {
+                                                    ((Piece) select).move(collections, "BR");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            case -11:
+                                                try {
+                                                    ((Piece) select).move(collections, "BL");
+                                                } catch (OutOfBoardException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                okay = true;
+                                                break;
+                                            default:
+                                                okay = false;
+                                        }
+                                        if(okay) {
+                                            level = true;
+                                            select = null;
+                                            human = false;
+                                            reboard();
+                                        }
                                 } else {
                                     // TO-DO IMPLEMENTS Roll dice
+
                                     try {
                                         int dice = new Dice().rollDice();
                                         ((Piece)select).move(collections,dice);
@@ -176,7 +280,7 @@ public class BoardPane extends ListView {
                                                     ((Piece) e).addLevel();
                                                 }
                                             }
-                                            collections.remove(select);
+                                           System.out.println(collections.remove(select));
                                         }
                                         select = null;
                                         human = false;

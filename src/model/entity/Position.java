@@ -138,8 +138,6 @@ public class Position{
 		case "B1L2":
 			this.setXY(this.getX()-2,this.getY()-1);
 			break;
-
-		default:
 		}
 	}
 
