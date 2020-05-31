@@ -9,11 +9,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.exception.GridsBeingTakenException;
 import model.exception.InitializeException;
+import model.exception.OnlyOneSnakeGreaterEightyException;
 import model.exception.OutOfBoardException;
 
 public class Snake extends SLEntity {
 
-    public Snake(Position head, Position tail, String name) throws InitializeException {
+    public Snake(Position head, Position tail, String name, HashMap<Position,Entity>collections) throws InitializeException, OnlyOneSnakeGreaterEightyException {
         super(head, tail, name);
         InitializeException ex = new InitializeException(
                 "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
@@ -23,10 +24,11 @@ public class Snake extends SLEntity {
                 || super.getEntry().getY() == super.getExit().getY()) {
             throw ex;
         }
+        snakeBound(collections);
     }
 
     public boolean move(HashMap<Position, Entity> collections, String choice)
-            throws OutOfBoardException, GridsBeingTakenException {
+            throws OutOfBoardException, GridsBeingTakenException, OnlyOneSnakeGreaterEightyException {
 
         Position headDestination = new Position(super.getEntry().getX(), super.getEntry().getY());
         Position tailDestination = new Position(super.getExit().getX(), super.getExit().getY());
@@ -72,20 +74,22 @@ public class Snake extends SLEntity {
             }
         }
 
-        System.out.print(super.getName() + " head moves from " + super.getEntry().positionToInt());
-        super.getEntry().setXY(headDestination);
-        System.out.println(" to " + super.getEntry().positionToInt());
+        for(Position p: collections.keySet()){
+            if(collections.get(p) instanceof Snake && !collections.get(p).equals(this)){
+                if(p.positionToInt()>80 && headDestination.positionToInt() >80)
+                    throw new OnlyOneSnakeGreaterEightyException(String.format("%s already been greater than 80",collections.get(p).getName()));
+            }
+        }
 
-        System.out.print(super.getName() + " tail moves from " + super.getExit().positionToInt());
+        super.getEntry().setXY(headDestination);
         super.getExit().setXY(tailDestination);
-        System.out.println(" to " + super.getExit().positionToInt());
 
         for (Position p : collections.keySet()) {
             if (p.compareTo(super.getEntry())) {
                 if (collections.get(p) instanceof Piece) {
                     if (((Piece) collections.get(p)).getLevel() == 1) {
                         adjustPosition((Piece) collections.get(p));
-                    } else if (((Piece) collections.get(p)).getLevel() == 3) {
+                    } else if (((Piece) collections.get(p)).getLevel() == 2) {
                         System.out.println("Snake win");
                     }
                 }
@@ -103,6 +107,20 @@ public class Snake extends SLEntity {
             return true;
         }
         return false;
+    }
+
+    public void snakeBound(HashMap<Position,Entity>collections) throws OnlyOneSnakeGreaterEightyException {
+        OnlyOneSnakeGreaterEightyException ooe = new OnlyOneSnakeGreaterEightyException();
+        int index = 0;
+        for (Position p:collections.keySet()){
+            if(collections.get(p) instanceof Snake){
+                if(p.positionToInt()>80)
+                    index++;
+            }
+        }
+        if(index > 1){
+            throw ooe;
+        }
     }
 
     @Override
