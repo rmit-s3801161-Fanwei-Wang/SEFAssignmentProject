@@ -7,6 +7,19 @@ import model.exception.InitializeException;
 
 public class Admin extends User {
 //    static int uniqueID = 0;
+	
+	public static void main(String[] args) {
+		Admin admin = new Admin();
+		try {
+			admin.CreateNewBoard();
+		} catch (InitializeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
     public Admin() {
     }
