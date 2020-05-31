@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import model.entity.*;
+import model.exception.CannotMoveException;
 import model.exception.InitializeException;
 
 import java.util.Collections;
@@ -55,19 +56,11 @@ public class MainGameController {
             pieces[1].move(collections, 35);
             pieces[2].move(collections, 53);
             pieces[3].move(collections, 71);
-        } catch (InitializeException e) {
+        } catch (InitializeException | CannotMoveException e) {
             e.printStackTrace();
         }
 
-        BoardPane boardGUI = new BoardPane(collections);
-        hBox.getChildren().add(boardGUI);
-        ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
-        Collections.swap(workingCollection, 0, 1);
-        hBox.getChildren().setAll(workingCollection);
-    }
-
-    public void refresh(HashMap<Position, Entity> collections) {
-        BoardPane boardGUI = new BoardPane(collections);
+        BoardPane boardGUI = new BoardPane(collections,true,false);
         hBox.getChildren().add(boardGUI);
         ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
         Collections.swap(workingCollection, 0, 1);

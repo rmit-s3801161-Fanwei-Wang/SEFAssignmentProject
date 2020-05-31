@@ -94,7 +94,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testLevel1() throws GridsBeingTakenException, OutOfBoardException {
+    public void testLevel1() throws GridsBeingTakenException, OutOfBoardException, CannotMoveException {
         board.viewBoard();
         Dice dice = new Dice();
         for (int j = 0; j < 4; j++) {
@@ -117,7 +117,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testLevel3() throws InitializeException {
+    public void testLevel3() throws InitializeException, CannotMoveException {
         for (int j = 0; j < 4; j++) {
             pieces[j].move(collections, 1);
         }

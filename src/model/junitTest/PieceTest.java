@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 
+import model.exception.CannotMoveException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class PieceTest {
 	}
 
 	@Test
-	public void testMove() {
+	public void testMove() throws CannotMoveException {
 		Dice dice = new Dice();
 		pieces[0].move(collections, dice.rollDice());
 		pieces[1].move(collections, dice.rollDice());
