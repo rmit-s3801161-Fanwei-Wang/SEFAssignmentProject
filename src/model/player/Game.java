@@ -9,9 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
+
+import com.google.gson.Gson;
 
 
 public class Game {
@@ -31,8 +35,9 @@ public class Game {
     public static void main(String[] args) {
 		try {
 			System.out.println("Testing Start!");
-			Board b = initBoard();
-			b.viewBoard();
+			String result = initBoardDataBase();
+			Board board = stringConvertToCollection(result);
+			board.viewBoard();
 			System.out.println("Testing End!");
 		} catch (InitializeException e) {
 			// TODO Auto-generated catch block
@@ -127,7 +132,88 @@ public class Game {
         return null;
 
     }
+    // init board to database
+    private static String initBoardDataBase() throws InitializeException {
+    	//    	DB db = new DB();
+    	Board board = initBoard();
+    	String result = collectionConvetToStringJson(board.getCollections());
+    	System.out.println(result);
+    	return result;
+    }
     
+    // import google Gson jar
+    // convert board to string    
+    private static String collectionConvetToStringJson(HashMap<Position, Entity> collections) {
+    	HashMap<Integer, String> hashmap = new HashMap<Integer, String>();
+    	collections.forEach((k,v)->{
+    		int position = k.positionToInt();
+    		String entity = v.toDbString();
+			hashmap.put(position, entity);
+    	});
+    	Gson gson = new Gson();
+    	String hashString = gson.toJson(hashmap);
+    	return hashString;
+    }
+    
+    // convert string to board    
+    private static Board stringConvertToCollection(String json) {
+    	Gson gson = new Gson();
+    	Board board = new Board();
+    	HashMap<String, Object> prepareMap = new HashMap<String, Object>();
+    	prepareMap = (HashMap<String, Object>) gson.fromJson(json, prepareMap.getClass());
+    	prepareMap.forEach((k,v)->{ 
+    		int position = Integer.valueOf(k);
+    		Position p = initToPosition(position);
+    		Entity entity = null;
+    		HashMap<String, String> entityData = new HashMap<String, String>();
+    		entityData = (HashMap<String, String>) gson.fromJson((String) v, entityData.getClass());
+    		String type = entityData.get("Type");
+    		String name = entityData.get("Name");
+    		switch (type) {
+			case "Ladder":
+				int topX = Integer.valueOf(entityData.get("TopX"));
+				int topY = Integer.valueOf(entityData.get("TopY"));
+				int botX = Integer.valueOf(entityData.get("BotX"));
+				int botY = Integer.valueOf(entityData.get("BotY"));
+				Position top = new Position(topX, topY);
+				Position bot = new Position(botX, botY);
+				try {
+					entity = new Ladder(bot, top, name);
+				} catch (InitializeException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+
+			case "Piece":
+				int pX = Integer.valueOf(entityData.get("PositionX"));
+				int pY = Integer.valueOf(entityData.get("PositionY"));
+				Position pp = new Position(pX, pY);
+				entity = new Piece(pp, name);
+				break;
+				
+			case "Snake":
+				int tailX = Integer.valueOf(entityData.get("TailX"));
+				int tailY = Integer.valueOf(entityData.get("TailY"));
+				int headX = Integer.valueOf(entityData.get("HeadX"));
+				int headY = Integer.valueOf(entityData.get("HeadY"));
+				Position tail = new Position(tailX, tailY);
+				Position head = new Position(headX, headY);
+				try {
+					entity = new Snake(head, tail, name);
+				} catch (InitializeException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			}
+    		board.getCollections().put(p, entity);
+    	});
+    	
+    	return board;
+    }
+    
+    // init board functions    
     private static Board initBoard() throws InitializeException{
     	Position initPiece = new Position(0, 0);
     	ArrayList<Entity> entitys = new ArrayList<Entity>();
@@ -135,7 +221,6 @@ public class Game {
     		Piece p = new Piece(initPiece, "P"+(i+1));
     		entitys.add(p);
 		}
-    	
     	int[] ladderBottom = {-1, -1, -1, -1, -1};
     	int[] ladderTop = {-1, -1, -1, -1, -1};
     	int[] snakeHead = {-1, -1, -1, -1, -1};
@@ -163,13 +248,16 @@ public class Game {
     	for (int i = 0; i < entitys.size(); i++) {
     		iniBoard.addCollection(entitys.get(i));
 		}
-    	
+    	iniBoard.viewBoard();
     	return iniBoard;
     }
     
     private static int randomInt(int range) {
     	Random random = new Random();
-    	int i = random.nextInt(range);
+    	int i = -1;
+    	while(i < 1) {
+    		i = random.nextInt(range);
+    	}
     	return i;
     }
     
