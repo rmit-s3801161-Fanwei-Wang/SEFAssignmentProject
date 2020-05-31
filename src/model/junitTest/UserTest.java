@@ -1,3 +1,4 @@
+package model.junitTest;
 
 import org.junit.Test;
 
@@ -20,12 +21,12 @@ public class UserTest {
 		assertEquals(userName, testPlayer.getUsername());
 		assertEquals(pass, testPlayer.getPassword());
 		assertEquals(email, testPlayer.getUserEmail());
-		assertEquals("player000001", testPlayer.getUserID());
+		assertEquals("player000001", testPlayer.getUsername());
 		
 		assertEquals(userName + 1, testPlayer2.getUsername());
 		assertEquals(pass + 1, testPlayer2.getPassword());
 		assertEquals(email + 1 , testPlayer2.getUserEmail());
-		assertEquals("player000002", testPlayer2.getUserID());
+		assertEquals("player000002", testPlayer2.getUsername());
 		
 		//Reset password tesing
 		testPlayer.resetPassword("NewPassword", "NewPassword");
@@ -38,7 +39,7 @@ public class UserTest {
 		assertEquals(userName, testAdmin.getUsername());
 		assertEquals(pass, testAdmin.getPassword());
 		assertEquals(email, testAdmin.getUserEmail());
-		assertEquals("admin000001", testAdmin.getUserID());
+		assertEquals("admin000001", testAdmin.getUsername());
 		
 		
 	}

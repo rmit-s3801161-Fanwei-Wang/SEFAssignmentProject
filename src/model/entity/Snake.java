@@ -33,8 +33,8 @@ public class Snake extends SLEntity {
                 "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
         if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
                 || super.getExit().positionToInt() > super.getEntry().positionToInt()
-                || super.getEntry().positionToInt() == 100
-                || super.getEntry().getY() == super.getExit().getY()) {
+                || super.getEntry().positionToInt() == 100) {
+//        	|| super.getEntry().getY() == super.getExit().getY()
             throw ex;
         }
         snakeBound(collections);
@@ -159,7 +159,7 @@ public class Snake extends SLEntity {
 
     @Override
     public String toDbString() {
-        return String.format("{\"Type\":\"Snake\",\"Name\":\"%s\",\"TailX\":%d,\"TailY\":%d,\"HeadX\":%d,\"HeadY\":%d}",
+        return String.format("{\"Type\":\"Snake\",\"Name\":\"%s\",\"TailX\":\"%d\",\"TailY\":\"%d\",\"HeadX\":\"%d\",\"HeadY\":\"%d\"}",
                 super.getName(), super.getExit().getX(),super.getExit().getY(),super.getEntry().getX(),super.getEntry().getY());
     }
 
