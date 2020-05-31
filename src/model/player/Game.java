@@ -1,6 +1,7 @@
 package model.player;
 
 import model.entity.*;
+import model.exception.InitializeException;
 import exception.LoadGameException;
 
 import java.sql.Connection;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 
@@ -18,12 +20,26 @@ public class Game {
 //    private Board board;
     private int playerID;
     private int boardID;
+    private Board board;
 
 //
 //    public Game(Player player, Board board) {
 //        this.player = player;
 //        this.board = board;
 //    }
+    
+    public static void main(String[] args) {
+		try {
+			System.out.println("Testing Start!");
+			Board b = initBoard();
+			b.viewBoard();
+			System.out.println("Testing End!");
+		} catch (InitializeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+    
     public Game(int playerID, int boardID) {
         this.playerID = playerID;
         this.boardID = boardID;
@@ -112,12 +128,11 @@ public class Game {
 
     }
     
-    private static HashMap<String, Position> rollMetricx(){
-    	HashMap<String, Position> initPostions = new HashMap<String, Position>();
+    private static Board initBoard() throws InitializeException{
     	Position initPiece = new Position(0, 0);
     	ArrayList<Entity> entitys = new ArrayList<Entity>();
     	for (int i = 1; i < 5; i++) {
-    		Piece p = new Piece(initPiece, "piece"+i);
+    		Piece p = new Piece(initPiece, "P"+(i+1));
     		entitys.add(p);
 		}
     	
@@ -126,23 +141,192 @@ public class Game {
     	int[] snakeHead = {-1, -1, -1, -1, -1};
     	int[] snakeTail = {-1, -1, -1, -1, -1};
     	
-    	return initPostions;
+    	System.out.println("Starting Random");
+    	ladderBottom = initLadderBottom(ladderBottom);
+    	ladderTop = initLadderTop(ladderBottom, ladderTop);
+    	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail);
+    	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop, snakeTail);
+    	System.out.println("Ending Random");
+    	for (int i = 0; i < ladderBottom.length; i++) {
+    		Position bottom = initToPosition(ladderBottom[i]);
+    		Position top = initToPosition(ladderTop[i]);
+			Ladder ladder = new Ladder(bottom, top, "L"+(i+1));
+			entitys.add(ladder);
+		}
+    	for (int i = 0; i < snakeHead.length; i++) {
+			Position head = initToPosition(snakeHead[i]);
+			Position tail = initToPosition(snakeTail[i]);
+			Snake snake = new Snake(head, tail, "S"+(i+1));
+			entitys.add(snake);
+		}
+    	Board iniBoard = new Board();
+    	for (int i = 0; i < entitys.size(); i++) {
+    		iniBoard.addCollection(entitys.get(i));
+		}
+    	
+    	return iniBoard;
     }
     
     private static int randomInt(int range) {
-    	int i = (int) Math.random() * range;
+    	Random random = new Random();
+    	int i = random.nextInt(range);
     	return i;
     }
     
     private static int[] initLadderBottom(int[] bottoms) {
-    	int prev = -1;
+    	boolean dup = false;
     	int ths = -1;
+    	int n = 0;
     	while(bottoms[4] == -1) {
-    		
+    		ths = randomInt(100);
+    		for (int bottom : bottoms) {
+				if (ths == bottom) {
+					dup = true;
+					break;
+				}
+			}
+    		if (!dup && ths > 1) {
+				bottoms[n] = ths;
+				dup = false;
+    			n++;
+			}
     	}
+    	return bottoms;
     }
     
-    private static Position intToPosition(int z) {
+    private static int[] initLadderTop(int[] bottoms, int[] tops) {
+    	boolean dup = false;
+    	int ths = -1;
+    	int n = 0;
+    	while(tops[4] == -1) {
+    		ths = randomInt(100);
+    		if (ths == 100) {
+				continue;
+			}
+    		for (int top : tops) {
+				if (ths == top) {
+					dup = true;
+					break;
+				}
+			}
+    		if (dup) {
+    			dup = false;
+				continue;
+			}
+    		for (int bottom : bottoms) {
+				if (ths == bottom) {
+					dup = true;
+					break;
+				}
+			}
+    		if (!dup && ths > bottoms[n] && (ths - bottoms[n]) <= 30) {
+				tops[n] = ths;
+				dup = false;
+				n++;
+			}
+    	}
+    	return tops;
+    }
+    
+    private static int[] initSnakeTails(int[] bottoms, int[] tops, int[] tails) {
+    	boolean dup = false;
+    	int ths = -1;
+    	int n = 0;
+    	while(tails[4] == -1) {
+    		ths = randomInt(100);
+    		for (int bottom : bottoms) {
+				if (ths == bottom) {
+					dup = true;
+					break;
+				}
+			}
+    		if (dup) {
+    			dup = false;
+				continue;
+			}
+    		for (int top : tops) {
+				if (ths == top) {
+					dup = true;
+					break;
+				}
+			}
+    		if (dup) {
+    			dup = false;
+				continue;
+			}
+    		for (int tail : tails) {
+				if (ths == tail) {
+					dup = true;
+					break;
+				}
+			}
+    		if (!dup) {
+				tails[n] = ths;
+				dup = false;
+				n++;
+			}
+    	}
+    	return tails;
+    }
+    
+    private static int[] initSnakeHead(int[] heads, int[] bottoms, int[] tops, int[] tails) {
+    	boolean dup = false;
+    	int ths = -1;
+    	int n = 0;
+    	while(heads[4] == -1) {
+    		ths = randomInt(100);
+    		if (ths == 100) {
+				continue;
+			}
+    		for (int bottom : bottoms) {
+				if (ths == bottom) {
+					dup = true;
+					break;
+				}
+			}
+    		if (dup) {
+    			dup = false;
+				continue;
+			}
+    		for (int top : tops) {
+				if (ths == top) {
+					dup = true;
+					break;
+				}
+			}
+    		if (dup) {
+    			dup = false;
+				continue;
+			}
+    		for (int tail : tails) {
+				if (ths == tail) {
+					dup = true;
+					break;
+				}
+			}
+    		if (dup) {
+    			dup = false;
+				continue;
+			}
+    		for (int head : heads) {
+				if (ths == head) {
+					dup = true;
+				}
+				if (ths == head && (ths < 100 && ths >= 81)) {
+					dup = true;
+				}
+				if (dup) { break; }
+			}
+    		if (!dup && tails[n] < ths && (ths - tails[n]) <= 30) {
+				heads[n] = ths;
+				dup = false;
+				n++;
+			}
+    	}
+    	return heads;
+    }
+    
+    private static Position initToPosition(int z) {
     	Position p = null;
 		if ((z - 1) / 10 % 2 == 0) {
 			if (z % 10 == 0)

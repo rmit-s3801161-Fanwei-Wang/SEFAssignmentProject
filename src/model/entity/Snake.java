@@ -15,8 +15,8 @@ public class Snake extends SLEntity {
                 "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
         if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
                 || super.getExit().positionToInt() > super.getEntry().positionToInt()
-                || super.getEntry().positionToInt() == 100
-                || super.getEntry().getY() == super.getExit().getY()) {
+                || super.getEntry().positionToInt() == 100) {
+//        	|| super.getEntry().getY() == super.getExit().getY()
             throw ex;
         }
     }
