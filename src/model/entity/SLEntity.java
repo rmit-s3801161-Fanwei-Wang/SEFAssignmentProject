@@ -23,7 +23,10 @@ abstract public class SLEntity extends Entity{
 
         for(Entity e:collections.values()){
             if(e instanceof SLEntity){
-                if(((SLEntity) e).getEntry().compareTo(this.entry) || ((SLEntity) e).getEntry().compareTo(this.exit) || ((SLEntity) e).getExit().compareTo(this.entry) || ((SLEntity) e).getExit().compareTo(this.exit))
+                if(((SLEntity) e).getEntry().compareTo(this.entry)
+                        || ((SLEntity) e).getEntry().compareTo(this.exit)
+                        || ((SLEntity) e).getExit().compareTo(this.entry)
+                        || ((SLEntity) e).getExit().compareTo(this.exit))
                     throw new GridsBeingTakenException("Grids already been taken by " + e.getName());
             }
         }

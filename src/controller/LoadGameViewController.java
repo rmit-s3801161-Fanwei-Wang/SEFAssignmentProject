@@ -14,10 +14,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.entity.Board;
+import model.exception.GameSLException;
 import model.player.Game;
 import model.player.Player;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static controller.Util.changeScene;
 
@@ -29,13 +32,13 @@ public class LoadGameViewController {
     private ObservableList<Game> observableList;
 
     public void initialize() {
-        for (Game game : Game.getGames(LoginViewController.currentUser)) {
-            System.out.println(game.getGameID() + " " + game.getPlayerID() + " " + game.getBoardID());
-        }
+//        for (Game game : Game.getGames(LoginViewController.currentUser)) {
+//            System.out.println(game.getGameID() + " " + game.getPlayerID() + " " + game.getBoardID());
+//        }
         usernameLabel.setText(LoginViewController.currentUser.getUsername());
         observableList = FXCollections.observableArrayList(Game.getGames(LoginViewController.currentUser));
 
-        System.out.println(Game.getGames(LoginViewController.currentUser));
+//        System.out.println(Game.getGames(LoginViewController.currentUser));
 
         TableColumn<Game, Integer> gameIDColumn = new TableColumn<>("Game ID");
         gameIDColumn.setMinWidth(200);
@@ -54,8 +57,9 @@ public class LoadGameViewController {
     }
 
     @FXML
-    public void load(ActionEvent event) throws IOException {
+    public void load(ActionEvent event) throws IOException, SQLException, GameSLException {
         Game game = (Game)tableView.getSelectionModel().getSelectedItem();
+        game.setBoard(Board.findBoard(game.getBoardID()));
         String fileAddress = "/view/mainGame.fxml";
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Util.class.getResource(fileAddress));
@@ -68,7 +72,7 @@ public class LoadGameViewController {
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(scene);
         window.show();
-        System.out.println("The Game ID you choose is: " + ((Game)tableView.getSelectionModel().getSelectedItem()).getGameID());
+//        System.out.println("The Game ID you choose is: " + ((Game)tableView.getSelectionModel().getSelectedItem()).getGameID());
     }
 
     @FXML
