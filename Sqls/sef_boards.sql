@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `boards`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `boards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `collections` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `collections` longtext COLLATE utf8mb4_general_ci,
   `createdBy` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -39,4 +39,4 @@ CREATE TABLE `boards` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-31 18:36:41
+-- Dump completed on 2020-06-01 16:18:37

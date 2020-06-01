@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.gson.JsonObject;
+
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -133,10 +135,16 @@ public class Piece extends PGEntity {
 	}
 
 	@Override
-	public String toDbString() {
-		return String.format("{\"Type\":\"Piece\",\"Name\":\"%s\",\"PositionX\":\"%d\",\"PositionY\":\"%d\"}",
-				super.getName(),
-				super.getPosition().getX(),super.getPosition().getY());
+	public JsonObject toDbString() {
+		JsonObject json = new JsonObject();
+		json.addProperty("Type", "Piece");
+		json.addProperty("Name", super.getName());
+		json.addProperty("PositionX", String.valueOf(super.getPosition().getX()));
+		json.addProperty("PositionY", String.valueOf(super.getPosition().getY()));
+		return json;
+//		return String.format("{\"Type\":\"Piece\",\"Name\":\"%s\",\"PositionX\":\"%d\",\"PositionY\":\"%d\"}",
+//				super.getName(),
+//				super.getPosition().getX(),super.getPosition().getY());
 	}
 
 	public int getClimbNumber() {

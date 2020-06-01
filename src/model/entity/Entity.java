@@ -1,5 +1,7 @@
 package model.entity;
 
+import com.google.gson.JsonObject;
+
 import javafx.scene.image.ImageView;
 
 abstract public class Entity {
@@ -13,5 +15,5 @@ abstract public class Entity {
 		return name;
 	}
 
-	abstract public String toDbString();
+	abstract public JsonObject toDbString();
 }
