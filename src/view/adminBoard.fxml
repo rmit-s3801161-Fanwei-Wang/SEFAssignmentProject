@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+
+<fx:root fx:id="listview" prefHeight="450.0" prefWidth="450.0" stylesheets="@listview.css" type="javafx.scene.control.ListView" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+</fx:root>
+

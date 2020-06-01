@@ -6,11 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.exception.InitializeException;
 import model.player.Admin;
 import model.player.DB;
 import model.player.User;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static controller.Util.alertBox;
 import static controller.Util.changeScene;
@@ -65,14 +67,9 @@ public class LoginViewController {
         return false;
     }
 
-    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException {
-        if(!login(email.getText(),password.getText()));{
-            errorLabel.setText("Wrong password or email!");
-        }
-
-        if(currentUser instanceof Admin){
-            alertBox("Alert", "YOU ARE AN ADMIN.");
-        }
+    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException, InitializeException, SQLException, IOException {
+        Admin admin = new Admin();
+        admin.CreateNewBoard(event);
     }
 
     public void loadTestAccount(ActionEvent event) {
