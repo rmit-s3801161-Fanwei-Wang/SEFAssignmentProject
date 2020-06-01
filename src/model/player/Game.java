@@ -336,8 +336,7 @@ public class Game {
 //		}
     	
     	int times = 1;
-    	boolean stopToken = false; 
-    	while (times < 6 || stopToken) {
+    	while (times < 6) {
     		int top = randomInt(99);
         	int bottom = randomInt(top);
         	Position topXY = initToPosition(top);
@@ -345,18 +344,15 @@ public class Game {
         	Ladder ladder = null;
         	try {
     			ladder = new Ladder(bottomXY, topXY, "L"+times, iniBoard.getCollections());
+    			times++;
+            	iniBoard.addCollection(ladder);
     		} catch (Exception e) {
-    			stopToken = true;
-    			continue;
     		}
-        	times++;
-        	stopToken = false;
-        	iniBoard.addCollection(ladder);
+        	
 		}
     	
     	times = 1;
-    	stopToken = false;
-    	while (times < 6 || stopToken) {
+    	while (times < 6) {
     		int head = randomInt(99);
         	int tail = randomInt(head);
         	Position topXY = initToPosition(head);
@@ -364,13 +360,10 @@ public class Game {
         	Snake snake = null;
         	try {
     			snake = new Snake(topXY, bottomXY, "S"+times, iniBoard.getCollections());
+    			times++;
+            	iniBoard.addCollection(snake);
     		} catch (Exception e) {
-    			stopToken = true;
-    			continue;
     		}
-        	times++;
-        	stopToken = false;
-        	iniBoard.addCollection(snake);
 		}
     	
     	iniBoard.viewBoard();
