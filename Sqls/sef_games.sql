@@ -26,6 +26,8 @@ CREATE TABLE `games` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `playerID` int(11) NOT NULL,
   `boardID` int(11) NOT NULL,
+  `human` bit(2) NOT NULL,
+  `level` bit(2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,4 +41,4 @@ CREATE TABLE `games` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-29 19:00:16
+-- Dump completed on 2020-06-02  2:20:44

@@ -53,10 +53,12 @@ public class Game {
         this.boardID = boardID;
     }
 
-    public Game(long gameID, long playerID,long boardID) {
+    public Game(long gameID, long playerID,long boardID, boolean human, boolean level) {
         this.id = gameID;
         this.playerID = playerID;
         this.boardID = boardID;
+        this.human = human;
+        this.level = level;
     }
 
     public static ArrayList<Game> getGames(User currentPlayer) {
@@ -69,10 +71,14 @@ public class Game {
              Statement stmt = con.createStatement();
         ){
             String sql = "SELECT * FROM " + GAME_TABLE_NAME + " WHERE playerID = " + currentPlayer.getID() + ";";
-//            String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
             try(ResultSet resultSet = stmt.executeQuery(sql)) {
                 while (resultSet.next()) {
-                    Game game = new Game(resultSet.getInt("id"), resultSet.getInt("playerID"), resultSet.getInt("boardID"));
+                    Game game = new Game(resultSet.getInt("id"), 
+                    		resultSet.getInt("playerID"), 
+                    		resultSet.getInt("boardID"),
+                    		intToBoolean(resultSet.getInt("human")),
+                    		intToBoolean(resultSet.getInt("level"))
+                    		);
 
                     games.add(game);
                 }
@@ -82,7 +88,7 @@ public class Game {
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-
+        
         return games;
     }
     
@@ -151,7 +157,8 @@ public class Game {
 		}
 		String gameSql = "";
 		if (this.getGameID() == -1) {
-			gameSql = "INSERT INTO games(playerID, boardID) VALUES(" + this.getPlayerID() + ", "+ boardID +")";
+			gameSql = "INSERT INTO games(playerID, boardID, human, level) VALUES(" + this.getPlayerID() + 
+					", "+ boardID +", "+ booleanToInt(this.getHuman()) +", "+ booleanToInt(this.getLevel()) +")";
 		} else {
 			gameSql = "UPDATE games SET boardID = " + boardID; 
 		}
@@ -171,16 +178,21 @@ public class Game {
     public Game loadGame(Player currentPlayer, long gameID) throws SQLException, GameSLException {
     	DB db = new DB();
     	Game game = null;
-    	String sql = "SELECT * FROM games WHERE id = " + gameID + "and playerID = " + currentPlayer.getID();
+    	String sql = "SELECT * FROM games WHERE id = " + gameID + " and playerID = " + currentPlayer.getID();
     	ResultSet rs = db.search(sql);
     	while (rs.next()) {
-			game = new Game(rs.getLong("id"), rs.getLong("playerID"), rs.getLong("boardID"));
+			game = new Game(rs.getLong("id"), 
+					rs.getLong("playerID"), 
+					rs.getLong("boardID"),
+					intToBoolean(rs.getInt("human")),
+					intToBoolean(rs.getInt("level"))
+					);
 		}
     	if (game == null) {
 			throw new GameSLException("LoadGame Failed");
 		}
     	Board board = null;
-    	String bSql = "SELECT * FROM boards WHERE id = " + game.getBoardID() + "and createdBy = 'Player'";
+    	String bSql = "SELECT * FROM boards WHERE id = " + game.getBoardID() + " and createdBy = 'Player'";
     	ResultSet bRs = db.search(bSql);
     	while (bRs.next()) {
 			board = stringConvertToCollection(bRs.getLong("id"), bRs.getString("collections"));
@@ -190,6 +202,22 @@ public class Game {
 		}
     	game.setBoard(board);
     	return game;
+    }
+    
+    public static Integer booleanToInt(boolean tag) {
+		if (tag) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+    
+    public static Boolean intToBoolean(int tag) {
+    	if (tag == 1) { 
+    		return true; 
+    	} else {
+    		return false;
+    	}
     }
     
     // init board to database
@@ -356,176 +384,6 @@ public class Game {
     		i = random.nextInt(range)+1;
     	}
     	return i;
-    }
-    
-    private static int[] initLadderBottom(int[] bottoms) {
-    	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(bottoms[4] == -1) {
-    		ths = randomInt(100);
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (!dup && ths > 1) {
-				bottoms[n] = ths;
-				dup = false;
-    			n++;
-			}
-    	}
-    	return bottoms;
-    }
-    
-    private static int[] initLadderTop(int[] bottoms, int[] tops) {
-    	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(tops[4] == -1) {
-    		ths = randomInt(100);
-    		if (ths == 100) {
-				continue;
-			}
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int top : tops) {
-    			if (top == -1) {
-    				continue;
-    			}
-				if (ths == top) {
-					dup = true;
-					break;
-				}
-			}
-    		if (!dup && ths > bottoms[n] && (ths - bottoms[n]) <= 30) {
-				tops[n] = ths;
-				dup = false;
-				n++;
-			}
-    	}
-    	return tops;
-    }
-    
-    private static int[] initSnakeHead(int[] heads, int[] bottoms, int[] tops) {
-    	boolean dup = false;
-    	boolean exHead = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(heads[4] == -1) {
-    		ths = randomInt(100);
-    		if (ths == 100) {
-				continue;
-			}
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int top : tops) {
-				if (ths == top) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		
-    		for (int head : heads) {
-    			if (head == -1) { continue; }
-    			if (exHead) {
-					dup = true;
-				}
-				if (ths == head) {
-					dup = true;
-				}
-				if (head < 100 && head > 80) {
-					if (ths < 100 && ths > 80) {
-						exHead = true;
-						dup = true;
-						continue;
-					}
-				}
-				if (dup) { break; }
-			}
-    		if (!dup) {
-				heads[n] = ths;
-				dup = false;
-				exHead = false;
-				n++;
-			}
-    	}
-    	return heads;
-    }
-    
-    private static int[] initSnakeTails(int[] bottoms, int[] tops, int[] tails, int[] heads) {
-    	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(tails[4] == -1) {
-    		ths = randomInt(100);
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int top : tops) {
-				if (ths == top) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int head : heads) {
-    			if (ths == head) {
-    				dup = true;
-    				break;
-    			}
-    		}
-    		if (dup) {
-    			dup = false;
-    			continue;
-    		}
-    		for (int tail : tails) {
-    			if (tail == -1) {
-					continue;
-				}
-				if (ths == tail) {
-					dup = true;
-					break;
-				}
-			}
-    		if (!dup && ths < heads[n] && ((heads[n] - ths) <= 30)) {
-				tails[n] = ths;
-				dup = false;
-				n++;
-			}
-    	}
-    	return tails;
     }
     
     private static Position initToPosition(int z) {
