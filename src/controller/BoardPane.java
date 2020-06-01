@@ -88,6 +88,15 @@ public class BoardPane extends ListView {
             alert.showAndWait();
             System.exit(0);
         }
+
+        if (human) {
+            controller.Human.setVisible(true);
+            controller.Snake.setVisible(false);
+        } else {
+            controller.Human.setVisible(false);
+            controller.Snake.setVisible(true);
+        }
+
         GridPane board = new GridPane();
         board.setMinSize(0, 0);
         board.setPrefHeight(400);
@@ -464,8 +473,8 @@ public class BoardPane extends ListView {
                                             }
                                         }
                                         reboard();
-                                    } else{
-                                        Alert alert = new Alert(Alert.AlertType.ERROR,"Can only move diagonally one unit");
+                                    } else {
+                                        Alert alert = new Alert(Alert.AlertType.ERROR, "Can only move diagonally one unit");
                                         alert.showAndWait();
                                         select = null;
                                         head = false;

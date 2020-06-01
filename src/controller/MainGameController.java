@@ -2,6 +2,7 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -13,14 +14,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import model.entity.*;
 import model.exception.CannotMoveException;
+import model.exception.GameSLException;
 import model.exception.InitializeException;
 import model.exception.OnlyOneSnakeGreaterEightyException;
 import model.player.Game;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
+
+import static controller.Util.changeScene;
 
 public class MainGameController {
 
@@ -31,9 +37,9 @@ public class MainGameController {
     @FXML
     private ImageView diceImage2;
     @FXML
-    private Label Human;
+    public Label Human;
     @FXML
-    private Label Snake;
+    public Label Snake;
     @FXML
     private HBox hBox;
     @FXML
@@ -50,31 +56,37 @@ public class MainGameController {
     public Button Guard;
 
     private HashMap<Position, Entity> collections;
+    private Game game;
 
     public void setUp(Game game) {
+        this.game = game;
         collections = game.getBoard().getCollections();
-        Piece[] pieces = new Piece[4];
+        Guard temp = new Guard(null, "");
+        temp.draw(Guard1);
+        temp.draw(Guard2);
+        temp.draw(Guard3);
+
         try {
             HUMAN.setImage(new Image(new FileInputStream(Piece.pieceShape)));
             SNAKE.setImage(new Image(new FileInputStream("./src/model/icon/SNAKE.png")));
-            Guard temp = new Guard(null, "");
-            temp.draw(Guard1);
-            temp.draw(Guard2);
-            temp.draw(Guard3);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        Human.setText(String.format("%s, it's your turn",LoginViewController.currentUser.getUsername()));
+        Snake.setText(String.format("%s, it's your turn",LoginViewController.currentUser.getUsername()));
 
+        /* // To delete!!!!!!
+        Piece[] pieces = new Piece[4];
         for (int i = 0; i < 4; i++) {
-            pieces[i] = new Piece(null, Character.toString((char) (65 + i)));
+            pieces[i] = new Piece(null,"P+"+(i+2));
         }
-        try {
-            for (int j = 0; j < 4; j++) {
+        for (int j=0;j<4;j++) {
+            try {
                 pieces[j].move(collections, 1);
+            } catch (CannotMoveException e) {
+                e.printStackTrace();
             }
-        } catch (CannotMoveException e) {
-            e.printStackTrace();
-        }
+        }*/
 
         BoardPane boardGUI = new BoardPane(collections, true, false, this);
         hBox.getChildren().add(boardGUI);
@@ -105,5 +117,16 @@ public class MainGameController {
 
     public void setGuard3Image() {
         Guard3.setImage(null);
+    }
+
+    public void BackToLogInView(ActionEvent actionEvent) throws IOException {
+        String fileAddress = "/view/menu_window_view.fxml";
+        changeScene(actionEvent, fileAddress);
+    }
+
+    public void SaveGame(ActionEvent actionEvent) throws SQLException, GameSLException, IOException {
+        game.saveGame();
+        String fileAddress = "/view/menu_window_view.fxml";
+        changeScene(actionEvent, fileAddress);
     }
 }

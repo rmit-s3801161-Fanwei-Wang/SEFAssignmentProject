@@ -32,6 +32,10 @@ public class Board{
 		this.collections = collections;
 	}
 
+	public long getId(){
+		return id;
+	}
+
 //	public static void setBoardSize(int grid) {
 //		grids = grid;
 //	}

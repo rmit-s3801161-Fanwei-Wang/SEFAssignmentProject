@@ -259,16 +259,15 @@ public class Game {
 			}
     		board.getCollections().put(p, entity);
     	});
-    	
+
     	return board;
     }
     
     // init board functions    
     public static Board initBoard() throws InitializeException{
-    	Position initPiece = new Position(0, 0);
     	ArrayList<Entity> entitys = new ArrayList<Entity>();
-    	for (int i = 1; i < 5; i++) {
-    		Piece p = new Piece(initPiece, "P"+(i+1));
+    	for (int i = 0; i < 5; i++) {
+    		Piece p = new Piece(new Position(0,0), "P"+(i+1));
     		entitys.add(p);
 		}
     	int[] ladderBottom = {-1, -1, -1, -1, -1};
@@ -411,6 +410,7 @@ public class Game {
 				if (head < 100 && head > 80) {
 					if (ths < 100 && ths > 80) {
 						exHead = true;
+						dup = true;
 						continue;
 					}
 				}

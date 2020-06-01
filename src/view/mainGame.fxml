@@ -15,7 +15,8 @@
          <children>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
+                <Button mnemonicParsing="false" onAction="#BackToLogInView" text="Back" />
+                  <Button mnemonicParsing="false" onAction="#SaveGame" text="Save" />
               </items>
             </ToolBar>
             <HBox fx:id="hBox" spacing="20.0">

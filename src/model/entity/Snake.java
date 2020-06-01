@@ -73,7 +73,7 @@ public class Snake extends SLEntity {
                 Position p = ((Guard)e).getPosition();
                 if (p.compareTo(headDestination) || p.compareTo(tailDestination)) {
                         throw new GridsBeingTakenException(super.getName() + " cannot move to " + p.positionToInt()
-                                + " because of " + collections.get(p).getName());
+                                + " because of " + e.getName());
                 }
             } else{
                 if(e.equals(this))
@@ -82,10 +82,10 @@ public class Snake extends SLEntity {
                 Position p2 = ((SLEntity)e).getExit();
                 if (p1.compareTo(headDestination) || p1.compareTo(tailDestination)) {
                     throw new GridsBeingTakenException(super.getName() + " cannot move to " + p1.positionToInt()
-                            + " because of " + collections.get(p1).getName());
+                            + " because of " + e.getName());
                 } else if(p2.compareTo(headDestination) || p2.compareTo(tailDestination)){
                     throw new GridsBeingTakenException(super.getName() + " cannot move to " + p2.positionToInt()
-                            + " because of " + collections.get(p1).getName());
+                            + " because of " + e.getName());
                 }
             }
         }

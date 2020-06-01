@@ -15,12 +15,14 @@ import java.util.HashMap;
 import static controller.Util.changeScene;
 
 public class AdminGameViewController {
+    private Board board;
     private HashMap<Position, Entity> collections;
 
     @FXML
     private Pane boardP;
 
     public void setUp(Board board) {
+        this.board = board;
         collections = board.getCollections();
 
         AdminBoard boardGUI = new AdminBoard(collections);
@@ -48,12 +50,13 @@ public class AdminGameViewController {
 
             String collection = Game.collectionConvetToStringJson(collections);
             DB db = new DB();
-            String sql = "INSERT INTO boards (collections, createdBy) VALUES('" + collection + "', 'Admin')";
-            long id = db.insert(sql);
+            String delSql = "Delete from boards where id = " + board.getId();
+            long id = db.insert(delSql);
+            String sql = "INSERT INTO boards (id, collections, createdBy) VALUES('" + board.getId()+"', '" + collection + "', 'Admin')";
+            id = db.insert(sql);
 
-            String fileAddress = "/view/login_view.fxml";
+            String fileAddress = "/view/admin_edit_view.fxml";
             changeScene(actionEvent, fileAddress);
-
 
         } catch (Exception exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR,exception.toString());

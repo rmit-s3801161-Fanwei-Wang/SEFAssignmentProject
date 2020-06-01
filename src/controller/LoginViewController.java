@@ -76,7 +76,7 @@ public class LoginViewController {
             return;
         }
 
-        if (currentUser.getType().equals("admin")) {
+        if (currentUser.getType().compareToIgnoreCase("admin")==0) {
 //            Admin admin = new Admin();
 //            admin.CreateNewBoard(event);
             changeScene(event,"/view/admin_edit_view.fxml");

@@ -48,27 +48,8 @@ public class Admin extends User {
         if (id == -1) {
             return false;
         }
+
         return true;
-    }
-
-    public void CreateNewBoard(ActionEvent event) throws InitializeException, SQLException, IOException {
-        Board board = Game.initBoard();
-        try {
-            String fileAddress = "/view/adminGame.fxml";
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Util.class.getResource(fileAddress));
-            Parent mainViewParent = loader.load();
-            AdminGameViewController adminGameViewController = loader.getController();
-            adminGameViewController.setUp(board);
-            Scene scene = new Scene(mainViewParent);
-
-            //get Window
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(scene);
-            window.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     // ladder ,snake larger than 30    
