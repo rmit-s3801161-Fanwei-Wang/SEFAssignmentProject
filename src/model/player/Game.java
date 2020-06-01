@@ -337,8 +337,14 @@ public class Game {
     	
     	int times = 1;
     	while (times < 6) {
-    		int top = randomInt(99);
-        	int bottom = randomInt(top);
+    		int top = randomInt(89) + 10;
+    		int bottom = -1;
+    		if (top > 30) {
+    			int dif = randomInt(29);
+    			bottom = top - dif;
+			} else {
+				bottom = randomInt(top);
+			}
         	Position topXY = initToPosition(top);
         	Position bottomXY = initToPosition(bottom);
         	Ladder ladder = null;
@@ -347,14 +353,21 @@ public class Game {
     			times++;
             	iniBoard.addCollection(ladder);
     		} catch (Exception e) {
+    			System.out.println(e.toString());
     		}
         	
 		}
     	
     	times = 1;
     	while (times < 6) {
-    		int head = randomInt(99);
-        	int tail = randomInt(head);
+    		int head = randomInt(89) + 10;
+    		int tail = -1;
+    		if (head > 30) {
+    			int dif = randomInt(29);
+    			tail = head - dif;
+			} else {
+				tail = randomInt(head);
+			}
         	Position topXY = initToPosition(head);
         	Position bottomXY = initToPosition(tail);
         	Snake snake = null;
@@ -363,6 +376,7 @@ public class Game {
     			times++;
             	iniBoard.addCollection(snake);
     		} catch (Exception e) {
+    			System.out.println(e.toString());
     		}
 		}
     	
