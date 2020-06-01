@@ -1,14 +1,12 @@
 package model.junitTest;
 
-import java.util.HashMap;
-import java.util.Scanner;
-
 import model.entity.*;
+import model.exception.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.exception.*;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 

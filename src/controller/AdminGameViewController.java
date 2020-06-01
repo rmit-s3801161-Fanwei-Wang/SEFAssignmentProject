@@ -53,6 +53,8 @@ public class AdminGameViewController {
 
             String fileAddress = "/view/login_view.fxml";
             changeScene(actionEvent, fileAddress);
+
+
         } catch (Exception exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR,exception.toString());
             alert.showAndWait();

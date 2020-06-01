@@ -1,7 +1,15 @@
 package model.entity;
 
 import model.entity.*;
+import model.player.DB;
+import model.player.Game;
+import model.player.User;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Board{
@@ -76,4 +84,29 @@ public class Board{
 		System.out.println();
 	}
 
+	public static ArrayList<Integer> getBoards() {
+		final String TABLE_NAME = "boards";
+		ArrayList<Integer> boards= new ArrayList<>();
+
+		DB db = new DB();
+
+		try (Connection con = db.getConn();
+			 Statement stmt = con.createStatement();
+		){
+			String sql = "SELECT * FROM " + TABLE_NAME + " WHERE createdBy = 'Admin'";
+//            String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
+			try(ResultSet resultSet = stmt.executeQuery(sql)) {
+				while (resultSet.next()) {
+//					Game game = new Game(resultSet.getInt("id"), resultSet.getInt("playerID"), resultSet.getInt("boardID"));
+					boards.add(resultSet.getInt("id"));
+				}
+			}catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+
+		return boards;
+	}
 }

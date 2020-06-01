@@ -6,11 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.exception.InitializeException;
 import model.player.Admin;
 import model.player.DB;
 import model.player.User;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static controller.Util.alertBox;
 import static controller.Util.changeScene;
@@ -67,19 +69,23 @@ public class LoginViewController {
         return false;
     }
 
-    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException {
+
+    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException, SQLException, IOException, InitializeException {
         if (!login(email.getText(), password.getText())) {
             errorLabel.setText("Wrong password or email!");
             return;
         }
 
         if (currentUser.getType().equals("admin")) {
-            //TODO jump admin board editor
-            alertBox("alert", "You are admin");
+//            Admin admin = new Admin();
+//            admin.CreateNewBoard(event);
+            changeScene(event,"/view/admin_edit_view.fxml");
+
         } else
             errorLabel.setText("You are not admin.");
-
     }
+
+
 
     public void loadTestAccount(ActionEvent event) {
         email.setText("test@email.com");
