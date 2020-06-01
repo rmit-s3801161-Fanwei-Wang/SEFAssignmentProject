@@ -30,6 +30,11 @@ public class Game {
     private long boardID;
     private Board board;
 
+    // whose turn : start from true
+	private boolean human;
+	// which stage : start from false
+	private boolean level;
+
 //
 //    public Game(Player player, Board board) {
 //        this.player = player;
