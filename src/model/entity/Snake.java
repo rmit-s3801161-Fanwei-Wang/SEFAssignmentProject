@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
+import com.google.gson.JsonObject;
+
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -159,9 +161,17 @@ public class Snake extends SLEntity {
     }
 
     @Override
-    public String toDbString() {
-        return String.format("{\"Type\":\"Snake\",\"Name\":\"%s\",\"TailX\":\"%d\",\"TailY\":\"%d\",\"HeadX\":\"%d\",\"HeadY\":\"%d\"}",
-                super.getName(), super.getExit().getX(),super.getExit().getY(),super.getEntry().getX(),super.getEntry().getY());
+    public JsonObject toDbString() {
+    	JsonObject json = new JsonObject();
+    	json.addProperty("Type", "Snake");
+    	json.addProperty("Name", super.getName());
+    	json.addProperty("TailX", String.valueOf(super.getExit().getX()));
+    	json.addProperty("TailY", String.valueOf(super.getExit().getY()));
+    	json.addProperty("HeadX", String.valueOf(super.getEntry().getX()));
+    	json.addProperty("HeadY", String.valueOf(super.getEntry().getY()));
+    	return json;
+//        return String.format("{\"Type\":\"Snake\",\"Name\":\"%s\",\"TailX\":\"%d\",\"TailY\":\"%d\",\"HeadX\":\"%d\",\"HeadY\":\"%d\"}",
+//                super.getName(), super.getExit().getX(),super.getExit().getY(),super.getEntry().getX(),super.getEntry().getY());
     }
 
 }

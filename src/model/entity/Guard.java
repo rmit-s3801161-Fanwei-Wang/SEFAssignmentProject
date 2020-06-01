@@ -6,6 +6,8 @@ import javafx.scene.image.ImageView;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import com.google.gson.JsonObject;
+
 public class Guard extends PGEntity{
 
 	private static final String guardPath = "./src/model/icon/guard.png";
@@ -26,10 +28,16 @@ public class Guard extends PGEntity{
 	}
 
 	@Override
-	public String toDbString() {
-		return String.format("{\"Type\":\"Guard\",\"Name\":\"%s\",\"PositionX\":%d,\"PositionY\":%d}",
-				super.getName(),
-				super.getPosition().getX(),super.getPosition().getY());
+	public JsonObject toDbString() {
+		JsonObject json = new JsonObject();
+		json.addProperty("Type", "Guard");
+		json.addProperty("Name", super.getName());
+		json.addProperty("PositionX", String.valueOf(super.getPosition().getX()));
+		json.addProperty("PositionY", String.valueOf(super.getPosition().getY()));
+		return json;
+//		return String.format("{\"Type\":\"Guard\",\"Name\":\"%s\",\"PositionX\":%d,\"PositionY\":%d}",
+//				super.getName(),
+//				super.getPosition().getX(),super.getPosition().getY());
 	}
 
 
