@@ -22,7 +22,7 @@ public class DB {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/Sef?serverTimezone=UTC&zeroDateTimeBehavior=ConvertToNull";
     
     private static final String USER = "root";
-    private static final String PASS = "Root1234";
+    private static final String PASS = "wswfwqaz123!";
     
     private Connection conn = null;
 	private Statement  stmt = null;
@@ -183,8 +183,7 @@ public class DB {
 
 	public Player findPlayer(String email, String password) throws DBException {
 		Player player = new Player();
-		String sql = "select * from users where email = '" + email + "' and password = '" + password + "' and type ='Player'";
-
+		String sql = "select * from users where email = '" + email + "' and password = '" + password + "' ";
 		try {
 			this.stmt = this.conn.createStatement();
 			ResultSet rs = this.stmt.executeQuery(sql);
@@ -193,6 +192,7 @@ public class DB {
 				player.setUserEmail(rs.getString("email"));
 				player.setUsername(rs.getString("username"));
 				player.setPassword(rs.getString("password"));
+				player.setType(rs.getString("type"));
 				return player;
 			}
 			
