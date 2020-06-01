@@ -6,21 +6,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import model.exception.InitializeException;
 import model.player.Admin;
 import model.player.DB;
 import model.player.User;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import static controller.Util.alertBox;
 import static controller.Util.changeScene;
 
 public class LoginViewController {
-    @FXML private Label errorLabel;
-    @FXML private TextField email;
-    @FXML private TextField password;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private TextField email;
+    @FXML
+    private TextField password;
 
     public static User currentUser;
 
@@ -32,17 +33,16 @@ public class LoginViewController {
     }
 
 
-
     @FXML
     public void login(ActionEvent event) throws IOException, DBException, ValidationException {
         try {
             //TODO change true as login(email.getText(),password.getText()) and add try&catch
-            if(login(email.getText(),password.getText())){
+            if (login(email.getText(), password.getText())) {
                 //login successful change scene to the menu window
                 String fileAddress = "/view/menu_window_view.fxml";
                 changeScene(event, fileAddress);
 
-            }else{
+            } else {
                 errorLabel.setText("Wrong password or email!");
             }
 
@@ -60,16 +60,25 @@ public class LoginViewController {
 
         currentUser = db.findPlayer(email, password);
 
-        if(currentUser !=null)
+        if (currentUser != null)
             return true;
 
         db.db_close();
         return false;
     }
 
-    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException, InitializeException, SQLException, IOException {
-        Admin admin = new Admin();
-        admin.CreateNewBoard(event);
+    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException {
+        if (!login(email.getText(), password.getText())) {
+            errorLabel.setText("Wrong password or email!");
+            return;
+        }
+
+        if (currentUser.getType().equals("admin")) {
+            //TODO jump admin board editor
+            alertBox("alert", "You are admin");
+        } else
+            errorLabel.setText("You are not admin.");
+
     }
 
     public void loadTestAccount(ActionEvent event) {

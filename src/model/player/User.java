@@ -58,6 +58,10 @@ public abstract class User implements Serializable {
 		this.type = type;
 	}
 
+    public String getType() {
+        return type;
+    }
+
     public String getPassword() {
         return password;
     }
