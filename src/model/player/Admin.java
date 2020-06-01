@@ -19,17 +19,11 @@ import model.exception.InitializeException;
 public class Admin extends User {
 //    static int uniqueID = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InitializeException, SQLException {
         Admin admin = new Admin();
-        try {
-            admin.CreateNewBoard();
-        } catch (InitializeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+   
+        admin.CreateNewBoard();
+       
     }
 
     public Admin() {
@@ -48,7 +42,6 @@ public class Admin extends User {
         if (id == -1) {
             return false;
         }
-
         return true;
     }
 

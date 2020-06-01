@@ -189,10 +189,12 @@ public class Game {
     // import google Gson jar
     // convert board to string    
     public static String collectionConvetToStringJson(HashMap<Position, Entity> collections) {
-    	HashMap<Integer, JsonObject> hashmap = new HashMap<Integer, JsonObject>();
+    	HashMap<Position, JsonObject> hashmap = new HashMap<Position, JsonObject>();
     	collections.forEach((k,v)->{
     		int position = k.positionToInt();
-			hashmap.put(position, v.toDbString());
+    		JsonObject jsOb = v.toDbString();
+    		jsOb.addProperty("Position", String.valueOf(position));
+			hashmap.put(k, jsOb);
     	});
     	Gson gson = new Gson();
     	String hashString = gson.toJson(hashmap);
@@ -201,13 +203,12 @@ public class Game {
     
     // convert string to board    
     public static Board stringConvertToCollection(long boardID, String json) {
-    	
     	Gson gson = new Gson();
     	Board board = new Board(boardID);
     	HashMap<String, Object> prepareMap = new HashMap<String, Object>();
     	prepareMap = (HashMap<String, Object>) gson.fromJson(json, prepareMap.getClass());
     	prepareMap.forEach((k,v)->{ 
-    		int position = Integer.valueOf(k);
+    		int position = Integer.valueOf(((Map)v).get("Position").toString());
     		Position p = initToPosition(position);
     		Entity entity = null;
     		String type = ((Map) v).get("Type").toString();
@@ -221,8 +222,8 @@ public class Game {
 				Position top = new Position(topX, topY);
 				Position bot = new Position(botX, botY);
 				try {
-					entity = new Ladder(bot, top, name);
-				} catch (InitializeException e) {
+					entity = new Ladder(bot, top, name, board.getCollections());
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -250,8 +251,8 @@ public class Game {
 				Position tail = new Position(tailX, tailY);
 				Position head = new Position(headX, headY);
 				try {
-					entity = new Snake(head, tail, name);
-				} catch (InitializeException e) {
+					entity = new Snake(head, tail, name, board.getCollections());
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -264,39 +265,73 @@ public class Game {
     }
     
     // init board functions    
-    public static Board initBoard() throws InitializeException{
-    	ArrayList<Entity> entitys = new ArrayList<Entity>();
+    public static Board initBoard() {
+    	Board iniBoard = new Board();
     	for (int i = 0; i < 5; i++) {
     		Piece p = new Piece(new Position(0,0), "P"+(i+1));
-    		entitys.add(p);
+    		iniBoard.addCollection(p);
 		}
-    	int[] ladderBottom = {-1, -1, -1, -1, -1};
-    	int[] ladderTop = {-1, -1, -1, -1, -1};
-    	int[] snakeHead = {-1, -1, -1, -1, -1};
-    	int[] snakeTail = {-1, -1, -1, -1, -1};
+//    	int[] ladderBottom = {-1, -1, -1, -1, -1};
+//    	int[] ladderTop = {-1, -1, -1, -1, -1};
+//    	int[] snakeHead = {-1, -1, -1, -1, -1};
+//    	int[] snakeTail = {-1, -1, -1, -1, -1};
     	
-    	ladderBottom = initLadderBottom(ladderBottom);
-    	ladderTop = initLadderTop(ladderBottom, ladderTop);
-    	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop);
-    	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail, snakeHead);
+//    	ladderBottom = initLadderBottom(ladderBottom);
+//    	ladderTop = initLadderTop(ladderBottom, ladderTop);
+//    	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop);
+//    	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail, snakeHead);
     	
+//    	for (int i = 0; i < ladderBottom.length; i++) {
+//    		Position bottom = initToPosition(ladderBottom[i]);
+//    		Position top = initToPosition(ladderTop[i]);
+//			Ladder ladder = new Ladder(bottom, top, "L"+(i+1));
+//			entitys.add(ladder);
+//		}
+//    	for (int i = 0; i < snakeHead.length; i++) {
+//			Position head = initToPosition(snakeHead[i]);
+//			Position tail = initToPosition(snakeTail[i]);
+//			Snake snake = new Snake(head, tail, "S"+(i+1));
+//			entitys.add(snake);
+//		}
     	
-    	for (int i = 0; i < ladderBottom.length; i++) {
-    		Position bottom = initToPosition(ladderBottom[i]);
-    		Position top = initToPosition(ladderTop[i]);
-			Ladder ladder = new Ladder(bottom, top, "L"+(i+1));
-			entitys.add(ladder);
+    	int times = 1;
+    	boolean stopToken = false; 
+    	while (times < 6 || stopToken) {
+    		int top = randomInt(99);
+        	int bottom = randomInt(top);
+        	Position topXY = initToPosition(top);
+        	Position bottomXY = initToPosition(bottom);
+        	Ladder ladder = null;
+        	try {
+    			ladder = new Ladder(bottomXY, topXY, "L"+times, iniBoard.getCollections());
+    		} catch (Exception e) {
+    			stopToken = true;
+    			continue;
+    		}
+        	times++;
+        	stopToken = false;
+        	iniBoard.addCollection(ladder);
 		}
-    	for (int i = 0; i < snakeHead.length; i++) {
-			Position head = initToPosition(snakeHead[i]);
-			Position tail = initToPosition(snakeTail[i]);
-			Snake snake = new Snake(head, tail, "S"+(i+1));
-			entitys.add(snake);
+    	
+    	times = 1;
+    	stopToken = false;
+    	while (times < 6 || stopToken) {
+    		int head = randomInt(99);
+        	int tail = randomInt(head);
+        	Position topXY = initToPosition(head);
+        	Position bottomXY = initToPosition(tail);
+        	Snake snake = null;
+        	try {
+    			snake = new Snake(topXY, bottomXY, "S"+times, iniBoard.getCollections());
+    		} catch (Exception e) {
+    			stopToken = true;
+    			continue;
+    		}
+        	times++;
+        	stopToken = false;
+        	iniBoard.addCollection(snake);
 		}
-    	Board iniBoard = new Board();
-    	for (int i = 0; i < entitys.size(); i++) {
-    		iniBoard.addCollection(entitys.get(i));
-		}
+    	
     	iniBoard.viewBoard();
     	return iniBoard;
     }
