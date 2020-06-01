@@ -27,15 +27,10 @@ public class Snake extends SLEntity {
 
             throw ex;
         }
-<<<<<<< HEAD
-        if (super.getEntry().positionToInt() > 80)
-            snakeBound(collections);
-=======
         if(super.getEntry().positionToInt()>80) 
             	snakeBound(collections);
 
 //        snakeBound(collections);
->>>>>>> 0ae7295b276fda366308ccce88bcabbb2fc5915c
     }
 
     public boolean move(HashMap<Position, Entity> collections, String choice)
@@ -122,7 +117,6 @@ public class Snake extends SLEntity {
         return false;
     }
 
-<<<<<<< HEAD
     public void snakeBound(HashMap<Position, Entity> collections) throws OnlyOneSnakeGreaterEightyException {
         boolean exist = false;
         for (Position p : collections.keySet()) {
@@ -137,22 +131,6 @@ public class Snake extends SLEntity {
             throw new OnlyOneSnakeGreaterEightyException();
         }
     }
-=======
-	public void snakeBound(HashMap<Position, Entity> collections) throws OnlyOneSnakeGreaterEightyException {
-		boolean exist = false;
-		for (Position p : collections.keySet()) {
-			if (collections.get(p) instanceof Snake) {
-				if (p.positionToInt() > 80) {
-					exist = true;
-					break;
-				}
-			}
-		}
-		if (exist) {
-			throw new OnlyOneSnakeGreaterEightyException();
-		}
-	}
->>>>>>> 0ae7295b276fda366308ccce88bcabbb2fc5915c
 
     @Override
     public void draw(ImageView imageView, Position position) {

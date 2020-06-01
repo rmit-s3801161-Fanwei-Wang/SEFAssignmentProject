@@ -8,6 +8,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -109,6 +110,9 @@ public class AdminBoard extends ListView {
                 }
                 if(!exist){
                     Pane pane = new Pane();
+                    Label label = new Label();
+                    label.setText(String.valueOf(temp.positionToInt()));
+                    pane.getChildren().add(label);
                     pane.setOnMouseClicked(mouseEvent -> {
                         if(select!=null){
                             select.setXY(temp);

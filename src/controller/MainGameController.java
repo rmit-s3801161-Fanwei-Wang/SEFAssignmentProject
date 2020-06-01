@@ -72,12 +72,12 @@ public class MainGameController {
         }
         Guard temp = new Guard(null, "");
         switch (count) {
-            case 1:
-                temp.draw(Guard1);
-            case 2:
-                temp.draw(Guard2);
             case 3:
                 temp.draw(Guard3);
+            case 2:
+                temp.draw(Guard2);
+            case 1:
+                temp.draw(Guard1);
             default:
         }
 
