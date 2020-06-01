@@ -28,7 +28,6 @@ public class Snake extends SLEntity {
             throw ex;
         }
 
-
         snakeBound(collections);
     }
 

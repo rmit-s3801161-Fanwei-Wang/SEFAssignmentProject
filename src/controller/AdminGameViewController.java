@@ -41,10 +41,10 @@ public class AdminGameViewController {
         try {
             for (Entity e : collections.values()) {
                 if (e instanceof Snake) {
-                    Snake snake = new Snake(((Snake) e).getEntry(), ((Snake) e).getExit(), "", collections);
+                    Snake snake = new Snake(((Snake) e).getEntry(), ((Snake) e).getExit(), "", new HashMap<>());
                 }
                 if (e instanceof Ladder) {
-                    Ladder ladder = new Ladder(((Ladder) e).getEntry(), ((Ladder) e).getExit(), "");
+                    Ladder ladder = new Ladder(((Ladder) e).getEntry(), ((Ladder) e).getExit(), "",new HashMap<>());
                 }
             }
 

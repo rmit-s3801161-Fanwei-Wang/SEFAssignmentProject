@@ -45,8 +45,6 @@ public class LoadGameViewController {
 
         tableView.setItems(observableList);
         tableView.getColumns().addAll(gameIDColumn, playerIDColumn, boardIDColumn);
-
-
     }
 
     @FXML

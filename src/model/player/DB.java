@@ -22,7 +22,8 @@ public class DB {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/Sef?serverTimezone=UTC&zeroDateTimeBehavior=ConvertToNull";
     
     private static final String USER = "root";
-    private static final String PASS = "wswfwqaz123!";
+//    private static final String PASS = "wswfwqaz123!";
+	private static final String PASS = "Root1234";
     
     private Connection conn = null;
 	private Statement  stmt = null;
