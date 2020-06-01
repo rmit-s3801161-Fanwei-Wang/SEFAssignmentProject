@@ -17,21 +17,8 @@ import model.exception.OutOfBoardException;
 
 public class Snake extends SLEntity {
 
-    public Snake(Position head, Position tail, String name) throws InitializeException {
-        super(head, tail, name);
-        InitializeException ex = new InitializeException(
-                "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
-        if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
-                || super.getExit().positionToInt() > super.getEntry().positionToInt()
-                || super.getEntry().positionToInt() == 100
-//                || super.getEntry().getY() == super.getExit().getY())
-        ){
-            throw ex;
-        }
-    }
-
     public Snake(Position head, Position tail, String name, HashMap<Position,Entity>collections) throws InitializeException, OnlyOneSnakeGreaterEightyException, GridsBeingTakenException {
-        super(head, tail, name);
+        super(head, tail, name, collections);
         InitializeException ex = new InitializeException(
                 "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
         if (super.getEntry().positionToInt() - super.getExit().positionToInt() > 30
@@ -41,12 +28,6 @@ public class Snake extends SLEntity {
             throw ex;
         }
 
-        for(Entity e:collections.values()){
-            if(e instanceof SLEntity){
-                if(((SLEntity) e).getEntry().compareTo(head) || ((SLEntity) e).getEntry().compareTo(tail) || ((SLEntity) e).getExit().compareTo(head) || ((SLEntity) e).getExit().compareTo(tail))
-                    throw new GridsBeingTakenException("Grids already been taken by " + e.getName());
-            }
-        }
 
         snakeBound(collections);
     }

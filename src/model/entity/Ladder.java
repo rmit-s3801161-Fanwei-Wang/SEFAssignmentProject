@@ -3,18 +3,20 @@ package model.entity;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import model.exception.GridsBeingTakenException;
 import model.exception.InitializeException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 import com.google.gson.JsonObject;
 
 public class Ladder extends SLEntity {
 	private String ladderName = "./src/model/icon/ladder1.png";
 
-	public Ladder(Position bottom, Position top, String name) throws InitializeException {
-		super(bottom, top, name);
+	public Ladder(Position bottom, Position top, String name, HashMap<Position,Entity> collections) throws InitializeException, GridsBeingTakenException {
+		super(bottom, top, name,collections);
 		InitializeException ex = new InitializeException(
 				("Bottom:" + bottom.positionToInt() + " ,Top:" + top.positionToInt() + " is not possible"));
 		if (super.getExit().positionToInt() - super.getEntry().positionToInt() > 30
