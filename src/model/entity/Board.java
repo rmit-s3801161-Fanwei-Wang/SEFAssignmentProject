@@ -1,6 +1,7 @@
 package model.entity;
 
 import model.entity.*;
+import model.exception.GameSLException;
 import model.player.DB;
 import model.player.Game;
 import model.player.User;
@@ -108,5 +109,23 @@ public class Board{
 		}
 
 		return boards;
+	}
+	
+	public static Board findBoard(long boardID) throws SQLException, GameSLException {
+		final String TABLE_NAME = "boards";
+		DB db = new DB();
+		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + boardID;
+		ResultSet rs = db.search(sql);
+		String collection = "";
+		while (rs.next()) {
+			boardID = rs.getLong("id");
+			collection = rs.getString("collections");
+		}
+		if (boardID == -1 || collection.isBlank()) {
+			throw new GameSLException("Find Board Fail!");
+		}
+		
+		Board board = Game.stringConvertToCollection(boardID, collection);
+		return board;
 	}
 }
