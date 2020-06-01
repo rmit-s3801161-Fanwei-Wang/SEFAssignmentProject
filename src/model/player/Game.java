@@ -1,17 +1,26 @@
 package model.player;
 
-import com.google.gson.Gson;
 import model.entity.*;
 import model.exception.GameSLException;
 import model.exception.InitializeException;
+import exception.LoadGameException;
 
+import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
+import com.mysql.cj.xdevapi.DbDoc;
 
 
 public class Game {
@@ -27,8 +36,11 @@ public class Game {
 //        this.board = board;
 //    }
     
-    public static void main(String[] args) {
-    	
+    public static void main(String[] args) throws SQLException, InitializeException {
+    	Player player = new Player();
+    	player.setID(4);
+    	Game game = createGame(player);
+    	game.getBoard().viewBoard();
 	}
     
     public Game(long playerID, long boardID) {
@@ -177,11 +189,10 @@ public class Game {
     // import google Gson jar
     // convert board to string    
     public static String collectionConvetToStringJson(HashMap<Position, Entity> collections) {
-    	HashMap<Integer, String> hashmap = new HashMap<Integer, String>();
+    	HashMap<Integer, JsonObject> hashmap = new HashMap<Integer, JsonObject>();
     	collections.forEach((k,v)->{
     		int position = k.positionToInt();
-    		String entity = v.toDbString();
-			hashmap.put(position, entity);
+			hashmap.put(position, v.toDbString());
     	});
     	Gson gson = new Gson();
     	String hashString = gson.toJson(hashmap);
@@ -190,6 +201,7 @@ public class Game {
     
     // convert string to board    
     public static Board stringConvertToCollection(long boardID, String json) {
+    	
     	Gson gson = new Gson();
     	Board board = new Board(boardID);
     	HashMap<String, Object> prepareMap = new HashMap<String, Object>();
@@ -198,16 +210,14 @@ public class Game {
     		int position = Integer.valueOf(k);
     		Position p = initToPosition(position);
     		Entity entity = null;
-    		HashMap<String, String> entityData = new HashMap<String, String>();
-    		entityData = (HashMap<String, String>) gson.fromJson((String) v, entityData.getClass());
-    		String type = entityData.get("Type");
-    		String name = entityData.get("Name");
+    		String type = ((Map) v).get("Type").toString();
+    		String name = ((Map) v).get("Name").toString();
     		switch (type) {
 			case "Ladder":
-				int topX = Integer.valueOf(entityData.get("TopX"));
-				int topY = Integer.valueOf(entityData.get("TopY"));
-				int botX = Integer.valueOf(entityData.get("BotX"));
-				int botY = Integer.valueOf(entityData.get("BotY"));
+				int topX = Integer.valueOf(((Map) v).get("TopX").toString());
+				int topY = Integer.valueOf(((Map) v).get("TopY").toString());
+				int botX = Integer.valueOf(((Map) v).get("BotX").toString());
+				int botY = Integer.valueOf(((Map) v).get("BotY").toString());
 				Position top = new Position(topX, topY);
 				Position bot = new Position(botX, botY);
 				try {
@@ -219,17 +229,24 @@ public class Game {
 				break;
 
 			case "Piece":
-				int pX = Integer.valueOf(entityData.get("PositionX"));
-				int pY = Integer.valueOf(entityData.get("PositionY"));
+				int pX = Integer.valueOf(((Map) v).get("PositionX").toString());
+				int pY = Integer.valueOf(((Map) v).get("PositionY").toString());
 				Position pp = new Position(pX, pY);
 				entity = new Piece(pp, name);
 				break;
 				
+			case "Guard":
+				int gX = Integer.valueOf(((Map) v).get("PositionX").toString());
+				int gY = Integer.valueOf(((Map) v).get("PositionY").toString());
+				Position gp = new Position(gX, gY);
+				entity = new Guard(gp, name);
+				break;
+				
 			case "Snake":
-				int tailX = Integer.valueOf(entityData.get("TailX"));
-				int tailY = Integer.valueOf(entityData.get("TailY"));
-				int headX = Integer.valueOf(entityData.get("HeadX"));
-				int headY = Integer.valueOf(entityData.get("HeadY"));
+				int tailX = Integer.valueOf(((Map) v).get("TailX").toString());
+				int tailY = Integer.valueOf(((Map) v).get("TailY").toString());
+				int headX = Integer.valueOf(((Map) v).get("HeadX").toString());
+				int headY = Integer.valueOf(((Map) v).get("HeadY").toString());
 				Position tail = new Position(tailX, tailY);
 				Position head = new Position(headX, headY);
 				try {
@@ -261,8 +278,9 @@ public class Game {
     	
     	ladderBottom = initLadderBottom(ladderBottom);
     	ladderTop = initLadderTop(ladderBottom, ladderTop);
-    	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail);
-    	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop, snakeTail);
+    	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop);
+    	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail, snakeHead);
+    	
     	
     	for (int i = 0; i < ladderBottom.length; i++) {
     		Position bottom = initToPosition(ladderBottom[i]);
@@ -288,7 +306,7 @@ public class Game {
     	Random random = new Random();
     	int i = -1;
     	while(i < 1) {
-    		i = random.nextInt(range);
+    		i = random.nextInt(range)+1;
     	}
     	return i;
     }
@@ -323,8 +341,8 @@ public class Game {
     		if (ths == 100) {
 				continue;
 			}
-    		for (int top : tops) {
-				if (ths == top) {
+    		for (int bottom : bottoms) {
+				if (ths == bottom) {
 					dup = true;
 					break;
 				}
@@ -333,8 +351,11 @@ public class Game {
     			dup = false;
 				continue;
 			}
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
+    		for (int top : tops) {
+    			if (top == -1) {
+    				continue;
+    			}
+				if (ths == top) {
 					dup = true;
 					break;
 				}
@@ -348,49 +369,9 @@ public class Game {
     	return tops;
     }
     
-    private static int[] initSnakeTails(int[] bottoms, int[] tops, int[] tails) {
+    private static int[] initSnakeHead(int[] heads, int[] bottoms, int[] tops) {
     	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(tails[4] == -1) {
-    		ths = randomInt(100);
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int top : tops) {
-				if (ths == top) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int tail : tails) {
-				if (ths == tail) {
-					dup = true;
-					break;
-				}
-			}
-    		if (!dup) {
-				tails[n] = ths;
-				dup = false;
-				n++;
-			}
-    	}
-    	return tails;
-    }
-    
-    private static int[] initSnakeHead(int[] heads, int[] bottoms, int[] tops, int[] tails) {
-    	boolean dup = false;
+    	boolean exHead = false;
     	int ths = -1;
     	int n = 0;
     	while(heads[4] == -1) {
@@ -418,8 +399,50 @@ public class Game {
     			dup = false;
 				continue;
 			}
-    		for (int tail : tails) {
-				if (ths == tail) {
+    		
+    		for (int head : heads) {
+    			if (head == -1) { continue; }
+    			if (exHead) {
+					dup = true;
+				}
+				if (ths == head) {
+					dup = true;
+				}
+				if (head < 100 && head > 80) {
+					if (ths < 100 && ths > 80) {
+						exHead = true;
+					}
+				}
+				if (dup) { break; }
+			}
+    		if (!dup) {
+				heads[n] = ths;
+				dup = false;
+				exHead = false;
+				n++;
+			}
+    	}
+    	return heads;
+    }
+    
+    private static int[] initSnakeTails(int[] bottoms, int[] tops, int[] tails, int[] heads) {
+    	boolean dup = false;
+    	int ths = -1;
+    	int n = 0;
+    	while(tails[4] == -1) {
+    		ths = randomInt(100);
+    		for (int bottom : bottoms) {
+				if (ths == bottom) {
+					dup = true;
+					break;
+				}
+			}
+    		if (dup) {
+    			dup = false;
+				continue;
+			}
+    		for (int top : tops) {
+				if (ths == top) {
 					dup = true;
 					break;
 				}
@@ -429,21 +452,31 @@ public class Game {
 				continue;
 			}
     		for (int head : heads) {
-				if (ths == head) {
-					dup = true;
+    			if (ths == head) {
+    				dup = true;
+    				break;
+    			}
+    		}
+    		if (dup) {
+    			dup = false;
+    			continue;
+    		}
+    		for (int tail : tails) {
+    			if (tail == -1) {
+					continue;
 				}
-				if (ths == head && (ths < 100 && ths >= 81)) {
+				if (ths == tail) {
 					dup = true;
+					break;
 				}
-				if (dup) { break; }
 			}
-    		if (!dup && tails[n] < ths && (ths - tails[n]) <= 30) {
-				heads[n] = ths;
+    		if (!dup && ths < heads[n] && ((heads[n] - ths) <= 30)) {
+				tails[n] = ths;
 				dup = false;
 				n++;
 			}
     	}
-    	return heads;
+    	return tails;
     }
     
     private static Position initToPosition(int z) {
