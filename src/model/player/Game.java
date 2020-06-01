@@ -411,6 +411,7 @@ public class Game {
 				if (head < 100 && head > 80) {
 					if (ths < 100 && ths > 80) {
 						exHead = true;
+						continue;
 					}
 				}
 				if (dup) { break; }
