@@ -57,14 +57,29 @@ public class MainGameController {
 
     private HashMap<Position, Entity> collections;
     private Game game;
+    private BoardPane boardGUI;
+
+    public boolean human, level;
 
     public void setUp(Game game) {
         this.game = game;
         collections = game.getBoard().getCollections();
+
+        int count = 3;
+        for (Entity e : collections.values()) {
+            if (e instanceof Guard)
+                count--;
+        }
         Guard temp = new Guard(null, "");
-        temp.draw(Guard1);
-        temp.draw(Guard2);
-        temp.draw(Guard3);
+        switch (count) {
+            case 1:
+                temp.draw(Guard1);
+            case 2:
+                temp.draw(Guard2);
+            case 3:
+                temp.draw(Guard3);
+            default:
+        }
 
         try {
             HUMAN.setImage(new Image(new FileInputStream(Piece.pieceShape)));
@@ -72,8 +87,8 @@ public class MainGameController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Human.setText(String.format("%s, it's your turn",LoginViewController.currentUser.getUsername()));
-        Snake.setText(String.format("%s, it's your turn",LoginViewController.currentUser.getUsername()));
+        Human.setText(String.format("%s, it's your turn", LoginViewController.currentUser.getUsername()));
+        Snake.setText(String.format("%s, it's your turn", LoginViewController.currentUser.getUsername()));
 
         /* // To delete!!!!!!
         Piece[] pieces = new Piece[4];
@@ -88,7 +103,7 @@ public class MainGameController {
             }
         }*/
 
-        BoardPane boardGUI = new BoardPane(collections, true, false, this);
+        boardGUI = new BoardPane(collections, game.getHuman(), game.getLevel(), this);
         hBox.getChildren().add(boardGUI);
         ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
         Collections.swap(workingCollection, 0, 1);
@@ -125,6 +140,8 @@ public class MainGameController {
     }
 
     public void SaveGame(ActionEvent actionEvent) throws SQLException, GameSLException, IOException {
+        game.setHuman(boardGUI.getHuman());
+        game.setLevel(boardGUI.getLevel());
         game.saveGame();
         String fileAddress = "/view/menu_window_view.fxml";
         changeScene(actionEvent, fileAddress);

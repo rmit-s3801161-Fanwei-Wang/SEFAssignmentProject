@@ -65,6 +65,14 @@ public class BoardPane extends ListView {
         reboard();
     }
 
+    public boolean getHuman(){
+        return human;
+    }
+
+    public boolean getLevel(){
+        return level;
+    }
+
     private void reboard() {
         if (level && round - levelStartRound == 20) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Out of Rounds, Snake win!");

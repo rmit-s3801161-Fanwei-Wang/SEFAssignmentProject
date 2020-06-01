@@ -31,9 +31,9 @@ public class Game {
     private Board board;
 
     // whose turn : start from true
-	private boolean human;
+	private boolean human = true;
 	// which stage : start from false
-	private boolean level;
+	private boolean level = false;
 
 //
 //    public Game(Player player, Board board) {
@@ -109,6 +109,14 @@ public class Game {
     public Board getBoard() {
     	return this.board;
     }
+
+    public void setHuman(boolean human){this.human = human;}
+
+    public boolean getHuman(){return human;}
+
+	public void setLevel(boolean level){this.level = level;}
+
+	public boolean getLevel(){return level;}
 
     public static Game createGame(Player currentPlayer) throws SQLException {
     	Game game = null;
