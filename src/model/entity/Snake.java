@@ -30,7 +30,7 @@ public class Snake extends SLEntity {
         }
     }
 
-    public Snake(Position head, Position tail, String name, HashMap<Position,Entity>collections) throws InitializeException, OnlyOneSnakeGreaterEightyException {
+    public Snake(Position head, Position tail, String name, HashMap<Position,Entity>collections) throws InitializeException, OnlyOneSnakeGreaterEightyException, GridsBeingTakenException {
         super(head, tail, name);
         InitializeException ex = new InitializeException(
                 "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
@@ -40,6 +40,14 @@ public class Snake extends SLEntity {
 //        	|| super.getEntry().getY() == super.getExit().getY()
             throw ex;
         }
+
+        for(Entity e:collections.values()){
+            if(e instanceof SLEntity){
+                if(((SLEntity) e).getEntry().compareTo(head) || ((SLEntity) e).getEntry().compareTo(tail) || ((SLEntity) e).getExit().compareTo(head) || ((SLEntity) e).getExit().compareTo(tail))
+                    throw new GridsBeingTakenException("Grids already been taken by " + e.getName());
+            }
+        }
+
         snakeBound(collections);
     }
 
