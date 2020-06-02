@@ -173,6 +173,12 @@ public class Game {
 		} else {
 			boardSql = "UPDATE boards SET collections = '" + collection + "' WHERE id = " + this.getBoardID();
 			boardID = db.update(boardSql, this.getBoardID());
+			if (boardID == -1) { return false; }
+			gameSql = "UPDATE games SET human = "+ booleanToInt(this.getHuman()) +
+					", level = "+ booleanToInt(this.getLevel()) +", round = "+ this.getRound() +
+					", levelRound = " + this.getLevelRound() +" WHERE id = "+ this.getGameID();
+			gameID = db.update(gameSql, this.getGameID());
+			if (gameID == -1) { return false; }
 		}
 		
 		return true;
