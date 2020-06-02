@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.gson.JsonObject;
+
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,24 +25,23 @@ public class Piece extends PGEntity {
 		super(position, name);
 	}
 
-	public boolean move(HashMap<Position, Entity> collections,int dice) throws CannotMoveException {
+	public boolean move(ArrayList<Entity> collections,int dice) throws CannotMoveException {
 		if(level!=1)
 			return false;
-		if (super.getPosition() == null) {
-			super.setPosition(new Position(dice - 1, 0));
-			collections.put(super.getPosition(), this);
-		}
-		else if (buff == 0) {
+//		if (super.getPosition() == null) {
+//			super.setPosition(new Position(dice - 1, 0));
+//			collections.add(this);
+//		}
+		if (buff == 0) {
 			super.getPosition().move(dice);
 		} else {
 			throw new CannotMoveException(super.getName() + " cannot move when having buff");
 		}
 		
-		for(Position p:collections.keySet()) {
-			Entity e = collections.get(p);
+		for(Entity e: collections) {
 			if(e instanceof PGEntity)
 				continue;
-			if(e instanceof SLEntity && this.getPosition().compareTo(p)) {
+			if(e instanceof SLEntity && this.getPosition().compareTo(((SLEntity) e).getEntry())) {
 				if(e instanceof Ladder) {
 					if(!ladders.contains(e)) {
 						ladders.add((Ladder)e);
@@ -53,17 +54,17 @@ public class Piece extends PGEntity {
 		return true;
 	}
 
-	public boolean move(HashMap<Position, Entity> collections, String choice) throws OutOfBoardException {
+	public boolean move(ArrayList<Entity> collections, String choice) throws OutOfBoardException {
 		if(level!=2)
 			return false;
 		Position Destination = new Position(super.getPosition().getX(), super.getPosition().getY());
 		Destination.move(choice);
-		super.getPosition().setXY(Destination);
+		this.getPosition().setXY(Destination);
 		Snake removeSnake = null;
-		for(Entity e:collections.values()) {
+		for(Entity e:collections) {
 			if(e instanceof Snake) {
 				if(((Snake)e).getEntry().compareTo(super.getPosition())) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION,super.getName() + " is eaten by " + e.getName()+"Snake Win!");
+					Alert alert = new Alert(Alert.AlertType.INFORMATION,super.getName() + " is eaten by " + e.getName()+", Snake Win!");
 					alert.showAndWait();
 					System.exit(0);
 				}
@@ -80,8 +81,7 @@ public class Piece extends PGEntity {
 			}
 		}
 		if(removeSnake!=null) {
-			collections.remove(removeSnake.getEntry());
-			collections.remove(removeSnake.getExit());
+			collections.remove(removeSnake);
 		}
 		return true;
 	}
@@ -133,10 +133,16 @@ public class Piece extends PGEntity {
 	}
 
 	@Override
-	public String toDbString() {
-		return String.format("{\"Type\":\"Piece\",\"Name\":\"%s\",\"PositionX\":\"%d\",\"PositionY\":\"%d\"}",
-				super.getName(),
-				super.getPosition().getX(),super.getPosition().getY());
+	public JsonObject toDbString() {
+		JsonObject json = new JsonObject();
+		json.addProperty("Type", "Piece");
+		json.addProperty("Name", super.getName());
+		json.addProperty("PositionX", String.valueOf(super.getPosition().getX()));
+		json.addProperty("PositionY", String.valueOf(super.getPosition().getY()));
+		return json;
+//		return String.format("{\"Type\":\"Piece\",\"Name\":\"%s\",\"PositionX\":\"%d\",\"PositionY\":\"%d\"}",
+//				super.getName(),
+//				super.getPosition().getX(),super.getPosition().getY());
 	}
 
 	public int getClimbNumber() {

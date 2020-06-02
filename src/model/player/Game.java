@@ -5,6 +5,7 @@ import model.exception.GameSLException;
 import model.exception.InitializeException;
 import exception.LoadGameException;
 
+import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +18,8 @@ import java.util.Map;
 import java.util.Random;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import com.mysql.cj.xdevapi.DbDoc;
 
 
@@ -25,7 +28,14 @@ public class Game {
 //    private Board board;
     private long playerID;
     private long boardID;
+    private int round = 0;
+    private int levelRound = 0;
     private Board board;
+
+    // whose turn : start from true
+	private boolean human = true;
+	// which stage : start from false
+	private boolean level = false;
 
 //
 //    public Game(Player player, Board board) {
@@ -33,8 +43,11 @@ public class Game {
 //        this.board = board;
 //    }
     
-    public static void main(String[] args) {
-    	
+    public static void main(String[] args) throws SQLException, InitializeException {
+    	Player player = new Player();
+    	player.setID(4);
+    	Game game = createGame(player);
+    	game.getBoard().viewBoard();
 	}
     
     public Game(long playerID, long boardID) {
@@ -42,10 +55,14 @@ public class Game {
         this.boardID = boardID;
     }
 
-    public Game(long gameID, long playerID,long boardID) {
+    public Game(long gameID, long playerID,long boardID, boolean human, boolean level, int round, int levelRound) {
         this.id = gameID;
         this.playerID = playerID;
         this.boardID = boardID;
+        this.human = human;
+        this.level = level;
+        this.round = round;
+        this.levelRound = levelRound;
     }
 
     public static ArrayList<Game> getGames(User currentPlayer) {
@@ -58,10 +75,16 @@ public class Game {
              Statement stmt = con.createStatement();
         ){
             String sql = "SELECT * FROM " + GAME_TABLE_NAME + " WHERE playerID = " + currentPlayer.getID() + ";";
-//            String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
             try(ResultSet resultSet = stmt.executeQuery(sql)) {
                 while (resultSet.next()) {
-                    Game game = new Game(resultSet.getInt("id"), resultSet.getInt("playerID"), resultSet.getInt("boardID"));
+                    Game game = new Game(resultSet.getInt("id"), 
+                    		resultSet.getInt("playerID"), 
+                    		resultSet.getInt("boardID"),
+                    		intToBoolean(resultSet.getInt("human")),
+                    		intToBoolean(resultSet.getInt("level")),
+                    		resultSet.getInt("round"),
+                    		resultSet.getInt("levelRound")
+                    		);
 
                     games.add(game);
                 }
@@ -71,33 +94,37 @@ public class Game {
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-
+        
         return games;
     }
     
-    public long getGameID() {
-        return id;
-    }
+    public long getGameID() { return id; }
 
-    public long getPlayerID() {
-        return playerID;
-    }
+    public long getPlayerID() { return playerID; }
 
-    public long getBoardID() {
-        return boardID;
-    }
+    public long getBoardID() { return boardID; }
     
-    public void setBoardID(long boardID) {
-    	this.boardID = boardID;
-    }
+    public void setBoardID(long boardID) { this.boardID = boardID; }
     
-    public void setBoard(Board board) {
-    	this.board = board;
-    }
+    public void setBoard(Board board) { this.board = board; }
     
-    public Board getBoard() {
-    	return this.board;
-    }
+    public Board getBoard() { return this.board; }
+
+    public void setHuman(boolean human){this.human = human;}
+
+    public boolean getHuman(){return human;}
+
+	public void setLevel(boolean level){this.level = level;}
+
+	public boolean getLevel(){return level;}
+	
+	public void setRound(int round) { this.round = round; }
+	
+	public int getRound() { return this.round; }
+	
+	public void setLevelRound(int levelRound) { this.levelRound = levelRound; }
+	
+	public int getLevelRound() { return this.levelRound; }
 
     public static Game createGame(Player currentPlayer) throws SQLException {
     	Game game = null;
@@ -125,43 +152,58 @@ public class Game {
     public boolean saveGame() throws SQLException, GameSLException {
 		DB db = new DB();
 		String collection = collectionConvetToStringJson(this.board.getCollections());
-		String boardSql = "INSERT INTO boards(collections, createdBy) VALUES('"+ collection +"', 'Player')";
-		long boardID = db.insert(boardSql);
-		if (boardID == -1) {
-			throw new GameSLException("Save Board Failed");
-		}
+		String boardSql = "";
 		String gameSql = "";
+		long gameID = -1;
+		long boardID = -1;
 		if (this.getGameID() == -1) {
-			gameSql = "INSERT INTO games(playerID, boardID) VALUES(" + this.getPlayerID() + ", "+ boardID +")";
-		} else {
-			gameSql = "UPDATE games SET boardID = " + boardID; 
-		}
-		long gameID = db.insert(gameSql);
-		if (gameID == -1) {
-			String dSql = "DELETE FROM boards WHERE id = " + boardID;
-			if(db.delete(dSql)) {
-				throw new GameSLException("Save Game Failed");
-			} else {
-				throw new GameSLException("DB Error");
+			boardSql = "INSERT INTO boards(collections, createdBy) VALUES('"+ collection +"', 'Player')";
+			boardID = db.insert(boardSql);
+			if (boardID == -1) {
+				throw new GameSLException("Save Board Failed");
 			}
+			gameSql = "INSERT INTO games(playerID, boardID, human, level, round, levelRound) VALUES(" + 
+					this.getPlayerID() + 
+					", "+ boardID +
+					", "+ booleanToInt(this.getHuman()) +
+					", "+ booleanToInt(this.getLevel()) +
+					", "+ this.getRound() +
+					", "+ this.getLevelRound() +")";
+			gameID = db.insert(gameSql);
+		} else {
+			boardSql = "UPDATE boards SET collections = '" + collection + "' WHERE id = " + this.getBoardID();
+			boardID = db.update(boardSql, this.getBoardID());
+			if (boardID == -1) { return false; }
+			gameSql = "UPDATE games SET human = "+ booleanToInt(this.getHuman()) +
+					", level = "+ booleanToInt(this.getLevel()) +", round = "+ this.getRound() +
+					", levelRound = " + this.getLevelRound() +" WHERE id = "+ this.getGameID();
+			gameID = db.update(gameSql, this.getGameID());
+			if (gameID == -1) { return false; }
 		}
-		this.setBoardID(boardID);
+		
 		return true;
 	}
     
     public Game loadGame(Player currentPlayer, long gameID) throws SQLException, GameSLException {
     	DB db = new DB();
     	Game game = null;
-    	String sql = "SELECT * FROM games WHERE id = " + gameID + "and playerID = " + currentPlayer.getID();
+    	String sql = "SELECT * FROM games WHERE id = " + gameID + " and playerID = " + currentPlayer.getID();
     	ResultSet rs = db.search(sql);
     	while (rs.next()) {
-			game = new Game(rs.getLong("id"), rs.getLong("playerID"), rs.getLong("boardID"));
+			game = new Game(rs.getLong("id"), 
+					rs.getLong("playerID"), 
+					rs.getLong("boardID"),
+					intToBoolean(rs.getInt("human")),
+					intToBoolean(rs.getInt("level")),
+					rs.getInt("round"),
+					rs.getInt("levelRound")
+					);
 		}
     	if (game == null) {
 			throw new GameSLException("LoadGame Failed");
 		}
     	Board board = null;
-    	String bSql = "SELECT * FROM boards WHERE id = " + game.getBoardID() + "and createdBy = 'Player'";
+    	String bSql = "SELECT * FROM boards WHERE id = " + game.getBoardID() + " and createdBy = 'Player'";
     	ResultSet bRs = db.search(bSql);
     	while (bRs.next()) {
 			board = stringConvertToCollection(bRs.getLong("id"), bRs.getString("collections"));
@@ -173,6 +215,22 @@ public class Game {
     	return game;
     }
     
+    public static Integer booleanToInt(boolean tag) {
+		if (tag) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+    
+    public static Boolean intToBoolean(int tag) {
+    	if (tag == 1) { 
+    		return true; 
+    	} else {
+    		return false;
+    	}
+    }
+    
     // init board to database
     public static String initBoardDataBase() throws InitializeException {
     	Board board = initBoard();
@@ -182,12 +240,11 @@ public class Game {
     
     // import google Gson jar
     // convert board to string    
-    public static String collectionConvetToStringJson(HashMap<Position, Entity> collections) {
-    	HashMap<Integer, String> hashmap = new HashMap<Integer, String>();
-    	collections.forEach((k,v)->{
-    		int position = k.positionToInt();
-    		String entity = v.toDbString();
-			hashmap.put(position, entity);
+    public static String collectionConvetToStringJson(ArrayList<Entity> collections) {
+    	HashMap<Entity, JsonObject> hashmap = new HashMap<Entity, JsonObject>();
+    	collections.forEach((v)->{
+    		JsonObject jsOb = v.toDbString();
+    		hashmap.put(v, jsOb);
     	});
     	Gson gson = new Gson();
     	String hashString = gson.toJson(hashmap);
@@ -201,92 +258,112 @@ public class Game {
     	HashMap<String, Object> prepareMap = new HashMap<String, Object>();
     	prepareMap = (HashMap<String, Object>) gson.fromJson(json, prepareMap.getClass());
     	prepareMap.forEach((k,v)->{ 
-    		int position = Integer.valueOf(k);
-    		Position p = initToPosition(position);
     		Entity entity = null;
-    		HashMap<String, String> entityData = new HashMap<String, String>();
-    		entityData = (HashMap<String, String>) gson.fromJson((String) v, entityData.getClass());
-    		String type = entityData.get("Type");
-    		String name = entityData.get("Name");
+    		String type = ((Map) v).get("Type").toString();
+    		String name = ((Map) v).get("Name").toString();
     		switch (type) {
 			case "Ladder":
-				int topX = Integer.valueOf(entityData.get("TopX"));
-				int topY = Integer.valueOf(entityData.get("TopY"));
-				int botX = Integer.valueOf(entityData.get("BotX"));
-				int botY = Integer.valueOf(entityData.get("BotY"));
+				int topX = Integer.valueOf(((Map) v).get("TopX").toString());
+				int topY = Integer.valueOf(((Map) v).get("TopY").toString());
+				int botX = Integer.valueOf(((Map) v).get("BotX").toString());
+				int botY = Integer.valueOf(((Map) v).get("BotY").toString());
 				Position top = new Position(topX, topY);
 				Position bot = new Position(botX, botY);
 				try {
-					entity = new Ladder(bot, top, name);
-				} catch (InitializeException e) {
+					entity = new Ladder(bot, top, name, board.getCollections());
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 
 			case "Piece":
-				int pX = Integer.valueOf(entityData.get("PositionX"));
-				int pY = Integer.valueOf(entityData.get("PositionY"));
+				int pX = Integer.valueOf(((Map) v).get("PositionX").toString());
+				int pY = Integer.valueOf(((Map) v).get("PositionY").toString());
 				Position pp = new Position(pX, pY);
 				entity = new Piece(pp, name);
 				break;
 				
+			case "Guard":
+				int gX = Integer.valueOf(((Map) v).get("PositionX").toString());
+				int gY = Integer.valueOf(((Map) v).get("PositionY").toString());
+				Position gp = new Position(gX, gY);
+				entity = new Guard(gp, name);
+				break;
+				
 			case "Snake":
-				int tailX = Integer.valueOf(entityData.get("TailX"));
-				int tailY = Integer.valueOf(entityData.get("TailY"));
-				int headX = Integer.valueOf(entityData.get("HeadX"));
-				int headY = Integer.valueOf(entityData.get("HeadY"));
+				int tailX = Integer.valueOf(((Map) v).get("TailX").toString());
+				int tailY = Integer.valueOf(((Map) v).get("TailY").toString());
+				int headX = Integer.valueOf(((Map) v).get("HeadX").toString());
+				int headY = Integer.valueOf(((Map) v).get("HeadY").toString());
 				Position tail = new Position(tailX, tailY);
 				Position head = new Position(headX, headY);
 				try {
-					entity = new Snake(head, tail, name);
-				} catch (InitializeException e) {
+					entity = new Snake(head, tail, name, board.getCollections());
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			}
-    		board.getCollections().put(p, entity);
+    		board.addCollection(entity);
     	});
-    	
+
     	return board;
     }
     
     // init board functions    
-    public static Board initBoard() throws InitializeException{
-    	Position initPiece = new Position(0, 0);
-    	ArrayList<Entity> entitys = new ArrayList<Entity>();
-    	for (int i = 1; i < 5; i++) {
-    		Piece p = new Piece(initPiece, "P"+(i+1));
-    		entitys.add(p);
-		}
-    	int[] ladderBottom = {-1, -1, -1, -1, -1};
-    	int[] ladderTop = {-1, -1, -1, -1, -1};
-    	int[] snakeHead = {-1, -1, -1, -1, -1};
-    	int[] snakeTail = {-1, -1, -1, -1, -1};
-    	
-    	ladderBottom = initLadderBottom(ladderBottom);
-    	ladderTop = initLadderTop(ladderBottom, ladderTop);
-    	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail);
-    	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop, snakeTail);
-    	
-    	for (int i = 0; i < ladderBottom.length; i++) {
-    		Position bottom = initToPosition(ladderBottom[i]);
-    		Position top = initToPosition(ladderTop[i]);
-			Ladder ladder = new Ladder(bottom, top, "L"+(i+1));
-			entitys.add(ladder);
-		}
-    	for (int i = 0; i < snakeHead.length; i++) {
-			Position head = initToPosition(snakeHead[i]);
-			Position tail = initToPosition(snakeTail[i]);
-			Snake snake = new Snake(head, tail, "S"+(i+1));
-			entitys.add(snake);
-		}
+    public static Board initBoard() {
     	Board iniBoard = new Board();
-    	for (int i = 0; i < entitys.size(); i++) {
-    		iniBoard.addCollection(entitys.get(i));
+    	for (int i = 0; i < 5; i++) {
+    		Piece p = new Piece(new Position(0,0), "P"+(i+1));
+    		iniBoard.addCollection(p);
 		}
-    	iniBoard.viewBoard();
+    	
+    	int times = 1;
+    	while (times < 6) {
+    		int top = randomInt(89) + 10;
+    		int bottom = -1;
+    		if (top > 30) {
+    			int dif = randomInt(29);
+    			bottom = top - dif;
+			} else {
+				bottom = randomInt(top);
+			}
+        	Position topXY = initToPosition(top);
+        	Position bottomXY = initToPosition(bottom);
+        	Ladder ladder = null;
+        	try {
+    			ladder = new Ladder(bottomXY, topXY, "L"+times, iniBoard.getCollections());
+    			times++;
+            	iniBoard.addCollection(ladder);
+    		} catch (Exception e) {
+    			System.out.println(e.toString());
+    		}
+        	
+		}
+    	
+    	times = 1;
+    	while (times < 6) {
+    		int head = randomInt(89) + 10;
+    		int tail = -1;
+    		if (head > 30) {
+    			int dif = randomInt(29);
+    			tail = head - dif;
+			} else {
+				tail = randomInt(head);
+			}
+        	Position topXY = initToPosition(head);
+        	Position bottomXY = initToPosition(tail);
+        	Snake snake = null;
+        	try {
+    			snake = new Snake(topXY, bottomXY, "S"+times, iniBoard.getCollections());
+    			times++;
+            	iniBoard.addCollection(snake);
+    		} catch (Exception e) {
+    			System.out.println(e.toString());
+    		}
+		}
     	return iniBoard;
     }
     
@@ -294,162 +371,9 @@ public class Game {
     	Random random = new Random();
     	int i = -1;
     	while(i < 1) {
-    		i = random.nextInt(range);
+    		i = random.nextInt(range)+1;
     	}
     	return i;
-    }
-    
-    private static int[] initLadderBottom(int[] bottoms) {
-    	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(bottoms[4] == -1) {
-    		ths = randomInt(100);
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (!dup && ths > 1) {
-				bottoms[n] = ths;
-				dup = false;
-    			n++;
-			}
-    	}
-    	return bottoms;
-    }
-    
-    private static int[] initLadderTop(int[] bottoms, int[] tops) {
-    	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(tops[4] == -1) {
-    		ths = randomInt(100);
-    		if (ths == 100) {
-				continue;
-			}
-    		for (int top : tops) {
-				if (ths == top) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (!dup && ths > bottoms[n] && (ths - bottoms[n]) <= 30) {
-				tops[n] = ths;
-				dup = false;
-				n++;
-			}
-    	}
-    	return tops;
-    }
-    
-    private static int[] initSnakeTails(int[] bottoms, int[] tops, int[] tails) {
-    	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(tails[4] == -1) {
-    		ths = randomInt(100);
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int top : tops) {
-				if (ths == top) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int tail : tails) {
-				if (ths == tail) {
-					dup = true;
-					break;
-				}
-			}
-    		if (!dup) {
-				tails[n] = ths;
-				dup = false;
-				n++;
-			}
-    	}
-    	return tails;
-    }
-    
-    private static int[] initSnakeHead(int[] heads, int[] bottoms, int[] tops, int[] tails) {
-    	boolean dup = false;
-    	int ths = -1;
-    	int n = 0;
-    	while(heads[4] == -1) {
-    		ths = randomInt(100);
-    		if (ths == 100) {
-				continue;
-			}
-    		for (int bottom : bottoms) {
-				if (ths == bottom) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int top : tops) {
-				if (ths == top) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int tail : tails) {
-				if (ths == tail) {
-					dup = true;
-					break;
-				}
-			}
-    		if (dup) {
-    			dup = false;
-				continue;
-			}
-    		for (int head : heads) {
-				if (ths == head) {
-					dup = true;
-				}
-				if (ths == head && (ths < 100 && ths >= 81)) {
-					dup = true;
-				}
-				if (dup) { break; }
-			}
-    		if (!dup && tails[n] < ths && (ths - tails[n]) <= 30) {
-				heads[n] = ths;
-				dup = false;
-				n++;
-			}
-    	}
-    	return heads;
     }
     
     private static Position initToPosition(int z) {
