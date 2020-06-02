@@ -35,6 +35,14 @@ public class MainGameController {
     @FXML
     public Button Dice;
     @FXML
+    public Label ROUND;
+    @FXML
+    public Label round;
+    @FXML
+    public Label LEVELROUND;
+    @FXML
+    public Label levelRound;
+    @FXML
     private ImageView diceImage;
     @FXML
     private ImageView diceImage2;
@@ -91,7 +99,12 @@ public class MainGameController {
         }
         Human.setText(String.format("%s, it's your turn", LoginViewController.currentUser.getUsername()));
         Snake.setText(String.format("%s, it's your turn", LoginViewController.currentUser.getUsername()));
-
+        round.setText(game.getRound());
+        levelRound.setText(game.getLevelRound());
+        if(!level){
+            LEVELROUND.setVisible(false);
+            levelRound.setVisible(false);
+        }
         /* // To delete!!!!!!
         Piece[] pieces = new Piece[4];
         for (int i = 0; i < 4; i++) {
@@ -105,7 +118,7 @@ public class MainGameController {
             }
         }*/
 
-        boardGUI = new BoardPane(collections, game.getHuman(), game.getLevel(), this);
+        boardGUI = new BoardPane(collections, game.getHuman(), game.getLevel(),game.getRound(),game.getLevelRound(), this);
         hBox.getChildren().add(boardGUI);
         ObservableList<Node> workingCollection = FXCollections.observableArrayList(hBox.getChildren());
         Collections.swap(workingCollection, 0, 1);
@@ -144,6 +157,8 @@ public class MainGameController {
     public void SaveGame(ActionEvent actionEvent) {
         game.setHuman(boardGUI.getHuman());
         game.setLevel(boardGUI.getLevel());
+        game.setRound(boardGUI.getRound());
+        game.setLevelRound(boardGUI.getLevelRound());
         try {
             game.saveGame();
             String fileAddress = "/view/menu_window_view.fxml";

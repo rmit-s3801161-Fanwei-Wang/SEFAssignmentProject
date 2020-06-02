@@ -44,10 +44,13 @@ public class BoardPane extends ListView {
     private int levelStartRound;
     private int guards = 0;
 
-    public BoardPane(ArrayList<Entity> collections, boolean human, boolean level, MainGameController controller) {
+    public BoardPane(ArrayList<Entity> collections, boolean human, boolean level,int round,int levelStartRound, MainGameController controller) {
         this.collections = collections;
         this.controller = controller;
-        round = 0;
+        this.round = round;
+        this.levelStartRound = levelStartRound;
+        if(!level)
+            this.levelStartRound = 0;
         this.human = human;
         this.level = level;
         try {
@@ -73,6 +76,10 @@ public class BoardPane extends ListView {
     public boolean getLevel(){
         return level;
     }
+
+    public int getRound(){ return round;}
+
+    public int getLevelRound(){ return levelStartRound;}
 
     private void reboard() {
         if (level && round - levelStartRound == 20) {
@@ -104,6 +111,11 @@ public class BoardPane extends ListView {
         } else {
             controller.Human.setVisible(false);
             controller.Snake.setVisible(true);
+        }
+
+        controller.round.setText(String.valueOf(round));
+        if(level){
+            controller.levelRound.setText(String.valueOf(levelStartRound));
         }
 
         GridPane board = new GridPane();
@@ -180,7 +192,9 @@ public class BoardPane extends ListView {
                                                     controller.setDiceImage(image);
                                                     if (((Piece) select).getPosition().positionToInt() == 100 && ((Piece) select).getClimbNumber() >= 3) {
                                                         level = true;
-                                                        levelStartRound = round;
+                                                        levelStartRound = 0;
+                                                        controller.LEVELROUND.setVisible(true);
+                                                        controller.levelRound.setVisible(true);
                                                         for (Entity e1 : collections) {
                                                             if (e1 instanceof Piece) {
                                                                 ((Piece) e1).addLevel();
@@ -200,6 +214,9 @@ public class BoardPane extends ListView {
                                                             controller.setDiceImage2(image2);
                                                             if (((Piece) select).getPosition().positionToInt() == 100 && ((Piece) select).getClimbNumber() >= 3) {
                                                                 level = true;
+                                                                levelStartRound = 0;
+                                                                controller.LEVELROUND.setVisible(true);
+                                                                controller.levelRound.setVisible(true);
                                                                 for (Entity e1 : collections) {
                                                                     if (e1 instanceof Piece) {
                                                                         ((Piece) e1).addLevel();

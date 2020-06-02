@@ -2,6 +2,7 @@ package model.junitTest;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.exception.CannotMoveException;
@@ -15,7 +16,7 @@ import model.entity.*;
 public class PieceTest {
 	Piece[] pieces = new Piece[6];
 	Dice dice = new Dice();
-	HashMap<Position,Entity> collections = new HashMap<Position,Entity>();
+	ArrayList<Entity> collections = new ArrayList<>();
 	
 	@Before
 	public void setUp() throws Exception {
