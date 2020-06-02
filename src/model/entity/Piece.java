@@ -59,12 +59,12 @@ public class Piece extends PGEntity {
 			return false;
 		Position Destination = new Position(super.getPosition().getX(), super.getPosition().getY());
 		Destination.move(choice);
-		super.getPosition().setXY(Destination);
+		this.getPosition().setXY(Destination);
 		Snake removeSnake = null;
 		for(Entity e:collections) {
 			if(e instanceof Snake) {
 				if(((Snake)e).getEntry().compareTo(super.getPosition())) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION,super.getName() + " is eaten by " + e.getName()+"Snake Win!");
+					Alert alert = new Alert(Alert.AlertType.INFORMATION,super.getName() + " is eaten by " + e.getName()+", Snake Win!");
 					alert.showAndWait();
 					System.exit(0);
 				}
@@ -81,8 +81,7 @@ public class Piece extends PGEntity {
 			}
 		}
 		if(removeSnake!=null) {
-			collections.remove(removeSnake.getEntry());
-			collections.remove(removeSnake.getExit());
+			collections.remove(removeSnake);
 		}
 		return true;
 	}

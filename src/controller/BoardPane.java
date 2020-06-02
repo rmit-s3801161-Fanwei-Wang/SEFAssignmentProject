@@ -82,12 +82,12 @@ public class BoardPane extends ListView {
     public int getLevelRound(){ return levelStartRound;}
 
     private void reboard() {
-        if (level && round - levelStartRound == 20) {
+        if (level && levelStartRound >= 20) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Out of Rounds, Snake win!");
             alert.showAndWait();
             System.exit(0);
         }
-        if (level && round - levelStartRound < 20) {
+        if (level && levelStartRound < 20) {
             boolean check = true;
             for (Entity e : collections) {
                 if (e instanceof Snake)
@@ -115,7 +115,17 @@ public class BoardPane extends ListView {
 
         controller.round.setText(String.valueOf(round));
         if(level){
+            for(Entity e:collections){
+                if(e instanceof Piece){
+                    if(((Piece) e).getPosition().positionToInt()==100 && ((Piece) e).getClimbNumber()>=3)
+                        continue;
+                    if(((Piece) e).getLevel()==1)
+                        ((Piece) e).addLevel();
+                }
+            }
             controller.levelRound.setText(String.valueOf(levelStartRound));
+            controller.levelRound.setVisible(true);
+            controller.LEVELROUND.setVisible(true);
         }
 
         GridPane board = new GridPane();
@@ -492,6 +502,8 @@ public class BoardPane extends ListView {
                                         controller.setDiceImage(null);
                                         controller.setDiceImage2(null);
                                         round++;
+                                        if(level)
+                                            levelStartRound++;
                                         for (Entity e : collections) {
                                             if (e instanceof Piece) {
                                                 if (((Piece) e).getBuff() != 0)

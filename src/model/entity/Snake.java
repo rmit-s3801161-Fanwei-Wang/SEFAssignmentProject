@@ -84,7 +84,6 @@ public class Snake extends SLEntity {
                 Position p = ((Snake) e).getEntry();
                 if (!e.equals(this)) {
                     if (p.positionToInt() > 80 && headDestination.positionToInt() > 80) {
-                        System.out.println(((Snake) e).getEntry().positionToInt());
                         throw new OnlyOneSnakeGreaterEightyException(String.format("%s already been greater than 80", e.getName()));
                     }
                 }
@@ -94,6 +93,7 @@ public class Snake extends SLEntity {
         super.getEntry().setXY(headDestination);
         super.getExit().setXY(tailDestination);
 
+        Snake removeSnake = null;
         for (Entity e:collections) {
             if(e instanceof Piece){
                 if(((Piece) e).getPosition().compareTo(super.getEntry())) {
@@ -105,8 +105,15 @@ public class Snake extends SLEntity {
                         System.exit(0);
                     }
                 }
+                if(((Piece) e).getPosition().compareTo(super.getExit())){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION,this.getName()+" died");
+                    alert.showAndWait();
+                    removeSnake = this;
+                    break;
+                }
             }
         }
+        collections.remove(removeSnake);
         return true;
     }
 
