@@ -40,21 +40,18 @@ public class AdminGameViewController {
 
     public void saveBoard(ActionEvent actionEvent) {
         try {
+            ArrayList<Entity> check = new ArrayList<>();
             for (Entity e : collections) {
                 if (e instanceof Snake) {
-                    Snake snake = new Snake(((Snake) e).getEntry(), ((Snake) e).getExit(), "", new ArrayList<>());
+                    Snake snake = new Snake(((Snake) e).getEntry(), ((Snake) e).getExit(), "", check);
+                    check.add(e);
                 }
                 if (e instanceof Ladder) {
-                    Ladder ladder = new Ladder(((Ladder) e).getEntry(), ((Ladder) e).getExit(), "",new ArrayList<>());
+                    Ladder ladder = new Ladder(((Ladder) e).getEntry(), ((Ladder) e).getExit(), "",check);
+                    check.add(e);
                 }
             }
-
-            String collection = Game.collectionConvetToStringJson(collections);
-            DB db = new DB();
-            String delSql = "Delete from boards where id = " + board.getId();
-            long id = db.insert(delSql);
-            String sql = "INSERT INTO boards (id, collections, createdBy) VALUES('" + board.getId()+"', '" + collection + "', 'Admin')";
-            id = db.insert(sql);
+            board.saveBoard();
 
             String fileAddress = "/view/admin_edit_view.fxml";
             changeScene(actionEvent, fileAddress);

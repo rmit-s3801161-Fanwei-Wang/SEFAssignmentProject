@@ -59,7 +59,7 @@ public class LoadGameViewController {
     @FXML
     public void load(ActionEvent event) throws IOException, SQLException, GameSLException {
         Game game = (Game)tableView.getSelectionModel().getSelectedItem();
-        game.setBoard(Board.findBoard(game.getBoardID()));
+        game.setBoard(Board.findBoard(game.getBoardID(),LoginViewController.currentUser));
         String fileAddress = "/view/mainGame.fxml";
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Util.class.getResource(fileAddress));

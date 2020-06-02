@@ -99,8 +99,8 @@ public class MainGameController {
         }
         Human.setText(String.format("%s, it's your turn", LoginViewController.currentUser.getUsername()));
         Snake.setText(String.format("%s, it's your turn", LoginViewController.currentUser.getUsername()));
-        round.setText(game.getRound());
-        levelRound.setText(game.getLevelRound());
+        round.setText(String.valueOf(game.getRound()));
+        levelRound.setText(String.valueOf(game.getLevelRound()));
         if(!level){
             LEVELROUND.setVisible(false);
             levelRound.setVisible(false);
@@ -157,10 +157,13 @@ public class MainGameController {
     public void SaveGame(ActionEvent actionEvent) {
         game.setHuman(boardGUI.getHuman());
         game.setLevel(boardGUI.getLevel());
+        System.out.println(boardGUI.getRound());
         game.setRound(boardGUI.getRound());
+        System.out.println(game.getRound());
         game.setLevelRound(boardGUI.getLevelRound());
         try {
             game.saveGame();
+            System.out.println(game.getRound());
             String fileAddress = "/view/menu_window_view.fxml";
             changeScene(actionEvent, fileAddress);
         }catch (Exception exception){

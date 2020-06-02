@@ -49,7 +49,7 @@ public class AdminEditViewController {
     @FXML
     public void editBoard(ActionEvent event) throws SQLException, GameSLException, IOException {
         int boardID = (int) listView.getSelectionModel().getSelectedItem();
-        Board board = Board.findBoard(boardID);
+        Board board = Board.findBoard(boardID,LoginViewController.currentUser);
 
         String fileAddress = "/view/adminGame.fxml";
         FXMLLoader loader = new FXMLLoader();
