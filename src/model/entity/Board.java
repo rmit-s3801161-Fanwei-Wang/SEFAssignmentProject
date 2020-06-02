@@ -18,7 +18,7 @@ public class Board{
 //	private static int grids = 10; // columns and lines
 //	private int gridsize = 20; // size
 
-	private HashMap<String, Entity> collections = new HashMap<String,Entity>();
+	private ArrayList<Entity> collections = new ArrayList<>();
 
 	public Board() {
 		
@@ -28,7 +28,7 @@ public class Board{
 		this.id = id;
 	}
 
-	public Board(HashMap<String,Entity> collections) {
+	public Board(ArrayList<Entity> collections) {
 		this.collections = collections;
 	}
 
@@ -41,22 +41,11 @@ public class Board{
 //	}
 
 	public void addCollection(Entity obj) {
-		if(obj instanceof Piece) {
-			collections.put(obj.getName(), obj);
-		}
-		else if(obj instanceof Guard) {
-			if(((Guard)obj).getPosition()!=null)
-				collections.put(((Guard)obj).getPosition(), obj);
-		}
-		else if(obj instanceof Snake) {
-			collections.put(((Snake) obj).getEntry(),obj);
-		}
-		else {
-			collections.put(((Ladder) obj).getEntry(),obj);
-		}
+		if(!collections.contains(obj))
+			collections.add(obj);
 	}
 	
-	public HashMap<Position, Entity> getCollections() {
+	public ArrayList<Entity> getCollections() {
 		return collections;
 	}
 	
@@ -65,7 +54,7 @@ public class Board{
 		for(int i = 9 ; i >= 0 ; i--) {
 			for(int j = 0 ; j < 10 ; j++) {
 				boolean okay = false;
-				for(Entity e:collections.values()) {
+				for(Entity e:collections) {
 					if(e instanceof PGEntity){
 						if(((PGEntity) e).getPosition().compareTo(new Position(j,i))) {
 							okay = true;
