@@ -28,6 +28,8 @@ public class Game {
 //    private Board board;
     private long playerID;
     private long boardID;
+    private int round = 0;
+    private int levelRound = 0;
     private Board board;
 
     // whose turn : start from true
@@ -92,29 +94,17 @@ public class Game {
         return games;
     }
     
-    public long getGameID() {
-        return id;
-    }
+    public long getGameID() { return id; }
 
-    public long getPlayerID() {
-        return playerID;
-    }
+    public long getPlayerID() { return playerID; }
 
-    public long getBoardID() {
-        return boardID;
-    }
+    public long getBoardID() { return boardID; }
     
-    public void setBoardID(long boardID) {
-    	this.boardID = boardID;
-    }
+    public void setBoardID(long boardID) { this.boardID = boardID; }
     
-    public void setBoard(Board board) {
-    	this.board = board;
-    }
+    public void setBoard(Board board) { this.board = board; }
     
-    public Board getBoard() {
-    	return this.board;
-    }
+    public Board getBoard() { return this.board; }
 
     public void setHuman(boolean human){this.human = human;}
 
@@ -123,6 +113,14 @@ public class Game {
 	public void setLevel(boolean level){this.level = level;}
 
 	public boolean getLevel(){return level;}
+	
+	public void setRound(int round) { this.round = round; }
+	
+	public int getRound() { return this.round; }
+	
+	public void setLevelRound(int levelRound) { this.levelRound = levelRound; }
+	
+	public int getLevelRound() { return this.levelRound; }
 
     public static Game createGame(Player currentPlayer) throws SQLException {
     	Game game = null;
@@ -349,8 +347,6 @@ public class Game {
     			System.out.println(e.toString());
     		}
 		}
-    	
-    	iniBoard.viewBoard();
     	return iniBoard;
     }
     
