@@ -89,10 +89,10 @@ public class Game {
                     games.add(game);
                 }
             }catch (SQLException e) {
-                System.out.println(e.getMessage());
+//                System.out.println(e.getMessage());
             }
         } catch (Exception e){
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
         }
         
         return games;
@@ -338,7 +338,7 @@ public class Game {
     			times++;
             	iniBoard.addCollection(ladder);
     		} catch (Exception e) {
-    			System.out.println(e.toString());
+//    			System.out.println(e.toString());
     		}
         	
 		}
@@ -361,7 +361,7 @@ public class Game {
     			times++;
             	iniBoard.addCollection(snake);
     		} catch (Exception e) {
-    			System.out.println(e.toString());
+//    			System.out.println(e.toString());
     		}
 		}
     	return iniBoard;
