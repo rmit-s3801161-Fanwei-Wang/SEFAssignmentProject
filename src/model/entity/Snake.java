@@ -106,10 +106,12 @@ public class Snake extends SLEntity {
                     }
                 }
                 if(((Piece) e).getPosition().compareTo(super.getExit())){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,this.getName()+" died");
-                    alert.showAndWait();
-                    removeSnake = this;
-                    break;
+                    if(((Piece) e).getLevel()==2) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION, this.getName() + " died");
+                        alert.showAndWait();
+                        removeSnake = this;
+                        break;
+                    }
                 }
             }
         }
