@@ -148,9 +148,19 @@ public class DB {
         return id;
 	}
 	
+	public long update(String sql, long id) throws SQLException {
+		this.ptmt = conn.prepareStatement(sql);
+		int count = this.ptmt.executeUpdate();
+        if (count > 0) {
+        	return id;
+		}
+        return -1;
+	}
+	
 	public boolean delete(String sql) throws SQLException {
 		this.ptmt = conn.prepareStatement(sql);
 		int count = this.ptmt.executeUpdate();
+		System.out.println(count);
 		if (count > 0) {
 			return true;
 		}

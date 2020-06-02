@@ -150,28 +150,24 @@ public class Game {
     public boolean saveGame() throws SQLException, GameSLException {
 		DB db = new DB();
 		String collection = collectionConvetToStringJson(this.board.getCollections());
-		String boardSql = "INSERT INTO boards(collections, createdBy) VALUES('"+ collection +"', 'Player')";
-		long boardID = db.insert(boardSql);
-		if (boardID == -1) {
-			throw new GameSLException("Save Board Failed");
-		}
+		String boardSql = "";
 		String gameSql = "";
+		long gameID = -1;
+		long boardID = -1;
 		if (this.getGameID() == -1) {
+			boardSql = "INSERT INTO boards(collections, createdBy) VALUES('"+ collection +"', 'Player')";
+			boardID = db.insert(boardSql);
+			if (boardID == -1) {
+				throw new GameSLException("Save Board Failed");
+			}
 			gameSql = "INSERT INTO games(playerID, boardID, human, level) VALUES(" + this.getPlayerID() + 
 					", "+ boardID +", "+ booleanToInt(this.getHuman()) +", "+ booleanToInt(this.getLevel()) +")";
+			gameID = db.insert(gameSql);
 		} else {
-			gameSql = "UPDATE games SET boardID = " + boardID; 
+			boardSql = "UPDATE boards SET collections = '" + collection + "' WHERE id = " + this.getBoardID();
+			boardID = db.update(boardSql, this.getBoardID());
 		}
-		long gameID = db.insert(gameSql);
-		if (gameID == -1) {
-			String dSql = "DELETE FROM boards WHERE id = " + boardID;
-			if(db.delete(dSql)) {
-				throw new GameSLException("Save Game Failed");
-			} else {
-				throw new GameSLException("DB Error");
-			}
-		}
-		this.setBoardID(boardID);
+		
 		return true;
 	}
     
@@ -229,13 +225,11 @@ public class Game {
     
     // import google Gson jar
     // convert board to string    
-    public static String collectionConvetToStringJson(HashMap<Position, Entity> collections) {
-    	HashMap<Position, JsonObject> hashmap = new HashMap<Position, JsonObject>();
-    	collections.forEach((k,v)->{
-    		int position = k.positionToInt();
+    public static String collectionConvetToStringJson(ArrayList<Entity> collections) {
+    	HashMap<Entity, JsonObject> hashmap = new HashMap<Entity, JsonObject>();
+    	collections.forEach((v)->{
     		JsonObject jsOb = v.toDbString();
-    		jsOb.addProperty("Position", String.valueOf(position));
-			hashmap.put(k, jsOb);
+    		hashmap.put(v, jsOb);
     	});
     	Gson gson = new Gson();
     	String hashString = gson.toJson(hashmap);
@@ -249,8 +243,6 @@ public class Game {
     	HashMap<String, Object> prepareMap = new HashMap<String, Object>();
     	prepareMap = (HashMap<String, Object>) gson.fromJson(json, prepareMap.getClass());
     	prepareMap.forEach((k,v)->{ 
-    		int position = Integer.valueOf(((Map)v).get("Position").toString());
-    		Position p = initToPosition(position);
     		Entity entity = null;
     		String type = ((Map) v).get("Type").toString();
     		String name = ((Map) v).get("Name").toString();
@@ -299,7 +291,7 @@ public class Game {
 				}
 				break;
 			}
-    		board.getCollections().put(p, entity);
+    		board.addCollection(entity);
     	});
 
     	return board;
@@ -312,28 +304,6 @@ public class Game {
     		Piece p = new Piece(new Position(0,0), "P"+(i+1));
     		iniBoard.addCollection(p);
 		}
-//    	int[] ladderBottom = {-1, -1, -1, -1, -1};
-//    	int[] ladderTop = {-1, -1, -1, -1, -1};
-//    	int[] snakeHead = {-1, -1, -1, -1, -1};
-//    	int[] snakeTail = {-1, -1, -1, -1, -1};
-    	
-//    	ladderBottom = initLadderBottom(ladderBottom);
-//    	ladderTop = initLadderTop(ladderBottom, ladderTop);
-//    	snakeHead = initSnakeHead(snakeHead, ladderBottom, ladderTop);
-//    	snakeTail = initSnakeTails(ladderBottom, ladderTop, snakeTail, snakeHead);
-    	
-//    	for (int i = 0; i < ladderBottom.length; i++) {
-//    		Position bottom = initToPosition(ladderBottom[i]);
-//    		Position top = initToPosition(ladderTop[i]);
-//			Ladder ladder = new Ladder(bottom, top, "L"+(i+1));
-//			entitys.add(ladder);
-//		}
-//    	for (int i = 0; i < snakeHead.length; i++) {
-//			Position head = initToPosition(snakeHead[i]);
-//			Position tail = initToPosition(snakeTail[i]);
-//			Snake snake = new Snake(head, tail, "S"+(i+1));
-//			entitys.add(snake);
-//		}
     	
     	int times = 1;
     	while (times < 6) {
