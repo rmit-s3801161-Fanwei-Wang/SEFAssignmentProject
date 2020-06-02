@@ -21,6 +21,7 @@ abstract public class SLEntity extends Entity{
         this.entry = entry;
         this.exit = exit;
 
+
         for(Entity e:collections){
             if(e instanceof SLEntity){
                 if(((SLEntity) e).getEntry().compareTo(this.entry)
