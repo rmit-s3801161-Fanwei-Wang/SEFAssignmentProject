@@ -2,8 +2,6 @@ package model.entity;
 
 import com.google.gson.JsonObject;
 
-import javafx.scene.image.ImageView;
-
 abstract public class Entity {
 	private String name;
 

@@ -69,7 +69,7 @@ public class MainGameController {
     private Game game;
     private BoardPane boardGUI;
 
-    public boolean human, level;
+    public boolean level;
 
     public void setUp(Game game) {
         this.game = game;

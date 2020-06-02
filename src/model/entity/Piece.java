@@ -3,7 +3,6 @@ package model.entity;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.google.gson.JsonObject;
 
