@@ -55,12 +55,14 @@ public class Game {
         this.boardID = boardID;
     }
 
-    public Game(long gameID, long playerID,long boardID, boolean human, boolean level) {
+    public Game(long gameID, long playerID,long boardID, boolean human, boolean level, int round, int levelRound) {
         this.id = gameID;
         this.playerID = playerID;
         this.boardID = boardID;
         this.human = human;
         this.level = level;
+        this.round = round;
+        this.levelRound = levelRound;
     }
 
     public static ArrayList<Game> getGames(User currentPlayer) {
@@ -79,7 +81,9 @@ public class Game {
                     		resultSet.getInt("playerID"), 
                     		resultSet.getInt("boardID"),
                     		intToBoolean(resultSet.getInt("human")),
-                    		intToBoolean(resultSet.getInt("level"))
+                    		intToBoolean(resultSet.getInt("level")),
+                    		resultSet.getInt("round"),
+                    		resultSet.getInt("levelRound")
                     		);
 
                     games.add(game);
@@ -158,8 +162,13 @@ public class Game {
 			if (boardID == -1) {
 				throw new GameSLException("Save Board Failed");
 			}
-			gameSql = "INSERT INTO games(playerID, boardID, human, level) VALUES(" + this.getPlayerID() + 
-					", "+ boardID +", "+ booleanToInt(this.getHuman()) +", "+ booleanToInt(this.getLevel()) +")";
+			gameSql = "INSERT INTO games(playerID, boardID, human, level, round, levelRound) VALUES(" + 
+					this.getPlayerID() + 
+					", "+ boardID +
+					", "+ booleanToInt(this.getHuman()) +
+					", "+ booleanToInt(this.getLevel()) +
+					", "+ this.getRound() +
+					", "+ this.getLevelRound() +")";
 			gameID = db.insert(gameSql);
 		} else {
 			boardSql = "UPDATE boards SET collections = '" + collection + "' WHERE id = " + this.getBoardID();
@@ -179,7 +188,9 @@ public class Game {
 					rs.getLong("playerID"), 
 					rs.getLong("boardID"),
 					intToBoolean(rs.getInt("human")),
-					intToBoolean(rs.getInt("level"))
+					intToBoolean(rs.getInt("level")),
+					rs.getInt("round"),
+					rs.getInt("levelRound")
 					);
 		}
     	if (game == null) {
