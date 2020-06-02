@@ -28,6 +28,8 @@ public class Game {
 //    private Board board;
     private long playerID;
     private long boardID;
+    private int round = 0;
+    private int levelRound = 0;
     private Board board;
 
     // whose turn : start from true
@@ -53,12 +55,14 @@ public class Game {
         this.boardID = boardID;
     }
 
-    public Game(long gameID, long playerID,long boardID, boolean human, boolean level) {
+    public Game(long gameID, long playerID,long boardID, boolean human, boolean level, int round, int levelRound) {
         this.id = gameID;
         this.playerID = playerID;
         this.boardID = boardID;
         this.human = human;
         this.level = level;
+        this.round = round;
+        this.levelRound = levelRound;
     }
 
     public static ArrayList<Game> getGames(User currentPlayer) {
@@ -77,7 +81,9 @@ public class Game {
                     		resultSet.getInt("playerID"), 
                     		resultSet.getInt("boardID"),
                     		intToBoolean(resultSet.getInt("human")),
-                    		intToBoolean(resultSet.getInt("level"))
+                    		intToBoolean(resultSet.getInt("level")),
+                    		resultSet.getInt("round"),
+                    		resultSet.getInt("levelRound")
                     		);
 
                     games.add(game);
@@ -92,29 +98,17 @@ public class Game {
         return games;
     }
     
-    public long getGameID() {
-        return id;
-    }
+    public long getGameID() { return id; }
 
-    public long getPlayerID() {
-        return playerID;
-    }
+    public long getPlayerID() { return playerID; }
 
-    public long getBoardID() {
-        return boardID;
-    }
+    public long getBoardID() { return boardID; }
     
-    public void setBoardID(long boardID) {
-    	this.boardID = boardID;
-    }
+    public void setBoardID(long boardID) { this.boardID = boardID; }
     
-    public void setBoard(Board board) {
-    	this.board = board;
-    }
+    public void setBoard(Board board) { this.board = board; }
     
-    public Board getBoard() {
-    	return this.board;
-    }
+    public Board getBoard() { return this.board; }
 
     public void setHuman(boolean human){this.human = human;}
 
@@ -123,6 +117,14 @@ public class Game {
 	public void setLevel(boolean level){this.level = level;}
 
 	public boolean getLevel(){return level;}
+	
+	public void setRound(int round) { this.round = round; }
+	
+	public int getRound() { return this.round; }
+	
+	public void setLevelRound(int levelRound) { this.levelRound = levelRound; }
+	
+	public int getLevelRound() { return this.levelRound; }
 
     public static Game createGame(Player currentPlayer) throws SQLException {
     	Game game = null;
@@ -160,8 +162,13 @@ public class Game {
 			if (boardID == -1) {
 				throw new GameSLException("Save Board Failed");
 			}
-			gameSql = "INSERT INTO games(playerID, boardID, human, level) VALUES(" + this.getPlayerID() + 
-					", "+ boardID +", "+ booleanToInt(this.getHuman()) +", "+ booleanToInt(this.getLevel()) +")";
+			gameSql = "INSERT INTO games(playerID, boardID, human, level, round, levelRound) VALUES(" + 
+					this.getPlayerID() + 
+					", "+ boardID +
+					", "+ booleanToInt(this.getHuman()) +
+					", "+ booleanToInt(this.getLevel()) +
+					", "+ this.getRound() +
+					", "+ this.getLevelRound() +")";
 			gameID = db.insert(gameSql);
 		} else {
 			boardSql = "UPDATE boards SET collections = '" + collection + "' WHERE id = " + this.getBoardID();
@@ -181,7 +188,9 @@ public class Game {
 					rs.getLong("playerID"), 
 					rs.getLong("boardID"),
 					intToBoolean(rs.getInt("human")),
-					intToBoolean(rs.getInt("level"))
+					intToBoolean(rs.getInt("level")),
+					rs.getInt("round"),
+					rs.getInt("levelRound")
 					);
 		}
     	if (game == null) {
@@ -349,8 +358,6 @@ public class Game {
     			System.out.println(e.toString());
     		}
 		}
-    	
-    	iniBoard.viewBoard();
     	return iniBoard;
     }
     

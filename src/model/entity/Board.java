@@ -100,10 +100,11 @@ public class Board{
 		return boards;
 	}
 	
-	public static Board findBoard(long boardID) throws SQLException, GameSLException {
+	public static Board findBoard(long boardID, User cUser) throws SQLException, GameSLException {
 		final String TABLE_NAME = "boards";
 		DB db = new DB();
-		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + boardID + " and createdBy = 'Player'";
+		String createdBy = cUser.getType();
+		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + boardID + " and createdBy = '" + createdBy + "'";
 		ResultSet rs = db.search(sql);
 		String collection = "";
 		while (rs.next()) {
@@ -116,5 +117,19 @@ public class Board{
 		
 		Board board = Game.stringConvertToCollection(boardID, collection);
 		return board;
+	}
+	
+	// For Admin User
+	public boolean saveBoard() throws SQLException {
+		final String TABLE_NAME = "boards";
+		DB db = new DB();
+		String collection = Game.collectionConvetToStringJson(this.getCollections());
+		String boardSql = "UPDATE boards SET collections = '" + collection + "' WHERE id = " + this.getId();
+		long boardID = db.update(boardSql, this.getId());
+		if (boardID == -1) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
