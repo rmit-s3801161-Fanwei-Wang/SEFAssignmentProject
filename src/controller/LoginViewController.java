@@ -41,9 +41,12 @@ public class LoginViewController {
             //TODO change true as login(email.getText(),password.getText()) and add try&catch
             if (login(email.getText(), password.getText())) {
                 //login successful change scene to the menu window
-                String fileAddress = "/view/menu_window_view.fxml";
-                changeScene(event, fileAddress);
-
+                if (currentUser.getType().compareTo("Player")==0){
+                    String fileAddress = "/view/menu_window_view.fxml";
+                    changeScene(event, fileAddress);
+                } else if(currentUser.getType().compareTo("Admin")==0){
+                    changeScene(event,"/view/admin_edit_view.fxml");
+                }
             } else {
                 errorLabel.setText("Wrong password or email!");
             }
@@ -58,6 +61,7 @@ public class LoginViewController {
 
     //TODO change login method: login by using the username and password
     public boolean login(String email, String password) throws DBException, ValidationException {
+
         DB db = new DB();
 
         currentUser = db.findPlayer(email, password);
@@ -70,25 +74,25 @@ public class LoginViewController {
     }
 
 
-    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException, SQLException, IOException, InitializeException {
-        if (!login(email.getText(), password.getText())) {
-            errorLabel.setText("Wrong password or email!");
-            return;
-        }
-
-        if (currentUser.getType().compareToIgnoreCase("admin")==0) {
-//            Admin admin = new Admin();
-//            admin.CreateNewBoard(event);
-            changeScene(event,"/view/admin_edit_view.fxml");
-
-        } else
-            errorLabel.setText("You are not admin.");
-    }
-
-
-
-    public void loadTestAccount(ActionEvent event) {
-        email.setText("test@email.com");
-        password.setText("asdf1234");
-    }
+//    public void loginAsAdmin(ActionEvent event) throws DBException, ValidationException, SQLException, IOException, InitializeException {
+//        if (!login(email.getText(), password.getText())) {
+//            errorLabel.setText("Wrong password or email!");
+//            return;
+//        }
+//
+//        if (currentUser.getType().compareToIgnoreCase("admin")==0) {
+////            Admin admin = new Admin();
+////            admin.CreateNewBoard(event);
+//            changeScene(event,"/view/admin_edit_view.fxml");
+//
+//        } else
+//            errorLabel.setText("You are not admin.");
+//    }
+//
+//
+//
+//    public void loadTestAccount(ActionEvent event) {
+//        email.setText("test@email.com");
+//        password.setText("asdf1234");
+//    }
 }
