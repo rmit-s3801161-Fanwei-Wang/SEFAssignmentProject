@@ -27,12 +27,13 @@ import model.exception.OutOfBoardException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BoardPane extends ListView {
     @FXML
     private ListView<GridPane> listview;
-    private HashMap<Position, Entity> collections;
+    private ArrayList<Entity>  collections;
     private MainGameController controller;
 
     private Entity select = null;
@@ -43,7 +44,7 @@ public class BoardPane extends ListView {
     private int levelStartRound;
     private int guards = 0;
 
-    public BoardPane(HashMap<Position, Entity> collections, boolean human, boolean level, MainGameController controller) {
+    public BoardPane(ArrayList<Entity> collections, boolean human, boolean level, MainGameController controller) {
         this.collections = collections;
         this.controller = controller;
         round = 0;
@@ -81,7 +82,7 @@ public class BoardPane extends ListView {
         }
         if (level && round - levelStartRound < 20) {
             boolean check = true;
-            for (Entity e : collections.values()) {
+            for (Entity e : collections) {
                 if (e instanceof Snake)
                     check = false;
             }
@@ -127,7 +128,7 @@ public class BoardPane extends ListView {
         board.setStyle("-fx-column-halignment: center");
         if (human && !level) {
             boolean allBuff = true;
-            for (Entity e : collections.values()) {
+            for (Entity e : collections) {
                 if (e instanceof Piece) {
                     if (((Piece) e).getBuff() == 0) {
                         allBuff = false;
@@ -145,7 +146,7 @@ public class BoardPane extends ListView {
                 label.setText(String.format("%d", new Position(j, i).positionToInt()));
                 pane.getChildren().add(label);
                 boolean exist = false;
-                for (Entity e : collections.values()) {
+                for (Entity e : collections) {
                     if (e instanceof PGEntity) {
                         if (((PGEntity) e).getPosition().compareTo(new Position(j, i))) {
                             ImageView imageView = new ImageView();
@@ -180,7 +181,7 @@ public class BoardPane extends ListView {
                                                     if (((Piece) select).getPosition().positionToInt() == 100 && ((Piece) select).getClimbNumber() >= 3) {
                                                         level = true;
                                                         levelStartRound = round;
-                                                        for (Entity e1 : collections.values()) {
+                                                        for (Entity e1 : collections) {
                                                             if (e1 instanceof Piece) {
                                                                 ((Piece) e1).addLevel();
                                                             }
@@ -199,7 +200,7 @@ public class BoardPane extends ListView {
                                                             controller.setDiceImage2(image2);
                                                             if (((Piece) select).getPosition().positionToInt() == 100 && ((Piece) select).getClimbNumber() >= 3) {
                                                                 level = true;
-                                                                for (Entity e1 : collections.values()) {
+                                                                for (Entity e1 : collections) {
                                                                     if (e1 instanceof Piece) {
                                                                         ((Piece) e1).addLevel();
                                                                     }
@@ -380,7 +381,7 @@ public class BoardPane extends ListView {
                                         if (guards < 3) {
                                             Position position = new Position(colIndex, 9 - rowIndex);
                                             boolean check = false;
-                                            for (Entity e : collections.values()) {
+                                            for (Entity e : collections) {
                                                 if (e instanceof SLEntity) {
                                                     if (((SLEntity) e).getEntry().compareTo(position) || ((SLEntity) e).getExit().compareTo(position)) {
                                                         check = true;
@@ -396,7 +397,7 @@ public class BoardPane extends ListView {
                                             if (!check) {
                                                 guards++;
                                                 Guard guard = new Guard(position, String.format("G%d", guards));
-                                                collections.put(position, guard);
+                                                collections.add(guard);
                                                 human = false;
                                                 select = null;
                                                 if (guards == 1)
@@ -474,7 +475,7 @@ public class BoardPane extends ListView {
                                         controller.setDiceImage(null);
                                         controller.setDiceImage2(null);
                                         round++;
-                                        for (Entity e : collections.values()) {
+                                        for (Entity e : collections) {
                                             if (e instanceof Piece) {
                                                 if (((Piece) e).getBuff() != 0)
                                                     ((Piece) e).roundBuff();

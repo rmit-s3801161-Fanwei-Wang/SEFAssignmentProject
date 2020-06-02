@@ -18,15 +18,16 @@ import javafx.scene.layout.RowConstraints;
 import model.entity.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AdminBoard extends ListView {
 
-    private HashMap<Position, Entity> collections;
+    private ArrayList<Entity>  collections;
     @FXML private ListView<GridPane> listview;
     private Position select;
 
-    public AdminBoard(HashMap<Position, Entity> collections){
+    public AdminBoard(ArrayList<Entity> collections){
         this.collections = collections;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/adminBoard.fxml"));
@@ -67,7 +68,7 @@ public class AdminBoard extends ListView {
         board.setVgap(0);
         board.setStyle("-fx-column-halignment: center");
 
-        for(Entity e:collections.values()){
+        for(Entity e:collections){
             if(e instanceof PGEntity)
                 continue;
             SLEntity sl = (SLEntity)e;
@@ -100,7 +101,7 @@ public class AdminBoard extends ListView {
             for(int j=0;j<10;j++){
                 Position temp = new Position(j,i);
                 boolean exist = false;
-                for(Entity e: collections.values()){
+                for(Entity e: collections){
                     if(e instanceof Piece)
                         continue;
                     if(temp.compareTo(((SLEntity)e).getEntry())|| temp.compareTo(((SLEntity)e).getExit())) {

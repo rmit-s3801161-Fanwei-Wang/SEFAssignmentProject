@@ -8,14 +8,14 @@ import model.exception.InitializeException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import com.google.gson.JsonObject;
 
 public class Ladder extends SLEntity {
 	private String ladderName = "./src/model/icon/ladder1.png";
 
-	public Ladder(Position bottom, Position top, String name, HashMap<Position,Entity> collections) throws InitializeException, GridsBeingTakenException {
+	public Ladder(Position bottom, Position top, String name, ArrayList<Entity> collections) throws InitializeException, GridsBeingTakenException {
 		super(bottom, top, name,collections);
 		InitializeException ex = new InitializeException(
 				("Bottom:" + bottom.positionToInt() + " ,Top:" + top.positionToInt() + " is not possible"));

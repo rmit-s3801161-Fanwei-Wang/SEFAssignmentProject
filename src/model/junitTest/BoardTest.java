@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -14,7 +15,7 @@ public class BoardTest {
 
     private Piece[] pieces = new Piece[4];
     Board board;
-    HashMap<Position, Entity> collections;
+    ArrayList<Entity> collections;
 
     @Before
     public void setUp() throws Exception {
@@ -45,22 +46,22 @@ public class BoardTest {
 
     @Test(expected = InitializeException.class)
     public void testLadder() throws InitializeException, GridsBeingTakenException {
-        new Ladder(new Position(0, 8), new Position(0, 4), "Ladder",new HashMap<>());
+        new Ladder(new Position(0, 8), new Position(0, 4), "Ladder",new ArrayList<>());
     }
 
     @Test(expected = InitializeException.class)
     public void testLadder1() throws InitializeException, GridsBeingTakenException {
-        new Ladder(new Position(0, 7), new Position(0, 9), "Ladder",new HashMap<>());
+        new Ladder(new Position(0, 7), new Position(0, 9), "Ladder",new ArrayList<>());
     }
 
     @Test(expected = InitializeException.class)
     public void testSnake() throws InitializeException, OnlyOneSnakeGreaterEightyException, GridsBeingTakenException {
-        new Snake(new Position(0, 1), new Position(0, 8), "Snake",new HashMap<>());
+        new Snake(new Position(0, 1), new Position(0, 8), "Snake",new ArrayList<>());
     }
 
     @Test(expected = InitializeException.class)
     public void testSnake1() throws InitializeException, OnlyOneSnakeGreaterEightyException, GridsBeingTakenException {
-        new Snake(new Position(0, 9), new Position(0, 7), "Snake",new HashMap<>());
+        new Snake(new Position(0, 9), new Position(0, 7), "Snake",new ArrayList<>());
     }
 
 }

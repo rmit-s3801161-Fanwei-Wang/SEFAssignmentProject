@@ -1,9 +1,8 @@
 package model.entity;
 
-import java.awt.Graphics;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import com.google.gson.JsonObject;
 
@@ -17,7 +16,7 @@ import model.exception.OutOfBoardException;
 
 public class Snake extends SLEntity {
 
-    public Snake(Position head, Position tail, String name, HashMap<Position, Entity> collections) throws InitializeException, OnlyOneSnakeGreaterEightyException, GridsBeingTakenException {
+    public Snake(Position head, Position tail, String name, ArrayList<Entity> collections) throws InitializeException, OnlyOneSnakeGreaterEightyException, GridsBeingTakenException {
         super(head, tail, name, collections);
         InitializeException ex = new InitializeException(
                 "Head:" + head.positionToInt() + " ,Tail:" + tail.positionToInt() + " is not possible");
@@ -33,7 +32,7 @@ public class Snake extends SLEntity {
 //        snakeBound(collections);
     }
 
-    public boolean move(HashMap<Position, Entity> collections, String choice)
+    public boolean move(ArrayList<Entity> collections, String choice)
             throws OutOfBoardException, GridsBeingTakenException, OnlyOneSnakeGreaterEightyException {
 
         Position headDestination = new Position(super.getEntry().getX(), super.getEntry().getY());
@@ -56,7 +55,7 @@ public class Snake extends SLEntity {
             throw new OutOfBoardException("Snake head cannot reach 100");
         }
 
-        for (Entity e : collections.values()) {
+        for (Entity e : collections) {
             if (e instanceof Piece)
                 continue;
             else if (e instanceof Guard) {
@@ -80,22 +79,27 @@ public class Snake extends SLEntity {
             }
         }
 
-        for (Position p : collections.keySet()) {
-            if (collections.get(p) instanceof Snake && !collections.get(p).equals(this)) {
-                if (p.positionToInt() > 80 && headDestination.positionToInt() > 80)
-                    throw new OnlyOneSnakeGreaterEightyException(String.format("%s already been greater than 80", collections.get(p).getName()));
+        for (Entity e: collections) {
+            if(e instanceof Snake) {
+                Position p = ((Snake) e).getEntry();
+                if (!e.equals(this)) {
+                    if (p.positionToInt() > 80 && headDestination.positionToInt() > 80) {
+                        System.out.println(((Snake) e).getEntry().positionToInt());
+                        throw new OnlyOneSnakeGreaterEightyException(String.format("%s already been greater than 80", e.getName()));
+                    }
+                }
             }
         }
 
         super.getEntry().setXY(headDestination);
         super.getExit().setXY(tailDestination);
 
-        for (Position p : collections.keySet()) {
-            if (p.compareTo(super.getEntry())) {
-                if (collections.get(p) instanceof Piece) {
-                    if (((Piece) collections.get(p)).getLevel() == 1) {
-                        adjustPosition((Piece) collections.get(p));
-                    } else if (((Piece) collections.get(p)).getLevel() == 2) {
+        for (Entity e:collections) {
+            if(e instanceof Piece){
+                if(((Piece) e).getPosition().compareTo(super.getEntry())) {
+                    if (((Piece) e).getLevel() == 1)
+                        adjustPosition((Piece) e);
+                    else{
                         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Snake win");
                         alert.showAndWait();
                         System.exit(0);
@@ -117,11 +121,11 @@ public class Snake extends SLEntity {
         return false;
     }
 
-    public void snakeBound(HashMap<Position, Entity> collections) throws OnlyOneSnakeGreaterEightyException {
+    public void snakeBound(ArrayList<Entity> collections) throws OnlyOneSnakeGreaterEightyException {
         boolean exist = false;
-        for (Position p : collections.keySet()) {
-            if (collections.get(p) instanceof Snake) {
-                if (p.positionToInt() > 80) {
+        for (Entity e:collections) {
+            if (e instanceof Snake) {
+                if (((Snake) e).getEntry().positionToInt() > 80) {
                     exist = true;
                     break;
                 }

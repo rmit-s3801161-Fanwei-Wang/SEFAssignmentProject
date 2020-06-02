@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -23,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -55,7 +57,7 @@ public class MainGameController {
     @FXML
     public Button Guard;
 
-    private HashMap<Position, Entity> collections;
+    private ArrayList<Entity> collections;
     private Game game;
     private BoardPane boardGUI;
 
@@ -66,7 +68,7 @@ public class MainGameController {
         collections = game.getBoard().getCollections();
 
         int count = 3;
-        for (Entity e : collections.values()) {
+        for (Entity e : collections) {
             if (e instanceof Guard)
                 count--;
         }
@@ -139,11 +141,16 @@ public class MainGameController {
         changeScene(actionEvent, fileAddress);
     }
 
-    public void SaveGame(ActionEvent actionEvent) throws SQLException, GameSLException, IOException {
+    public void SaveGame(ActionEvent actionEvent) {
         game.setHuman(boardGUI.getHuman());
         game.setLevel(boardGUI.getLevel());
-        game.saveGame();
-        String fileAddress = "/view/menu_window_view.fxml";
-        changeScene(actionEvent, fileAddress);
+        try {
+            game.saveGame();
+            String fileAddress = "/view/menu_window_view.fxml";
+            changeScene(actionEvent, fileAddress);
+        }catch (Exception exception){
+            Alert alert = new Alert(Alert.AlertType.ERROR,exception.toString());
+            alert.showAndWait();
+        }
     }
 }

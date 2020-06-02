@@ -10,13 +10,14 @@ import model.exception.OnlyOneSnakeGreaterEightyException;
 import model.player.DB;
 import model.player.Game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static controller.Util.changeScene;
 
 public class AdminGameViewController {
     private Board board;
-    private HashMap<Position, Entity> collections;
+    private ArrayList<Entity> collections;
 
     @FXML
     private Pane boardP;
@@ -39,7 +40,7 @@ public class AdminGameViewController {
 
     public void saveBoard(ActionEvent actionEvent) {
         try {
-            for (Entity e : collections.values()) {
+            for (Entity e : collections) {
                 if (e instanceof Snake) {
                     Snake snake = new Snake(((Snake) e).getEntry(), ((Snake) e).getExit(), "", new HashMap<>());
                 }

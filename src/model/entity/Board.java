@@ -1,17 +1,14 @@
 package model.entity;
 
-import model.entity.*;
 import model.exception.GameSLException;
 import model.player.DB;
 import model.player.Game;
-import model.player.User;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Board{
 	private long id;
