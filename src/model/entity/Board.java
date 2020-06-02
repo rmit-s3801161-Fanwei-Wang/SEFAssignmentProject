@@ -18,7 +18,7 @@ public class Board{
 //	private static int grids = 10; // columns and lines
 //	private int gridsize = 20; // size
 
-	private HashMap<Position, Entity> collections = new HashMap<Position,Entity>();
+	private HashMap<String, Entity> collections = new HashMap<String,Entity>();
 
 	public Board() {
 		
@@ -28,7 +28,7 @@ public class Board{
 		this.id = id;
 	}
 
-	public Board(HashMap<Position,Entity> collections) {
+	public Board(HashMap<String,Entity> collections) {
 		this.collections = collections;
 	}
 
@@ -42,8 +42,7 @@ public class Board{
 
 	public void addCollection(Entity obj) {
 		if(obj instanceof Piece) {
-			if(((Piece)obj).getPosition()!=null)
-				collections.put(((Piece)obj).getPosition(), obj);
+			collections.put(obj.getName(), obj);
 		}
 		else if(obj instanceof Guard) {
 			if(((Guard)obj).getPosition()!=null)
