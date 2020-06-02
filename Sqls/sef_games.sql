@@ -26,8 +26,8 @@ CREATE TABLE `games` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `playerID` int(11) NOT NULL,
   `boardID` int(11) NOT NULL,
-  `human` bit(2) NOT NULL,
-  `level` bit(2) NOT NULL,
+  `human` int(2) NOT NULL,
+  `level` int(2) NOT NULL,
   `round` int(11) NOT NULL,
   `levelRound` int(11) NOT NULL,
   PRIMARY KEY (`id`)
