@@ -107,7 +107,11 @@ public class Piece extends PGEntity {
 	public int getLevel() {
 		return level;
 	}
-	
+
+	public int getClimbNumber() {
+		return ladders.size();
+	}
+
 	@Override
 	public void draw(ImageView imageView) {
 		Image image = null;
@@ -142,10 +146,6 @@ public class Piece extends PGEntity {
 //		return String.format("{\"Type\":\"Piece\",\"Name\":\"%s\",\"PositionX\":\"%d\",\"PositionY\":\"%d\"}",
 //				super.getName(),
 //				super.getPosition().getX(),super.getPosition().getY());
-	}
-
-	public int getClimbNumber() {
-		return ladders.size();
 	}
 
 }
