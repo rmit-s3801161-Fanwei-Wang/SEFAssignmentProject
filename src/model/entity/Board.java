@@ -106,7 +106,7 @@ public class Board{
 	public static Board findBoard(long boardID) throws SQLException, GameSLException {
 		final String TABLE_NAME = "boards";
 		DB db = new DB();
-		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + boardID;
+		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + boardID + " and createdBy = 'Player'";
 		ResultSet rs = db.search(sql);
 		String collection = "";
 		while (rs.next()) {
