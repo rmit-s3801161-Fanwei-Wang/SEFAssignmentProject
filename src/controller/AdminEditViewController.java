@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import model.entity.Board;
@@ -65,7 +66,8 @@ public class AdminEditViewController {
             window.setScene(scene);
             window.show();
         }catch (NullPointerException exception){
-
+            Alert alert = new Alert(Alert.AlertType.ERROR,"You should select a board first!");
+            alert.showAndWait();
         }
     }
 
