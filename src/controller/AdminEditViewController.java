@@ -48,21 +48,25 @@ public class AdminEditViewController {
 
     @FXML
     public void editBoard(ActionEvent event) throws SQLException, GameSLException, IOException {
-        int boardID = (int) listView.getSelectionModel().getSelectedItem();
-        Board board = Board.findBoard(boardID,LoginViewController.currentUser);
+        try {
+            int boardID = (int) listView.getSelectionModel().getSelectedItem();
+            Board board = Board.findBoard(boardID, LoginViewController.currentUser);
 
-        String fileAddress = "/view/adminGame.fxml";
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Util.class.getResource(fileAddress));
-        Parent mainViewParent = loader.load();
-        AdminGameViewController adminGameViewController = loader.getController();
-        adminGameViewController.setUp(board);
-        Scene scene = new Scene(mainViewParent);
+            String fileAddress = "/view/adminGame.fxml";
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Util.class.getResource(fileAddress));
+            Parent mainViewParent = loader.load();
+            AdminGameViewController adminGameViewController = loader.getController();
+            adminGameViewController.setUp(board);
+            Scene scene = new Scene(mainViewParent);
 
-        //get Window
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(scene);
-        window.show();
+            //get Window
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.setScene(scene);
+            window.show();
+        }catch (NullPointerException exception){
+
+        }
     }
 
     @FXML

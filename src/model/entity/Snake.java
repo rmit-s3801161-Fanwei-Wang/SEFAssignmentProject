@@ -124,6 +124,7 @@ public class Snake extends SLEntity {
         if (super.adjustPosition(piece)) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     piece.getName() + " is eaten by " + super.getName() + " to " + super.getExit().positionToInt());
+            alert.showAndWait();
             piece.setBuff();
             return true;
         }
